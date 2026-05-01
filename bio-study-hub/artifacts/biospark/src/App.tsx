@@ -6,6 +6,7 @@ import { ThemePicker } from "@/components/ThemePicker";
 import { SpaceBackground } from "@/components/SpaceBackground";
 import { LoginPage } from "@/pages/LoginPage";
 import { HomePage } from "@/pages/HomePage";
+import { DashboardPage } from "@/pages/DashboardPage";
 import { ClassSelectPage } from "@/pages/ClassSelectPage";
 import { ChaptersPage } from "@/pages/ChaptersPage";
 import { SubunitsPage } from "@/pages/SubunitsPage";
@@ -15,6 +16,8 @@ import { CommunityPage } from "@/pages/CommunityPage";
 import { PlansPage } from "@/pages/PlansPage";
 import { AdminPage } from "@/pages/AdminPage";
 import { ProfilePage } from "@/pages/ProfilePage";
+import { MockTestPage } from "@/pages/MockTestPage";
+import { LeaderboardPage } from "@/pages/LeaderboardPage";
 
 const ADMIN_EMAIL = "bhamareketan18@gmail.com";
 
@@ -60,6 +63,25 @@ function AppRoutes() {
         <Route path="/home" element={<><Navbar /><HomePage /></>} />
         <Route path="/plans" element={<><Navbar /><PlansPage /></>} />
         <Route path="/community" element={<><Navbar /><CommunityPage /></>} />
+        <Route path="/leaderboard" element={<><Navbar /><LeaderboardPage /></>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mock-test"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <MockTestPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/class-select"
           element={
