@@ -66,7 +66,7 @@ export function LoginPage() {
   }
 
   function handleGoogleSignIn() {
-    window.location.href = "/.netlify/functions/auth-google";
+    window.location.href = "https://startup-85w8.onrender.com/auth/google";
   }
 
   const inputStyle = {
