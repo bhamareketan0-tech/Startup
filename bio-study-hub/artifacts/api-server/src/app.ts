@@ -11,17 +11,23 @@ app.set("trust proxy", 1);
 
 // ---------------- CORS ----------------
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()).filter(Boolean)
   : [];
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Server-to-server or same-origin — always allow
       if (!origin) return callback(null, true);
+      // No restrictions configured — allow all (open dev mode)
       if (ALLOWED_ORIGINS.length === 0) return callback(null, true);
+      // Wildcard — allow all
       if (ALLOWED_ORIGINS.includes("*")) return callback(null, true);
+      // Origin is in the allowlist
       if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
-      callback(new Error(`CORS: Origin ${origin} not allowed`));
+      // Origin not allowed — reject gracefully (no crash)
+      console.warn(`CORS blocked: ${origin}`);
+      return callback(null, false);
     },
     credentials: true,
   })
