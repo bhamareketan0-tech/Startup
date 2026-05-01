@@ -1,6 +1,17 @@
 import { Router } from "express";
+import { Settings } from "../models/settings";
 
 const router = Router();
+
+async function getGeminiApiKey(): Promise<string | null> {
+  const fromEnv = process.env.GEMINI_API_KEY || process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
+  if (fromEnv) return fromEnv;
+  try {
+    const doc = await Settings.findOne({ key: "cred_gemini_api_key" });
+    if (doc?.value && String(doc.value).trim()) return String(doc.value).trim();
+  } catch { /* db not ready */ }
+  return null;
+}
 
 const GEMINI_MODEL = "gemini-2.0-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -76,9 +87,9 @@ router.post("/pdf-extract", async (req, res) => {
       return;
     }
 
-    const apiKey = process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
+    const apiKey = await getGeminiApiKey();
     if (!apiKey) {
-      res.status(500).json({ error: "Gemini API key not configured." });
+      res.status(500).json({ error: "Gemini API key not configured. Add GEMINI_API_KEY to Replit Secrets or set it in Admin → Credentials & Keys." });
       return;
     }
 

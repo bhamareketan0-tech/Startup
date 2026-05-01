@@ -4,7 +4,8 @@ import { useAuth } from "@/lib/auth";
 import {
   Shield, LayoutDashboard, BookOpen, Layers, FileText,
   Users, CreditCard, MessageSquare, Flag, Settings,
-  Database, Plus, Sun, Moon, LogOut, User, ChevronRight, Upload
+  Database, Plus, Sun, Moon, LogOut, User, ChevronRight, Upload,
+  Sparkles, KeyRound
 } from "lucide-react";
 import { AdminDashboard } from "./admin/AdminDashboard";
 import { AdminAnalytics } from "./admin/AdminAnalytics";
@@ -18,6 +19,8 @@ import { AdminReports } from "./admin/AdminReports";
 import { AdminSettings } from "./admin/AdminSettings";
 import { AdminSupabaseConfig } from "./admin/AdminSupabaseConfig";
 import { AdminPDFImport } from "./admin/AdminPDFImport";
+import { AdminTextExtractor } from "./admin/AdminTextExtractor";
+import { AdminCredentials } from "./admin/AdminCredentials";
 import { api } from "@/lib/api";
 
 const ADMIN_EMAIL = "bhamareketan18@gmail.com";
@@ -34,7 +37,9 @@ type Page =
   | "reports"
   | "settings"
   | "mongodb"
-  | "pdf_import";
+  | "pdf_import"
+  | "text_extractor"
+  | "credentials";
 
 interface NavItem {
   id: Page;
@@ -50,13 +55,15 @@ const NAV_ITEMS: NavItem[] = [
   { id: "questions", label: "Questions", icon: BookOpen, group: "Content" },
   { id: "chapters", label: "Chapters & Topics", icon: Layers, group: "Content" },
   { id: "passages", label: "Passages", icon: FileText, group: "Content" },
+  { id: "pdf_import", label: "PDF Import", icon: Upload, group: "Content" },
+  { id: "text_extractor", label: "AI Question Extractor", icon: Sparkles, group: "Content" },
   { id: "students", label: "Students", icon: Users, group: "Users" },
   { id: "subscriptions", label: "Subscriptions", icon: CreditCard, group: "Users" },
   { id: "community", label: "Discussions", icon: MessageSquare, group: "Community" },
   { id: "reports", label: "Reports", icon: Flag, group: "Community" },
   { id: "settings", label: "Settings", icon: Settings, group: "System" },
+  { id: "credentials", label: "Credentials & Keys", icon: KeyRound, group: "System" },
   { id: "mongodb", label: "MongoDB Status", icon: Database, group: "System" },
-  { id: "pdf_import", label: "PDF Import", icon: Upload, group: "Content" },
 ];
 
 const GROUPS = ["Overview", "Content", "Users", "Community", "System"];
@@ -213,8 +220,10 @@ export function AdminPage() {
           {page === "community" && <AdminCommunity />}
           {page === "reports" && <AdminReports />}
           {page === "settings" && <AdminSettings />}
+          {page === "credentials" && <AdminCredentials />}
           {page === "mongodb" && <AdminSupabaseConfig />}
           {page === "pdf_import" && <AdminPDFImport />}
+          {page === "text_extractor" && <AdminTextExtractor />}
         </main>
       </div>
     </div>

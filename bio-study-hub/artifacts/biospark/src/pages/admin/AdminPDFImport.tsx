@@ -487,7 +487,7 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
     setParsing(true);
     setParseError(null);
 
-    const res = await fetch("https://startup-85w8.onrender.com/format", {
+    const res = await fetch("/format", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

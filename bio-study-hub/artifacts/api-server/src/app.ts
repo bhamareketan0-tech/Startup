@@ -4,6 +4,17 @@ import session from "express-session";
 import passport from "passport";
 import router from "./routes";
 import authRouter from "./routes/auth";
+import { Settings } from "./models/settings";
+
+async function getGeminiKey(): Promise<string> {
+  const fromEnv = process.env.GEMINI_API_KEY || process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
+  if (fromEnv) return fromEnv;
+  try {
+    const doc = await Settings.findOne({ key: "cred_gemini_api_key" });
+    if (doc?.value && String(doc.value).trim()) return String(doc.value).trim();
+  } catch { /* db not ready */ }
+  return "";
+}
 
 const app: Express = express();
 
@@ -71,16 +82,23 @@ app.post("/format", async (req, res) => {
     const input = req.body?.text || "";
 
     if (!input) {
-      return res.status(400).json({ error: "No input text provided" });
+      res.status(400).json({ error: "No input text provided" });
+      return;
     }
 
     // ⏱ timeout safety
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
 
+    const geminiKey = await getGeminiKey();
+    if (!geminiKey) {
+      res.status(500).json({ error: "Gemini API key not configured." });
+      return;
+    }
+
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" +
-        process.env.GEMINI_API_KEY,
+        geminiKey,
       {
         method: "POST",
         headers: {
