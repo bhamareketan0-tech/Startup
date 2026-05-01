@@ -543,10 +543,10 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
 
         <div className="flex items-center gap-3">
           <button
-            onClick={parseText}
-            disabled={parsing || !rawText.trim()}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00d4ff]/10 border border-[#00d4ff]/30 text-[#00d4ff] text-sm font-semibold hover:bg-[#00d4ff]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+  onClick={parseText}
+  disabled={parsing || !rawText.trim()}
+  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00d4ff]/10 border border-[#00d4ff]/30 text-[#00d4ff] text-sm font-semibold hover:bg-[#00d4ff]/20"
+>
             {parsing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
             {parsing ? "Parsing…" : "Parse Questions"}
           </button>
