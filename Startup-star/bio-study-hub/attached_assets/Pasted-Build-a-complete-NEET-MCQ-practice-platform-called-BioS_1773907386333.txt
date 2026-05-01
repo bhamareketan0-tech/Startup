@@ -1,0 +1,56 @@
+Build a complete NEET MCQ practice platform called "BioSpark" with the following specs:
+
+TECH STACK:
+- Frontend: React + Vite
+- Backend/DB: Supabase (URL: https://ncpqxlieypvijkpvhija.supabase.co, anon key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jcHF4bGlleXB2aWprcHZoaWphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MTQyMjEsImV4cCI6MjA4OTM5MDIyMX0.XPfPDUyGy3Sa3y4kmWR_N4cFSocqemKNUcvj_SMZYVI)
+- Styling: Tailwind CSS
+- Auth: Supabase Auth
+
+SUPABASE TABLES (already exist):
+- users: id, name, email, class, score, plan, created_at
+- questions: id, question, option1, option2, option3, option4, correct, subject, chapter, subunit, type, explanation, class, difficulty, is_active, created_at
+- attempts: id, user_id, chapter, subunit, class, score, correct, wrong, skipped, total, time_taken, created_at
+
+PAGES & FLOW:
+1. Login/Signup page → Supabase auth
+2. Home page → hero section, stats, features
+3. Class select page → Class 11 or Class 12
+4. Chapters page → list of chapters for selected class
+5. Subunits page → topics inside chapter
+6. Practice page → left sidebar with 7 question types:
+   - Passage Based
+   - Pointer Type
+   - Standard MCQ (load from Supabase questions table)
+   - Assertion Reason
+   - Number of Correct Statements
+   - True/False in 4 option format
+   - Fill in the Blanks
+   - Match the Column
+7. Score page → show correct, wrong, skipped with animated ring chart, save to attempts table
+8. Community page → discussions list
+9. Plans page → Free, Pro (₹299/mo), Elite (₹799/mo)
+
+ADMIN PANEL (separate /admin route, protected):
+- Only accessible if user email = "bhamareketan18@gmail.com"
+- Dashboard → real stats from Supabase (question count, user count, attempts count)
+- Questions Manager → fetch all from questions table, add new question (saves to Supabase), edit question (updates Supabase), delete question (deletes from Supabase) — ALL BUTTONS MUST ACTUALLY WORK
+- Users Manager → fetch all from users table, show real data
+- Attempts/Results → fetch from attempts table
+
+DESIGN:
+- Dark mode default, light mode toggle
+- Animated background with floating particles, aurora blobs, dot grid
+- Color scheme: neon mint #00ffb3, cyan #00d4ff, violet #a855f7, orange #ff6b35
+- Glassmorphism cards
+- Animated gradient text for headings
+- Smooth page transitions
+- Timer on practice page that counts down (30 minutes)
+- Progress bar in sidebar
+
+IMPORTANT:
+- Every button must actually work and connect to Supabase
+- No fake/hardcoded data anywhere except chapter names
+- Admin CRUD operations must save/update/delete from Supabase in real time
+- Questions load from Supabase questions table filtered by chapter
+- Scores save to Supabase attempts table after quiz
+- User profile saves to Supabase users table on signup

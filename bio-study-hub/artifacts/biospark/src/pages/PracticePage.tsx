@@ -1,0 +1,844 @@
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Question } from "@/lib/supabase";
+import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
+import {
+  ChevronRight,
+  ChevronLeft,
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  ArrowLeft,
+  BookOpen,
+  List,
+} from "lucide-react";
+
+const QUESTION_TYPES = [
+  { id: "paragraph", label: "Paragraph" },
+  { id: "pointer_notes", label: "Pointer Notes" },
+  { id: "mcq", label: "Standard MCQ" },
+  { id: "assertion", label: "Assertion Reason" },
+  { id: "statements", label: "No. of Correct Statements" },
+  { id: "truefalse", label: "True / False" },
+  { id: "fillblanks", label: "Fill in the Blanks" },
+  { id: "match", label: "Match the Column" },
+  { id: "diagram", label: "Diagram Based" },
+  { id: "table_based", label: "Table Based" },
+];
+
+const STUDY_TYPES = ["paragraph", "pointer_notes"];
+
+const TIMER_DURATION = 30 * 60;
+
+function HighlightedText({ text, highlights }: { text: string; highlights: string[] }) {
+  const filtered = (highlights || []).map((h) => h.trim()).filter((h) => h.length > 0);
+  if (filtered.length === 0) return <span>{text}</span>;
+  const escaped = filtered.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const pattern = new RegExp(`(${escaped.join("|")})`, "gi");
+  const parts = text.split(pattern);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const isHighlight = filtered.some((h) => h.toLowerCase() === part.toLowerCase());
+        return isHighlight ? (
+          <strong key={i} style={{ color: "var(--bs-accent-hex)", fontWeight: "bold" }}>{part}</strong>
+        ) : (
+          <span key={i}>{part}</span>
+        );
+      })}
+    </>
+  );
+}
+
+function ParagraphRenderer({ q }: { q: Question }) {
+  const highlights = (q.meta?.highlights as string[]) || [];
+  return (
+    <div className="max-w-3xl mx-auto">
+      <div className="flex items-center gap-2 mb-6">
+        <BookOpen className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} />
+        <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "var(--bs-accent-hex)" }}>Study Material — Paragraph</span>
+      </div>
+      <div className="border border-l-4 p-8 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <p className="text-lg leading-[1.9] tracking-wide" style={{ color: "var(--bs-text)" }}>
+          <HighlightedText text={q.question} highlights={highlights} />
+        </p>
+      </div>
+      {highlights.length > 0 && (
+        <div className="border p-4 mb-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)` }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-2 font-mono" style={{ color: "var(--bs-accent-hex)" }}>Key Terms</p>
+          <div className="flex flex-wrap gap-2">
+            {highlights.map((h, i) => (
+              <span key={i} className="px-3 py-1 border text-sm font-bold" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 30%, transparent)`, color: "var(--bs-accent-hex)" }}>{h}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PointerNotesRenderer({ q }: { q: Question }) {
+  const bullets = (q.meta?.bullets as string[]) || [];
+  return (
+    <div className="max-w-3xl mx-auto">
+      <div className="flex items-center gap-2 mb-6">
+        <List className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} />
+        <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "var(--bs-accent-hex)" }}>Study Material — Pointer Notes</span>
+      </div>
+      <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <h3 className="text-xl font-black mb-6 leading-snug" style={{ color: "var(--bs-text)" }}>{q.question}</h3>
+        {bullets.length > 0 ? (
+          <ul className="space-y-4">
+            {bullets.map((bullet, i) => {
+              const colonIdx = bullet.indexOf(":");
+              const hasKey = colonIdx > 0 && colonIdx < 40;
+              return (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="w-6 h-6 flex-shrink-0 text-xs font-black flex items-center justify-center mt-0.5" style={{ background: "var(--bs-accent-hex)", color: "black" }}>{i + 1}</span>
+                  <span className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>
+                    {hasKey ? (
+                      <><strong style={{ color: "var(--bs-accent-hex)" }}>{bullet.slice(0, colonIdx)}</strong>{bullet.slice(colonIdx)}</>
+                    ) : bullet}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="text-sm font-mono italic" style={{ color: "var(--bs-text-muted)" }}>No bullet points added.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function OptionButton({ letter, value, isSelected, isCorrect, isWrong, submitted, onClick }: {
+  letter: string; value: string; isSelected: boolean; isCorrect: boolean; isWrong: boolean; submitted: boolean; onClick: () => void;
+}) {
+  const buttonStyle = isCorrect
+    ? { background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 50%, transparent)`, color: "var(--bs-text)" }
+    : isWrong
+      ? { background: "rgba(239,68,68,0.1)", borderColor: "rgba(239,68,68,0.4)", color: "var(--bs-text)" }
+      : isSelected
+        ? { background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 30%, transparent)`, color: "var(--bs-text)" }
+        : { background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" };
+  const badgeStyle = isCorrect
+    ? { background: "var(--bs-accent-hex)", color: "black" }
+    : isWrong
+      ? { background: "#ef4444", color: "white" }
+      : isSelected
+        ? { background: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, color: "var(--bs-accent-hex)", border: `1px solid color-mix(in srgb, var(--bs-accent-hex) 50%, transparent)` }
+        : { background: "var(--bs-surface-2)", color: "var(--bs-text-muted)" };
+  return (
+    <button onClick={onClick} disabled={submitted} className="w-full flex items-start gap-4 p-4 border text-left transition-all" style={buttonStyle}>
+      <span className="w-7 h-7 flex items-center justify-center text-sm font-black shrink-0" style={badgeStyle}>{letter}</span>
+      <span className="flex-1 text-sm leading-relaxed">{value}</span>
+      {isCorrect && <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "var(--bs-accent-hex)" }} />}
+      {isWrong && <XCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />}
+    </button>
+  );
+}
+
+function StandardMCQRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+  const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
+  return (
+    <div>
+      <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
+      </div>
+      <div className="space-y-3 mb-6">
+        {options.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AssertionRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+  const statementA = q.question;
+  const statementR = (q.meta?.statementR as string) || "";
+  const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
+  return (
+    <div>
+      <div className="space-y-3 mb-6">
+        <div className="border border-l-4 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+          <span className="text-xs font-black uppercase tracking-widest font-mono block mb-2" style={{ color: "var(--bs-accent-hex)" }}>Statement (A) — Assertion</span>
+          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementA}</p>
+        </div>
+        <div className="border border-l-4 border-l-blue-400 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+          <span className="text-blue-400 text-xs font-black uppercase tracking-widest font-mono block mb-2">Statement (R) — Reason</span>
+          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementR || q.question}</p>
+        </div>
+      </div>
+      <div className="space-y-3 mb-6">
+        {options.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StatementsRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+  const stmts = (q.meta?.statements as string[]) || [];
+  const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
+  return (
+    <div>
+      {stmts.length > 0 && (
+        <div className="border border-l-4 p-6 mb-4" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+          <p className="text-xs font-black uppercase tracking-widest font-mono mb-4" style={{ color: "var(--bs-accent-hex)" }}>Consider the following statements:</p>
+          <ol className="space-y-3">
+            {stmts.map((s, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="font-black text-sm shrink-0 font-mono" style={{ color: "var(--bs-accent-hex)" }}>{i + 1}.</span>
+                <span className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{s}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+      {stmts.length === 0 && (
+        <div className="border border-l-4 p-6 mb-4" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+          <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
+        </div>
+      )}
+      <div className="border px-5 py-3 mb-5" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)` }}>
+        <p className="font-bold text-sm" style={{ color: "var(--bs-text)" }}>How many of the above statements are correct?</p>
+      </div>
+      <div className="space-y-3 mb-6">
+        {options.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TrueFalseRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+  const tfOptions = [{ key: "option1", value: q.option1 || "True" }, { key: "option2", value: q.option2 || "False" }];
+  return (
+    <div>
+      <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
+      </div>
+      <p className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: "var(--bs-text-muted)" }}>Select the correct answer:</p>
+      <div className="flex gap-4 mb-6">
+        {tfOptions.map((opt) => {
+          const isSelected = answers[currentIndex] === opt.key;
+          const isCorrect = submitted && opt.key === q.correct;
+          const isWrong = submitted && isSelected && opt.key !== q.correct;
+          const isTrue = opt.value.toLowerCase() === "true";
+          return (
+            <button
+              key={opt.key}
+              onClick={() => !submitted && onAnswer(opt.key)}
+              disabled={submitted}
+              className="flex-1 py-6 border text-xl font-black uppercase tracking-widest transition-all"
+              style={isCorrect
+                ? { background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 50%, transparent)`, color: "var(--bs-accent-hex)" }
+                : isWrong
+                  ? { background: "rgba(239,68,68,0.1)", borderColor: "rgba(239,68,68,0.4)", color: "#f87171" }
+                  : isSelected
+                    ? { background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 30%, transparent)`, color: "var(--bs-accent-hex)" }
+                    : isTrue
+                      ? { background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }
+                      : { background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }
+              }
+            >
+              {opt.value}
+              {isCorrect && <CheckCircle className="w-5 h-5 mx-auto mt-2" style={{ color: "var(--bs-accent-hex)" }} />}
+              {isWrong && <XCircle className="w-5 h-5 mx-auto mt-2 text-red-400" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function FillBlanksRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+  const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
+  const displayText = q.question.includes("_") ? q.question : q.question + " _____";
+  return (
+    <div>
+      <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>
+          {displayText.split(/(_+)/).map((part, i) =>
+            /^_+$/.test(part) ? (
+              <span key={i} className="inline-block border-b-2 min-w-[80px] mx-1 font-bold text-center" style={{ borderColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)" }}>
+                {answers[currentIndex] ? (q[answers[currentIndex] as keyof Question] as string) : "\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0"}
+              </span>
+            ) : <span key={i}>{part}</span>
+          )}
+        </p>
+      </div>
+      <p className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: "var(--bs-text-muted)" }}>Choose the word/phrase that fills the blank:</p>
+      <div className="space-y-3 mb-6">
+        {options.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MatchColumnRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+  const colLeft = (q.meta?.colLeft as string[]) || [];
+  const colRight = (q.meta?.colRight as string[]) || [];
+  const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
+  return (
+    <div>
+      {(colLeft.length > 0 || colRight.length > 0) && (
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="border border-l-4 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+            <p className="text-xs font-black uppercase tracking-widest font-mono mb-4" style={{ color: "var(--bs-accent-hex)" }}>Column I</p>
+            <ol className="space-y-3">
+              {colLeft.map((item, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="font-black text-sm shrink-0" style={{ color: "var(--bs-accent-hex)" }}>({String.fromCharCode(65 + i)})</span>
+                  <span className="text-sm leading-relaxed" style={{ color: "var(--bs-text)" }}>{item}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="border border-l-4 border-l-blue-400 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+            <p className="text-blue-400 text-xs font-black uppercase tracking-widest font-mono mb-4">Column II</p>
+            <ol className="space-y-3">
+              {colRight.map((item, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-blue-400 font-black text-sm shrink-0">({i + 1})</span>
+                  <span className="text-sm leading-relaxed" style={{ color: "var(--bs-text)" }}>{item}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      )}
+      {colLeft.length === 0 && (
+        <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+          <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
+        </div>
+      )}
+      <p className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: "var(--bs-text-muted)" }}>Choose the correct matching combination:</p>
+      <div className="space-y-3 mb-6">
+        {options.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TableRenderer({ tableData }: { tableData: { headers: string[]; rows: string[][] } }) {
+  return (
+    <div className="overflow-x-auto mb-5 border" style={{ borderColor: "var(--bs-border-subtle)" }}>
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)` }}>
+            {tableData.headers.map((h, i) => (
+              <th key={i} className="px-4 py-2 text-left font-black uppercase tracking-wide text-xs border-b border-r last:border-r-0" style={{ color: "var(--bs-accent-hex)", borderColor: "var(--bs-border-subtle)" }}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.rows.map((row, ri) => (
+            <tr key={ri} style={{ background: ri % 2 === 0 ? "var(--bs-surface)" : `color-mix(in srgb, var(--bs-accent-hex) 3%, var(--bs-surface))` }}>
+              {row.map((cell, ci) => (
+                <td key={ci} className="px-4 py-2 border-b border-r last:border-r-0" style={{ color: "var(--bs-text)", borderColor: "var(--bs-border-subtle)" }}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ImageMCQRenderer({ q, currentIndex, answers, submitted, onAnswer, typeLabel }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void; typeLabel: string }) {
+  const imageUrl = (q.meta?.imageUrl as string) || "";
+  const tableData = q.meta?.tableData as { headers: string[]; rows: string[][] } | undefined;
+  const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
+  return (
+    <div>
+      {imageUrl && (
+        <div className="border mb-5 overflow-hidden" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+          <div className="px-4 py-2 border-b flex items-center gap-2" style={{ borderColor: "var(--bs-border-subtle)", background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)` }}>
+            <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "var(--bs-accent-hex)" }}>{typeLabel}</span>
+          </div>
+          <img src={imageUrl} alt={typeLabel} className="w-full max-h-72 object-contain p-3" style={{ background: "#fff" }} />
+        </div>
+      )}
+      {tableData && <TableRenderer tableData={tableData} />}
+      <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
+      </div>
+      <div className="space-y-3 mb-6">
+        {options.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function PracticePage() {
+  const { cls, chapterId, subunit } = useParams<{ cls: string; chapterId: string; subunit: string }>();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const [selectedType, setSelectedType] = useState("mcq");
+  const [mobileStep, setMobileStep] = useState<"type" | "question">("type");
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [timeLeft, setTimeLeft] = useState(TIMER_DURATION);
+  const [submitted, setSubmitted] = useState(false);
+
+  const decodedSubunit = subunit ? decodeURIComponent(subunit) : "";
+  const isStudyType = STUDY_TYPES.includes(selectedType);
+
+  async function fetchQuestions() {
+    setLoading(true);
+    setQuestions([]);
+    setAnswers({});
+    setCurrentIndex(0);
+    setSubmitted(false);
+    setTimeLeft(TIMER_DURATION);
+
+    try {
+      const res = await api.get("/questions", { class: cls, chapter: chapterId, subunit: decodedSubunit, type: selectedType, is_active: true, limit: 200 });
+      setQuestions((res.data || []) as Question[]);
+    } catch {
+      setQuestions([]);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => { fetchQuestions(); }, [cls, chapterId, subunit, selectedType]);
+
+  const handleTimerEnd = useCallback(() => { if (!submitted) handleSubmit(); }, [submitted, questions, answers]);
+
+  useEffect(() => {
+    if (isStudyType || submitted || questions.length === 0) return;
+    if (timeLeft <= 0) { handleTimerEnd(); return; }
+    const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, submitted, questions.length, isStudyType]);
+
+  async function handleSubmit() {
+    setSubmitted(true);
+    const timeTaken = TIMER_DURATION - timeLeft;
+    let correct = 0, wrong = 0, skipped = 0;
+    const total = questions.length;
+    questions.forEach((q, i) => {
+      if (!answers[i]) skipped++;
+      else if (answers[i] === q.correct) correct++;
+      else wrong++;
+    });
+    const score = Math.round((correct / total) * 100) || 0;
+    if (user) {
+      await api.post("/attempts", { user_id: user.id, chapter: chapterId, subunit: decodedSubunit, class: cls, score, correct, wrong, skipped, total, time_taken: timeTaken }).catch(() => null);
+    }
+    navigate("/score", { state: { correct, wrong, skipped, total, score, timeTaken } });
+  }
+
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+  };
+
+  const progress = questions.length > 0 ? ((currentIndex + 1) / questions.length) * 100 : 0;
+  const currentQ = questions[currentIndex];
+
+  function renderQuestionContent() {
+    if (!currentQ) return null;
+    const commonProps = { q: currentQ, currentIndex, answers, submitted, onAnswer: (key: string) => setAnswers({ ...answers, [currentIndex]: key }) };
+    switch (currentQ.type) {
+      case "paragraph": return <ParagraphRenderer q={currentQ} />;
+      case "pointer_notes": return <PointerNotesRenderer q={currentQ} />;
+      case "assertion": return <AssertionRenderer {...commonProps} />;
+      case "statements": return <StatementsRenderer {...commonProps} />;
+      case "truefalse": return <TrueFalseRenderer {...commonProps} />;
+      case "fillblanks": return <FillBlanksRenderer {...commonProps} />;
+      case "match": return <MatchColumnRenderer {...commonProps} />;
+      case "diagram": return <ImageMCQRenderer {...commonProps} typeLabel="Diagram" />;
+      case "table_based": return <ImageMCQRenderer {...commonProps} typeLabel="Table" />;
+      default: return <StandardMCQRenderer {...commonProps} />;
+    }
+  }
+
+  const currentTypeName = QUESTION_TYPES.find(t => t.id === selectedType)?.label ?? selectedType;
+
+  return (
+    <div className="min-h-screen relative font-['Space_Grotesk']" style={{ background: "transparent" }}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      {/* ── MOBILE STEP 1: Type Selector ── */}
+      <div className={`md:hidden relative z-10 flex flex-col min-h-screen ${mobileStep !== "type" ? "hidden" : ""}`}>
+        {/* Header */}
+        <div className="sticky top-0 z-20 border-b px-5 py-4" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-xs font-mono uppercase tracking-wide mb-2" style={{ color: "var(--bs-text-muted)" }}>
+            <ArrowLeft className="w-4 h-4" />Back
+          </button>
+          <h2 className="font-black text-base uppercase tracking-tight" style={{ color: "var(--bs-text)" }}>{decodedSubunit}</h2>
+          <p className="text-xs font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>Class {cls}</p>
+          {!isStudyType && (
+            <div className="flex items-center gap-2 mt-2">
+              <Clock className="w-3.5 h-3.5" style={{ color: "var(--bs-secondary-hex)" }} />
+              <span className="text-sm font-black font-mono" style={{ color: timeLeft < 300 ? "#ef4444" : "var(--bs-accent-hex)" }}>{formatTime(timeLeft)}</span>
+            </div>
+          )}
+          {isStudyType && (
+            <div className="flex items-center gap-2 mt-2">
+              <BookOpen className="w-3.5 h-3.5" style={{ color: "var(--bs-accent-hex)" }} />
+              <span className="text-xs font-mono uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>Study Mode</span>
+            </div>
+          )}
+        </div>
+
+        {/* Type list */}
+        <div className="flex-1 overflow-y-auto px-5 py-5">
+          <p className="text-xs mb-4 font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Choose Question Type</p>
+          <div className="space-y-2">
+            {QUESTION_TYPES.map((type, idx) => (
+              <button
+                key={type.id}
+                onClick={() => { setSelectedType(type.id); setCurrentIndex(0); setAnswers({}); setMobileStep("question"); }}
+                className="w-full flex items-center justify-between px-5 py-4 border-l-4 transition-all"
+                style={selectedType === type.id
+                  ? { borderLeftColor: "var(--bs-accent-hex)", background: `color-mix(in srgb, var(--bs-accent-hex) 12%, var(--bs-surface))`, color: "var(--bs-accent-hex)" }
+                  : { borderLeftColor: "transparent", background: "var(--bs-surface)", color: "var(--bs-text)", borderColor: "var(--bs-border-subtle)" }
+                }
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono w-5" style={{ color: "var(--bs-border-strong)" }}>{idx + 1}.</span>
+                  <span className="font-black text-sm uppercase tracking-wide">{type.label}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 opacity-50" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── MOBILE STEP 2: Question View ── */}
+      <div className={`md:hidden relative z-10 flex flex-col min-h-screen ${mobileStep !== "question" ? "hidden" : ""}`}>
+        {/* Sticky top bar */}
+        <div className="sticky top-0 z-20 border-b" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
+          <div className="flex items-center justify-between px-5 py-4">
+            <button
+              onClick={() => setMobileStep("type")}
+              className="flex items-center gap-2 text-xs font-mono uppercase tracking-wide"
+              style={{ color: "var(--bs-text-muted)" }}
+            >
+              <ArrowLeft className="w-4 h-4" />Types
+            </button>
+            <div className="text-center">
+              <p className="text-xs font-black uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>{currentTypeName}</p>
+              <p className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>{currentIndex + 1} / {questions.length || 0}</p>
+            </div>
+            {!isStudyType ? (
+              <span className="text-sm font-black font-mono" style={{ color: timeLeft < 300 ? "#ef4444" : "var(--bs-accent-hex)" }}>{formatTime(timeLeft)}</span>
+            ) : (
+              <BookOpen className="w-4 h-4" style={{ color: "var(--bs-accent-hex)" }} />
+            )}
+          </div>
+          {/* Progress bar */}
+          <div className="h-0.5 w-full" style={{ background: "var(--bs-border-subtle)" }}>
+            <div className="h-full transition-all" style={{ width: `${progress}%`, background: "var(--bs-accent-hex)" }} />
+          </div>
+        </div>
+
+        {/* Question Content */}
+        <div className="flex-1 overflow-y-auto px-5 py-6">
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="w-10 h-10 border-2 border-t-transparent animate-spin mx-auto mb-3" style={{ borderColor: "var(--bs-accent-hex) transparent transparent transparent" }} />
+                <p className="font-mono uppercase text-xs" style={{ color: "var(--bs-text-muted)" }}>Loading...</p>
+              </div>
+            </div>
+          ) : questions.length === 0 ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--bs-border-strong)" }} />
+                <p className="font-black uppercase text-sm mb-1" style={{ color: "var(--bs-text)" }}>No content yet</p>
+                <p className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>No {currentTypeName} for this subunit</p>
+                <button onClick={() => setMobileStep("type")} className="mt-4 px-4 py-2 border text-xs font-black uppercase tracking-widest" style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>Choose Another Type</button>
+              </div>
+            </div>
+          ) : currentQ ? (
+            <div>
+              {/* Difficulty badge */}
+              {!isStudyType && currentQ.difficulty && (
+                <div className="mb-3">
+                  <span className={`px-2 py-0.5 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-green-500/10 border-green-500/20 text-green-500" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"}`}>
+                    {currentQ.difficulty}
+                  </span>
+                </div>
+              )}
+              {renderQuestionContent()}
+              {/* Explanation */}
+              {!isStudyType && submitted && currentQ.explanation && (
+                <div className="border border-l-4 p-4 mt-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}>
+                  <h4 className="font-black text-xs uppercase tracking-widest mb-2" style={{ color: "var(--bs-accent-hex)" }}>Explanation</h4>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--bs-text-muted)" }}>{currentQ.explanation}</p>
+                </div>
+              )}
+            </div>
+          ) : null}
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="sticky bottom-0 border-t px-4 py-4 flex gap-3" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
+          {/* Previous: first question → back to type selector */}
+          <button
+            onClick={() => {
+              if (currentIndex === 0) {
+                setMobileStep("type");
+              } else {
+                setCurrentIndex(currentIndex - 1);
+              }
+            }}
+            className="flex-1 flex items-center justify-center gap-2 py-3.5 border text-xs font-black uppercase tracking-widest"
+            style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}
+          >
+            <ChevronLeft className="w-4 h-4" />
+            {currentIndex === 0 ? "Types" : "Prev"}
+          </button>
+
+          {/* Next: advance through questions; disabled at the end */}
+          <button
+            onClick={() => {
+              if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
+            }}
+            disabled={currentIndex >= questions.length - 1}
+            className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs font-black uppercase tracking-widest disabled:opacity-40"
+            style={{ background: "var(--bs-accent-hex)", color: "black" }}
+          >
+            Next <ChevronRight className="w-4 h-4" />
+          </button>
+
+          {/* Submit/Done — only shown for quiz types */}
+          {!isStudyType && (
+            <button
+              onClick={handleSubmit}
+              disabled={questions.length === 0}
+              className="px-4 py-3.5 border text-xs font-black uppercase tracking-widest disabled:opacity-30"
+              style={{ borderColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)" }}
+            >
+              End
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── DESKTOP: Side-by-side layout (unchanged) ── */}
+      <div className="hidden md:flex relative z-10 pt-20 h-screen">
+        {/* Sidebar */}
+        <div className="w-72 border-r flex flex-col" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
+          <div className="p-4 border-b" style={{ borderColor: "var(--bs-border-subtle)" }}>
+            <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm transition-colors mb-3 font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
+              <ArrowLeft className="w-4 h-4" />Back
+            </button>
+            <h2 className="font-black text-sm truncate uppercase tracking-tight" style={{ color: "var(--bs-text)" }}>{decodedSubunit}</h2>
+            <p className="text-xs font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>Class {cls}</p>
+          </div>
+
+          {/* Timer — hidden for study types */}
+          {!isStudyType && (
+            <div className="p-4 border-b" style={{ borderColor: "var(--bs-border-subtle)" }}>
+              <div className="flex items-center gap-2 mb-2">
+                <Clock className="w-4 h-4" style={{ color: "var(--bs-secondary-hex)" }} />
+                <span className="text-xs font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Time Remaining</span>
+              </div>
+              <div className="text-2xl font-black font-mono" style={{ color: timeLeft < 300 ? "#ef4444" : "var(--bs-accent-hex)" }}>
+                {formatTime(timeLeft)}
+              </div>
+            </div>
+          )}
+
+          {isStudyType && (
+            <div className="p-4 border-b" style={{ borderColor: "var(--bs-border-subtle)" }}>
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4" style={{ color: "var(--bs-accent-hex)" }} />
+                <span className="text-xs font-mono uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>Study Mode</span>
+              </div>
+              <p className="text-xs mt-1 font-mono" style={{ color: "var(--bs-text-muted)" }}>Read carefully and absorb the material</p>
+            </div>
+          )}
+
+          {/* Progress */}
+          <div className="p-4 border-b" style={{ borderColor: "var(--bs-border-subtle)" }}>
+            <div className="flex justify-between text-xs mb-2 font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>
+              <span>Progress</span>
+              <span>{currentIndex + 1}/{questions.length || 0}</span>
+            </div>
+            <div className="h-1.5 overflow-hidden" style={{ background: "var(--bs-border-subtle)" }}>
+              <div className="h-full transition-all" style={{ width: `${progress}%`, background: "var(--bs-accent-hex)" }} />
+            </div>
+            {!isStudyType && (
+              <div className="grid grid-cols-3 gap-1 mt-3 text-center text-xs">
+                <div className="border p-1" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)` }}>
+                  <div className="font-black" style={{ color: "var(--bs-accent-hex)" }}>{questions.filter((_, i) => answers[i] !== undefined).length}</div>
+                  <div className="font-mono uppercase text-[10px]" style={{ color: "var(--bs-text-muted)" }}>Done</div>
+                </div>
+                <div className="border p-1" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+                  <div className="font-black" style={{ color: "var(--bs-text-muted)" }}>{questions.filter((_, i) => answers[i] === undefined).length}</div>
+                  <div className="font-mono uppercase text-[10px]" style={{ color: "var(--bs-text-muted)" }}>Left</div>
+                </div>
+                <div className="border p-1" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+                  <div className="font-black" style={{ color: "var(--bs-text)" }}>{questions.length}</div>
+                  <div className="font-mono uppercase text-[10px]" style={{ color: "var(--bs-text-muted)" }}>Total</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Question Types */}
+          <div className="p-4 flex-1 overflow-y-auto">
+            <p className="text-xs mb-3 font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Question Type</p>
+            <div className="space-y-1">
+              {QUESTION_TYPES.map((type, idx) => (
+                <button
+                  key={type.id}
+                  onClick={() => setSelectedType(type.id)}
+                  className="w-full text-left px-3 py-2 text-xs transition-all font-mono uppercase tracking-wide border-l-2"
+                  style={selectedType === type.id
+                    ? { borderLeftColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)", background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)` }
+                    : { borderLeftColor: "transparent", color: "var(--bs-text-muted)" }
+                  }
+                >
+                  <span style={{ color: "var(--bs-border-strong)" }} className="mr-2">{idx + 1}.</span>
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit — hidden for study types */}
+          {!isStudyType && (
+            <div className="p-4 border-t" style={{ borderColor: "var(--bs-border-subtle)" }}>
+              <div className="relative group">
+                <div className="absolute inset-0 transform -skew-x-12 translate-x-1 translate-y-1 opacity-30 group-hover:translate-x-1.5 group-hover:translate-y-1.5 transition-transform" style={{ background: "var(--bs-accent-hex)" }} />
+                <button onClick={handleSubmit} disabled={questions.length === 0} className="relative w-full py-2.5 font-black uppercase tracking-widest text-sm hover:opacity-90 transition-colors disabled:opacity-50 transform -skew-x-12" style={{ background: "var(--bs-accent-hex)", color: "black" }}>
+                  <span className="transform skew-x-12 inline-block">Submit Quiz</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {loading ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-12 h-12 border-2 border-t-transparent animate-spin mx-auto mb-4" style={{ borderColor: "var(--bs-accent-hex) transparent transparent transparent" }} />
+                <p className="font-mono uppercase tracking-widest text-sm" style={{ color: "var(--bs-text-muted)" }}>Loading...</p>
+              </div>
+            </div>
+          ) : questions.length === 0 ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center max-w-md">
+                <AlertCircle className="w-16 h-16 mx-auto mb-4" style={{ color: "var(--bs-border-strong)" }} />
+                <h3 className="text-xl font-black mb-2 uppercase tracking-tighter" style={{ color: "var(--bs-text)" }}>No content available</h3>
+                <p className="text-sm mb-6 font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
+                  No {QUESTION_TYPES.find(t => t.id === selectedType)?.label} found for this subunit yet.
+                </p>
+                <button onClick={() => navigate(-1)} className="px-6 py-2.5 border text-sm font-black uppercase tracking-widest transition-colors" style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>
+                  Go Back
+                </button>
+              </div>
+            </div>
+          ) : currentQ ? (
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="max-w-3xl mx-auto">
+                {/* Question number */}
+                <div className="flex items-center gap-3 mb-6">
+                  <div
+                    className="inline-flex items-center gap-2 border px-3 py-1 transform -skew-x-12"
+                    style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 30%, transparent)` }}
+                  >
+                    <span className="text-xs font-black uppercase tracking-widest transform skew-x-12" style={{ color: "var(--bs-accent-hex)" }}>
+                      {isStudyType ? `Item ${currentIndex + 1} of ${questions.length}` : `Q ${currentIndex + 1} of ${questions.length}`}
+                    </span>
+                  </div>
+                  {!isStudyType && currentQ.difficulty && (
+                    <span className={`px-3 py-1 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-green-500/10 border-green-500/20 text-green-500" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"}`}>
+                      {currentQ.difficulty}
+                    </span>
+                  )}
+                </div>
+
+                {/* Type-specific renderer */}
+                {renderQuestionContent()}
+
+                {/* Explanation — only for quiz types */}
+                {!isStudyType && submitted && currentQ.explanation && (
+                  <div
+                    className="border border-l-4 p-4 mb-6"
+                    style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}
+                  >
+                    <h4 className="font-black text-sm mb-2 uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>Explanation</h4>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--bs-text-muted)" }}>{currentQ.explanation}</p>
+                  </div>
+                )}
+
+                {/* Navigation */}
+                <div className="flex items-center justify-between mt-6">
+                  <button
+                    onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
+                    disabled={currentIndex === 0}
+                    className="flex items-center gap-2 px-5 py-2.5 border transition-colors disabled:opacity-30 text-sm font-black uppercase tracking-widest"
+                    style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}
+                  >
+                    <ChevronLeft className="w-4 h-4" />Previous
+                  </button>
+
+                  <div className="relative group">
+                    <div className="absolute inset-0 transform -skew-x-12 translate-x-1.5 translate-y-1.5 opacity-30 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform" style={{ background: "var(--bs-accent-hex)" }} />
+                    <button
+                      onClick={() => {
+                        if (currentIndex < questions.length - 1) {
+                          setCurrentIndex(currentIndex + 1);
+                        } else if (!isStudyType) {
+                          handleSubmit();
+                        } else {
+                          navigate(-1);
+                        }
+                      }}
+                      className="relative flex items-center gap-2 px-5 py-2.5 font-black uppercase tracking-widest text-sm transform -skew-x-12 transition-colors"
+                      style={{ background: "var(--bs-accent-hex)", color: "black" }}
+                    >
+                      <span className="transform skew-x-12 inline-flex items-center gap-2">
+                        {currentIndex < questions.length - 1 ? (
+                          <>Next <ChevronRight className="w-4 h-4" /></>
+                        ) : isStudyType ? (
+                          <>Done <CheckCircle className="w-4 h-4" /></>
+                        ) : (
+                          <>Submit <CheckCircle className="w-4 h-4" /></>
+                        )}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}

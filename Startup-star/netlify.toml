@@ -1,0 +1,4 @@
+[build]
+  base = "startup-star-app"
+  command = "npm run build"
+  publish = "dist/public"

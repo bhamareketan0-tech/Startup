@@ -1,0 +1,27 @@
+modules = ["nodejs-20"]
+[nix]
+channel = "stable-25_05"
+
+[agent]
+expertMode = true
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
+localPort = 8080
+externalPort = 80
+
+[[ports]]
+localPort = 8081
+externalPort = 8081
+
+[userenv]
+
+[userenv.shared]
+AI_INTEGRATIONS_GEMINI_BASE_URL = "https://generativelanguage.googleapis.com"
+
+[postMerge]
+path = "bio-study-hub/scripts/post-merge.sh"
+timeoutMs = 60000

@@ -1,0 +1,353 @@
+🟢 CLASS 11 BIOLOGY
+Unit I — Diversity in the Living World
+Chapter 1: The Living World
+
+Introduction
+What is Living?
+Diversity in the Living World
+Taxonomic Categories
+Taxonomical Aids
+
+Chapter 2: Biological Classification
+
+Introduction
+Kingdom Monera
+Kingdom Protista
+Kingdom Fungi
+Kingdom Plantae
+Kingdom Animalia
+Viruses, Viroids and Lichens
+
+Chapter 3: Plant Kingdom
+
+Introduction
+Algae
+Bryophytes
+Pteridophytes
+Gymnosperms
+Angiosperms
+Plant Life Cycles and Alternation of Generations
+
+Chapter 4: Animal Kingdom
+
+Introduction
+Basis of Classification
+Porifera
+Coelenterata
+Platyhelminthes
+Aschelminthes
+Annelida
+Arthropoda
+Mollusca
+Echinodermata
+Hemichordata
+Chordata
+
+
+Unit II — Structural Organisation in Plants and Animals
+Chapter 5: Morphology of Flowering Plants
+
+Introduction
+The Root
+The Stem
+The Leaf
+The Inflorescence
+The Flower
+The Fruit
+The Seed
+Description of Important Families
+
+Chapter 6: Anatomy of Flowering Plants
+
+Introduction
+The Tissue
+The Tissue System
+Anatomy of Dicotyledonous Plants
+Anatomy of Monocotyledonous Plants
+Secondary Growth
+
+Chapter 7: Structural Organisation in Animals
+
+Introduction
+Animal Tissues
+Organ and Organ System
+Earthworm
+Cockroach
+Frog
+
+
+Unit III — Cell: Structure and Functions
+Chapter 8: Cell – The Unit of Life
+
+Introduction
+What is a Cell?
+Cell Theory
+Overview of Cell
+Prokaryotic Cells
+Eukaryotic Cells
+
+Chapter 9: Biomolecules
+
+Introduction
+Chemical Composition Analysis
+Primary and Secondary Metabolites
+Biomacromolecules
+Proteins
+Polysaccharides
+Nucleic Acids
+Enzymes
+Concept of Metabolism
+
+Chapter 10: Cell Cycle and Cell Division
+
+Introduction
+Cell Cycle
+Mitosis (M Phase)
+Significance of Mitosis
+Meiosis
+Significance of Meiosis
+
+
+Unit IV — Plant Physiology
+Chapter 11: Photosynthesis in Higher Plants
+
+Introduction
+Early Experiments
+Where does Photosynthesis Occur?
+Pigments Involved
+Light Reactions
+Electron Transport
+Calvin Cycle (C3 Pathway)
+C4 Pathway
+Photorespiration
+Factors Affecting Photosynthesis
+
+Chapter 12: Respiration in Plants
+
+Introduction
+Do Plants Breathe?
+Glycolysis
+Fermentation
+Aerobic Respiration
+Krebs Cycle
+Respiratory Balance Sheet
+Amphibolic Pathway
+Respiratory Quotient
+
+Chapter 13: Plant Growth and Development
+
+Introduction
+Growth
+Differentiation, Dedifferentiation and Redifferentiation
+Development
+Plant Growth Regulators
+Auxins, Gibberellins, Cytokinins, ABA, Ethylene
+Photoperiodism
+Vernalisation
+
+
+Unit V — Human Physiology
+Chapter 14: Breathing and Exchange of Gases
+
+Introduction
+Respiratory Organs
+Mechanism of Breathing
+Exchange of Gases
+Transport of Gases
+Regulation of Respiration
+Disorders of Respiratory System
+
+Chapter 15: Body Fluids and Circulation
+
+Introduction
+Blood
+Lymph
+Circulatory Pathways
+Human Circulatory System
+Cardiac Cycle
+Electrocardiograph (ECG)
+Double Circulation
+Regulation of Cardiac Activity
+Disorders of Circulatory System
+
+Chapter 16: Excretory Products and their Elimination
+
+Introduction
+Human Excretory System
+Urine Formation
+Function of Tubules
+Concentration of Filtrate
+Regulation of Kidney Function
+Micturition
+Role of Other Organs in Excretion
+Disorders of Excretory System
+
+Chapter 17: Locomotion and Movement
+
+Introduction
+Types of Movement
+Muscle
+Skeletal System
+Joints
+Disorders of Muscular and Skeletal System
+
+Chapter 18: Neural Control and Coordination
+
+Introduction
+Neural System
+Human Neural System
+Neuron – Structure and Function
+Central Neural System
+Reflex Action and Reflex Arc
+Sensory Reception and Processing
+
+Chapter 19: Chemical Coordination and Integration
+
+Introduction
+Endocrine Glands and Hormones
+Human Endocrine System
+Hormones of Heart, Kidney and GI Tract
+Mechanism of Hormone Action
+
+
+🔵 CLASS 12 BIOLOGY
+Unit VI — Reproduction
+Chapter 1: Sexual Reproduction in Flowering Plants
+
+Introduction
+Flower – Structure and Function
+Pre-fertilisation: Structures and Events
+Double Fertilisation
+Post-fertilisation: Structures and Events
+Apomixis and Polyembryony
+
+Chapter 2: Human Reproduction
+
+Introduction
+Male Reproductive System
+Female Reproductive System
+Gametogenesis
+Menstrual Cycle
+Fertilisation and Implantation
+Pregnancy and Embryonic Development
+Parturition and Lactation
+
+Chapter 3: Reproductive Health
+
+Introduction
+Reproductive Health – Problems and Strategies
+Population Explosion and Birth Control
+Medical Termination of Pregnancy
+Sexually Transmitted Infections
+Infertility
+
+
+Unit VII — Genetics and Evolution
+Chapter 4: Principles of Inheritance and Variation
+
+Introduction
+Mendel's Experiments
+Inheritance of One Gene
+Inheritance of Two Genes
+Sex Determination
+Mutation
+Genetic Disorders
+
+Chapter 5: Molecular Basis of Inheritance
+
+Introduction
+The DNA
+Search for Genetic Material
+RNA World
+Replication
+Transcription
+Genetic Code
+Translation
+Regulation of Gene Expression
+Human Genome Project
+DNA Fingerprinting
+
+Chapter 6: Evolution
+
+Introduction
+Origin of Life
+Evidence for Evolution
+Adaptive Radiation
+Biological Evolution
+Mechanism of Evolution
+Hardy-Weinberg Principle
+A Brief Account of Evolution
+Origin and Evolution of Man
+
+
+Unit VIII — Biology in Human Welfare
+Chapter 7: Human Health and Disease
+
+Introduction
+Common Diseases in Humans
+Immunity
+AIDS
+Cancer
+Drugs and Alcohol Abuse
+
+Chapter 8: Microbes in Human Welfare
+
+Introduction
+Microbes in Household Products
+Microbes in Industrial Products
+Microbes in Sewage Treatment
+Microbes in Production of Biogas
+Microbes as Biocontrol Agents
+Microbes as Biofertilisers
+
+
+Unit IX — Biotechnology
+Chapter 9: Biotechnology – Principles and Processes
+
+Introduction
+Principles of Biotechnology
+Tools of Recombinant DNA Technology
+Processes of Recombinant DNA Technology
+
+Chapter 10: Biotechnology and its Applications
+
+Introduction
+Biotechnological Applications in Agriculture
+Biotechnological Applications in Medicine
+Transgenic Animals
+Ethical Issues
+
+
+Unit X — Ecology
+Chapter 11: Organisms and Populations
+
+Introduction
+Organism and its Environment
+Major Abiotic Factors
+Responses to Abiotic Factors
+Adaptations
+Population Attributes
+Population Growth
+Life History Variation
+Population Interactions
+
+Chapter 12: Ecosystem
+
+Introduction
+Ecosystem Structure and Function
+Productivity
+Decomposition
+Energy Flow
+Ecological Pyramids
+Ecological Succession
+Nutrient Cycling
+Ecosystem Services
+
+Chapter 13: Biodiversity and Conservation
+
+Introduction
+Biodiversity
+Biodiversity at Global Level
+Importance of Species Diversity
+Loss of Biodiversity
+Biodiversity Conservation
