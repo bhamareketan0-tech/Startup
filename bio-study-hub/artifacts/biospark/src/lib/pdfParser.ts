@@ -72,13 +72,11 @@ function parseMatch(raw: string) {
   const colAText = raw.split("COLUMN_A:")[1]?.split("COLUMN_B:")[0] || "";
   const colBText = raw.split("COLUMN_B:")[1]?.split("OPTIONS:")[0] || "";
 
-  // Column A (1–4)
   for (const m of colAText.matchAll(/\d+\.\s*(.*)/g)) {
     const val = clean(m[1]);
     if (val) colA.push(val);
   }
 
-  // Column B (P–S)
   for (const m of colBText.matchAll(/[P-S]\.\s*(.*)/g)) {
     const val = clean(m[1]);
     if (val) colB.push(val);
@@ -99,7 +97,7 @@ function parseMatch(raw: string) {
   return {
     columnA: colA,
     columnB: colB,
-    correctMapping: map.length ? map : [0, 1, 2, 3], // fallback safety
+    correctMapping: map.length ? map : [0, 1, 2, 3],
   };
 }
 
@@ -152,8 +150,6 @@ export function parse(text: string): ParsedQuestion[] {
 
     // ---------- NORMAL TYPES ----------
     const optStart = raw.search(/\n[A-D]\)/);
-
-    // SAFETY: skip broken question instead of crashing
     if (optStart === -1) continue;
 
     const qText = clean(
@@ -165,7 +161,6 @@ export function parse(text: string): ParsedQuestion[] {
 
     const opts = extractOptions(raw.slice(optStart));
     const ans = extractAnswer(raw);
-
     const correctIndex = ["A", "B", "C", "D"].indexOf(ans);
 
     result.push({
