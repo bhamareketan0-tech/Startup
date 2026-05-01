@@ -11,7 +11,7 @@ export interface ParsedQuestion {
 
 // ---------------- CLEAN ----------------
 function clean(s: string) {
-  return s.replace(/\s+/g, " ").trim();
+  return (s || "").replace(/\s+/g, " ").trim();
 }
 
 // ---------------- SPLIT ----------------
@@ -21,7 +21,7 @@ function splitBlocks(text: string) {
 
   for (const m of text.matchAll(regex)) {
     blocks.push({
-      type: m[1].toUpperCase(),
+      type: (m[1] || "").toUpperCase(),
       text: m[0],
     });
   }
@@ -31,7 +31,7 @@ function splitBlocks(text: string) {
 
 // ---------------- OPTIONS ----------------
 function extractOptions(text: string) {
-  const opts: any = { A: "", B: "", C: "", D: "" };
+  const opts: Record<string, string> = { A: "", B: "", C: "", D: "" };
   const regex = /\n([A-D])\)\s*([^\n]+)/g;
 
   for (const m of text.matchAll(regex)) {
@@ -72,12 +72,16 @@ function parseMatch(raw: string) {
   const colAText = raw.split("COLUMN_A:")[1]?.split("COLUMN_B:")[0] || "";
   const colBText = raw.split("COLUMN_B:")[1]?.split("OPTIONS:")[0] || "";
 
+  // Column A (1–4)
   for (const m of colAText.matchAll(/\d+\.\s*(.*)/g)) {
-    colA.push(clean(m[1]));
+    const val = clean(m[1]);
+    if (val) colA.push(val);
   }
 
+  // Column B (P–S)
   for (const m of colBText.matchAll(/[P-S]\.\s*(.*)/g)) {
-    colB.push(clean(m[1]));
+    const val = clean(m[1]);
+    if (val) colB.push(val);
   }
 
   const opts = extractOptions(raw);
@@ -86,7 +90,7 @@ function parseMatch(raw: string) {
   const mappingText = opts[ans] || "";
 
   const map: number[] = [];
-  const idx: any = { P: 0, Q: 1, R: 2, S: 3 };
+  const idx: Record<string, number> = { P: 0, Q: 1, R: 2, S: 3 };
 
   for (const m of mappingText.matchAll(/\d+-([P-S])/g)) {
     map.push(idx[m[1]]);
@@ -95,12 +99,14 @@ function parseMatch(raw: string) {
   return {
     columnA: colA,
     columnB: colB,
-    correctMapping: map,
+    correctMapping: map.length ? map : [0, 1, 2, 3], // fallback safety
   };
 }
 
 // ---------------- MAIN PARSER ----------------
 export function parse(text: string): ParsedQuestion[] {
+  if (!text || typeof text !== "string") return [];
+
   const blocks = splitBlocks(text);
   const result: ParsedQuestion[] = [];
 
@@ -108,7 +114,7 @@ export function parse(text: string): ParsedQuestion[] {
     const raw = block.text;
     const type = mapType(block.type);
 
-    // MATCH (special)
+    // ---------- MATCH ----------
     if (block.type === "MATCH") {
       result.push({
         question: "Match the following:",
@@ -123,13 +129,13 @@ export function parse(text: string): ParsedQuestion[] {
       continue;
     }
 
-    // PARAGRAPH / NOTES (no options)
+    // ---------- PARAGRAPH / POINTER ----------
     if (block.type === "PARAGRAPH" || block.type === "POINTER") {
       const q = clean(
         raw
-          .replace(/TYPE:\s*\w+/, "")
+          .replace(/TYPE:\s*\w+/i, "")
           .replace(/Q\d+\.\s*/, "")
-          .replace(/ANS:\s*[-]/, "")
+          .replace(/ANS:\s*-/i, "")
       );
 
       result.push({
@@ -144,19 +150,23 @@ export function parse(text: string): ParsedQuestion[] {
       continue;
     }
 
-    // NORMAL TYPES
+    // ---------- NORMAL TYPES ----------
     const optStart = raw.search(/\n[A-D]\)/);
+
+    // SAFETY: skip broken question instead of crashing
     if (optStart === -1) continue;
 
     const qText = clean(
       raw
         .slice(0, optStart)
-        .replace(/TYPE:\s*\w+/, "")
+        .replace(/TYPE:\s*\w+/i, "")
         .replace(/Q\d+\.\s*/, "")
     );
 
     const opts = extractOptions(raw.slice(optStart));
     const ans = extractAnswer(raw);
+
+    const correctIndex = ["A", "B", "C", "D"].indexOf(ans);
 
     result.push({
       question: qText,
@@ -164,9 +174,7 @@ export function parse(text: string): ParsedQuestion[] {
       option2: opts.B || "",
       option3: opts.C || "",
       option4: opts.D || "",
-      correct: ans
-        ? `option${["A","B","C","D"].indexOf(ans) + 1}`
-        : "",
+      correct: correctIndex !== -1 ? `option${correctIndex + 1}` : "",
       type,
     });
   }
