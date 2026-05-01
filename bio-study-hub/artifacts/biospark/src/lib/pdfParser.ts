@@ -20,8 +20,9 @@ function splitBlocks(text: string) {
   const blocks: { type: string; text: string }[] = [];
 
   for (const m of text.matchAll(regex)) {
+    if (!m[1] || !m[0]) continue;
     blocks.push({
-      type: (m[1] || "").toUpperCase(),
+      type: m[1].toUpperCase(),
       text: m[0],
     });
   }
@@ -32,9 +33,12 @@ function splitBlocks(text: string) {
 // ---------------- OPTIONS ----------------
 function extractOptions(text: string) {
   const opts: Record<string, string> = { A: "", B: "", C: "", D: "" };
+  if (!text) return opts;
+
   const regex = /\n([A-D])\)\s*([^\n]+)/g;
 
   for (const m of text.matchAll(regex)) {
+    if (!m[1]) continue;
     opts[m[1]] = clean(m[2]);
   }
 
@@ -43,6 +47,7 @@ function extractOptions(text: string) {
 
 // ---------------- ANSWER ----------------
 function extractAnswer(text: string) {
+  if (!text) return "";
   const m = text.match(/ANS:\s*([A-D])/i);
   return m ? m[1].toUpperCase() : "";
 }
@@ -66,6 +71,10 @@ function mapType(type: string) {
 
 // ---------------- MATCH PARSER ----------------
 function parseMatch(raw: string) {
+  if (!raw) {
+    return { columnA: [], columnB: [], correctMapping: [0, 1, 2, 3] };
+  }
+
   const colA: string[] = [];
   const colB: string[] = [];
 
@@ -85,13 +94,15 @@ function parseMatch(raw: string) {
   const opts = extractOptions(raw);
   const ans = extractAnswer(raw);
 
-  const mappingText = opts[ans] || "";
+  const mappingText = ans && opts[ans] ? opts[ans] : "";
 
   const map: number[] = [];
   const idx: Record<string, number> = { P: 0, Q: 1, R: 2, S: 3 };
 
-  for (const m of mappingText.matchAll(/\d+-([P-S])/g)) {
-    map.push(idx[m[1]]);
+  if (mappingText) {
+    for (const m of mappingText.matchAll(/\d+-([P-S])/g)) {
+      map.push(idx[m[1]]);
+    }
   }
 
   return {
@@ -105,10 +116,18 @@ function parseMatch(raw: string) {
 export function parse(text: string): ParsedQuestion[] {
   if (!text || typeof text !== "string") return [];
 
+  // 🔥 HARD VALIDATION
+  if (!text.includes("TYPE:") || !text.includes("Q1.")) {
+    console.error("INVALID INPUT FORMAT");
+    return [];
+  }
+
   const blocks = splitBlocks(text);
   const result: ParsedQuestion[] = [];
 
   for (const block of blocks) {
+    if (!block?.text) continue;
+
     const raw = block.text;
     const type = mapType(block.type);
 
@@ -148,7 +167,7 @@ export function parse(text: string): ParsedQuestion[] {
       continue;
     }
 
-    // ---------- NORMAL TYPES ----------
+    // ---------- NORMAL ----------
     const optStart = raw.search(/\n[A-D]\)/);
     if (optStart === -1) continue;
 
@@ -161,15 +180,16 @@ export function parse(text: string): ParsedQuestion[] {
 
     const opts = extractOptions(raw.slice(optStart));
     const ans = extractAnswer(raw);
-    const correctIndex = ["A", "B", "C", "D"].indexOf(ans);
+
+    const index = ["A", "B", "C", "D"].indexOf(ans);
 
     result.push({
       question: qText,
-      option1: opts.A || "",
-      option2: opts.B || "",
-      option3: opts.C || "",
-      option4: opts.D || "",
-      correct: correctIndex !== -1 ? `option${correctIndex + 1}` : "",
+      option1: opts.A,
+      option2: opts.B,
+      option3: opts.C,
+      option4: opts.D,
+      correct: index !== -1 ? `option${index + 1}` : "",
       type,
     });
   }
@@ -177,8 +197,6 @@ export function parse(text: string): ParsedQuestion[] {
   return result;
 }
 
-// ---------------- COMPATIBILITY FIX (VERY IMPORTANT) ----------------
-// This prevents your Netlify error forever
-
+// 🔥 COMPATIBILITY FIX
 export const parseNEETQuestionBank = parse;
 export const parseGeneralNEET = parse;
