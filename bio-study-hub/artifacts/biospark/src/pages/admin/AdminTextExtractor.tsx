@@ -3,8 +3,27 @@ import { api } from "@/lib/api";
 import { fetchChaptersFromAPI } from "@/lib/chaptersManager";
 import type { Chapter } from "@/lib/chaptersManager";
 import {
-  Sparkles, ChevronDown, ChevronUp, Plus, AlertCircle, Loader2, CheckCircle,
+  Sparkles, ChevronDown, ChevronUp, Plus, AlertCircle, Loader2, CheckCircle, Zap,
 } from "lucide-react";
+
+const API_ORIGIN = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
+
+async function wakeUpBackend(): Promise<boolean> {
+  const healthUrl = API_ORIGIN ? `${API_ORIGIN}/healthz` : "/healthz";
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20000);
+    try {
+      const res = await fetch(healthUrl, { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (res.ok) return true;
+    } catch {
+      clearTimeout(timer);
+      if (attempt < 3) await new Promise((r) => setTimeout(r, 8000));
+    }
+  }
+  return false;
+}
 
 const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
 const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
@@ -132,6 +151,7 @@ export function AdminTextExtractor() {
   const [subunit, setSubunit] = useState("");
   const [rawText, setRawText] = useState("");
   const [extracting, setExtracting] = useState(false);
+  const [extractStatus, setExtractStatus] = useState<string | null>(null);
   const [extractError, setExtractError] = useState<string | null>(null);
   const [questions, setQuestions] = useState<ExtractedQuestion[]>([]);
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -154,11 +174,20 @@ export function AdminTextExtractor() {
     if (!chapter) { setExtractError("Please select a chapter first."); return; }
     setExtracting(true);
     setExtractError(null);
+    setExtractStatus("Connecting to backend server…");
     setQuestions([]);
     setSelected(new Set());
     setSaveResult(null);
 
     try {
+      const alive = await wakeUpBackend();
+      if (!alive) {
+        setExtractError("Backend server didn't respond. Please wait 30 seconds and try again (free server wakes up slowly).");
+        return;
+      }
+
+      setExtractStatus("Sending to Gemini AI — this may take a few seconds…");
+
       const res = await api.post("/pdf-extract", {
         text: rawText,
         chapter,
@@ -177,6 +206,7 @@ export function AdminTextExtractor() {
       setExtractError(msg || "Extraction failed. Check your Gemini API key in Credentials.");
     } finally {
       setExtracting(false);
+      setExtractStatus(null);
     }
   }
 
@@ -284,11 +314,23 @@ export function AdminTextExtractor() {
           className="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black font-bold text-sm hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {extracting ? (
-            <><Loader2 className="w-5 h-5 animate-spin" /> Extracting with Gemini AI…</>
+            <>
+              <Loader2 className="w-5 h-5 animate-spin shrink-0" />
+              <span>{extractStatus ?? "Working…"}</span>
+            </>
           ) : (
             <><Sparkles className="w-5 h-5" /> Extract Questions with Gemini AI</>
           )}
         </button>
+
+        {extracting && extractStatus?.startsWith("Connecting") && (
+          <div className="flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-3">
+            <Zap className="w-4 h-4 text-yellow-400 shrink-0" />
+            <p className="text-yellow-300 text-xs">
+              Backend server may be waking up from sleep — this can take up to 30 seconds on first use.
+            </p>
+          </div>
+        )}
 
         {extractError && (
           <div className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
