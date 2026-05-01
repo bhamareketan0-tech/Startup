@@ -176,3 +176,9 @@ export function parse(text: string): ParsedQuestion[] {
 
   return result;
 }
+
+// ---------------- COMPATIBILITY FIX (VERY IMPORTANT) ----------------
+// This prevents your Netlify error forever
+
+export const parseNEETQuestionBank = parse;
+export const parseGeneralNEET = parse;
