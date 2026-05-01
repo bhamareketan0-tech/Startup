@@ -356,3 +356,51 @@ export function parseNEETQuestionBank(text: string, chapter: string, subunit: st
   }
   return { subUnit: detectedSubUnit, questions };
 }
+
+/**
+ * Fallback parser for standard NEET / competitive exam PDFs.
+ * Call this when the BioPrep-specific parser returns 0 questions.
+ */
+export function parseGeneralNEET(
+  text: string,
+  chapter: string,
+  subunit: string,
+  cls: string
+): ParseResult {
+  const questions: ParsedQuestion[] = [];
+  
+  // Look for answer key block at end of PDF
+  const akIdx = text.search(/answer\s*(key|sheet|s)?[:\s]/i);
+  const akText = akIdx !== -1 ? text.slice(akIdx) : text.slice(-2000);
+  const ak: Record<number, string> = {};
+  for (const m of akText.matchAll(/(\d+)[.\):\-\s]+([A-Da-d])\b/g)) {
+    ak[parseInt(m[1])] = m[2].toUpperCase();
+  }
+
+  // Remove answer key section before parsing questions
+  const mainText = text.replace(/answer\s*(key|sheet|s)?[:\s][\s\S]*/i, "");
+  const blocks = splitIntoQBlocks(mainText);
+
+  for (const block of blocks) {
+    const rawText = block.text.replace(/^\s*(?:Q\.?\s*)?\d+[.\)]\s*/, "");
+    const optStart = rawText.search(/(?:^|\s)[\(\[]?[A-Da-d1-4][\)\]\.]\s+\S/m);
+    if (optStart === -1) continue;
+
+    const qText = clean(rawText.slice(0, optStart));
+    if (qText.length < 5) continue;
+
+    const opts = extractOptions(rawText.slice(optStart));
+    if (Object.values(opts).filter(Boolean).length < 2) continue;
+
+    const answerLetter = ak[block.num] ?? "";
+    questions.push({
+      question: qText,
+      option1: opts.A || "", option2: opts.B || "", option3: opts.C || "", option4: opts.D || "",
+      correct: answerLetter ? letterToKey(answerLetter) : "option1",
+      type: "mcq", difficulty: "medium", explanation: "", subject: "Biology",
+      chapter, subunit: subunit || "", class: cls, is_active: true, meta: null,
+    });
+  }
+
+  return { subUnit: subunit, questions };
+}
