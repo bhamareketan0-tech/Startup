@@ -602,7 +602,16 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
             {parsing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
             {parsing ? "Parsing…" : "Parse Questions"}
           </button>
-          {rawText && (
+          </button>
+
+<button
+  onClick={autoParseWithAI}
+  disabled={parsing || !rawText.trim()}
+  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-sm font-semibold hover:bg-purple-500/20 transition-all disabled:opacity-50"
+>
+  🤖 AI Auto Parse
+</button>
+    {rawText && (
             <button
               onClick={() => { setRawText(""); setQuestions([]); setParseError(null); setSaveResult(null); }}
               className="text-xs text-white/30 hover:text-white/60 transition-colors"
