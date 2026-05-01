@@ -477,7 +477,59 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
       }
     }, 50);
   }
+  async function autoParseWithAI() {
+  try {
+    if (!rawText.trim()) {
+      setParseError("Paste text first");
+      return;
+    }
 
+    setParsing(true);
+    setParseError(null);
+
+    const res = await fetch("https://startup-85w8.onrender.com/format", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: rawText }),
+    });
+
+    const data = await res.json();
+
+    if (!data.text) {
+      setParseError("AI failed");
+      return;
+    }
+
+    let result = parseNEETQuestionBank(data.text, chapter, subunit, cls);
+
+    if (result.questions.length === 0) {
+      result = parseGeneralNEET(data.text, chapter, subunit, cls);
+    }
+
+    if (result.questions.length === 0) {
+      setParseError("Still failed after AI");
+      return;
+    }
+
+    const qs = result.questions.map((q) => ({
+      ...q,
+      chapter: chapter || q.chapter,
+      subunit: subunit || result.subUnit || q.subunit,
+      class: cls,
+    }));
+
+    setQuestions(qs);
+    setSelected(new Set(qs.map((_, i) => i)));
+
+  } catch (err) {
+    console.error(err);
+    setParseError("AI parsing failed");
+  } finally {
+    setParsing(false);
+  }
+}
   function toggleAll() {
     if (selected.size === questions.length) setSelected(new Set());
     else setSelected(new Set(questions.map((_, i) => i)));
