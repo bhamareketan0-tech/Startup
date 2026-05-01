@@ -34,6 +34,9 @@ externalPort = 3001
 
 [userenv.shared]
 AI_INTEGRATIONS_GEMINI_BASE_URL = "https://generativelanguage.googleapis.com"
+NODE_ENV = "development"
+PORT = "8080"
+ALLOWED_ORIGINS = ""
 
 [postMerge]
 path = "bio-study-hub/scripts/post-merge.sh"
