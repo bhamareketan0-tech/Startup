@@ -1,4 +1,5 @@
 {
-  "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "npm run build"
+  "buildCommand": "cd artifacts/biospark && npm install && npm run build",
+  "outputDirectory": "artifacts/biospark/dist/public",
+  "installCommand": "echo skip"
 }

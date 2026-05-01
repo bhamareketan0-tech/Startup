@@ -47,22 +47,22 @@ args = "BioSpark API"
 name = "BioSpark Frontend"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd bio-study-hub/artifacts/biospark && PORT=5000 npx vite --config vite.config.ts --host 0.0.0.0 --port 5000"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd bio-study-hub/artifacts/biospark && pnpm exec vite --config vite.config.ts --host 0.0.0.0 --port 5000"
+waitForPort = 5000
 
 [[workflows.workflow]]
 name = "BioSpark API"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd bio-study-hub/artifacts/api-server && pnpm exec tsx --env-file=../../.env ./src/index.ts"
-waitForPort = 8080
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd bio-study-hub/artifacts/api-server && pnpm exec tsx ./src/index.ts"
+waitForPort = 8080

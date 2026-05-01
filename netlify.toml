@@ -1,6 +1,6 @@
 [build]
   base = "bio-study-hub/artifacts/biospark"
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = "dist/public"
 
 [build.environment]
