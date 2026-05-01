@@ -1,0 +1,52 @@
+Let me push all local file changes to GitHub using the API directly — one by one for each key file:
+
+
+2 actions
+All changes are on GitHub. Now here is your complete credentials and setup reference:
+
+
+2 actions
+Everything is on GitHub. Here is your complete credentials & setup guide:
+
+GitHub Repository
+URL: https://github.com/bhamareketan0-tech/Startup
+Branch: main
+Frontend path: bio-study-hub/artifacts/biospark
+Backend path: bio-study-hub/artifacts/api-server
+
+Render (Backend) — https://startup-85w8.onrender.com
+Go to Render → your service → Environment and set ALL of these:
+
+Variable	Value / Where to get it
+MONGODB_URI	MongoDB Atlas → your cluster → Connect → copy the connection string
+GEMINI_API_KEY	aistudio.google.com/apikey
+SESSION_SECRET	Any long random string (e.g. biospark-super-secret-2024-xyz)
+NODE_ENV	production
+GOOGLE_CLIENT_ID	Google Cloud Console → Credentials → OAuth 2.0 Client ID
+GOOGLE_CLIENT_SECRET	Google Cloud Console → same OAuth client
+GOOGLE_CALLBACK_URL	https://startup-85w8.onrender.com/auth/google/callback
+GOOGLE_SUCCESS_REDIRECT	https://sparkling-sable-f45381.netlify.app/login
+Render build settings:
+
+Root directory: bio-study-hub/artifacts/api-server
+Build command: npm install && npm run build
+Start command: node dist/index.js
+Netlify (Frontend) — https://sparkling-sable-f45381.netlify.app
+Already configured via netlify.toml in the repo. No manual env vars needed — VITE_API_URL is already set in the file.
+
+If you run it locally / on a new Replit
+Create a .env file inside bio-study-hub/artifacts/api-server/:
+
+MONGODB_URI=mongodb+srv://<user>:<pass>@cluster0.xxxxx.mongodb.net/biospark
+GEMINI_API_KEY=AIza...your-key...
+SESSION_SECRET=any-long-random-string
+NODE_ENV=development
+GOOGLE_CLIENT_ID=xxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-xxxx
+GOOGLE_CALLBACK_URL=http://localhost:8080/auth/google/callback
+GOOGLE_SUCCESS_REDIRECT=http://localhost:5000/login
+
+Admin Login
+Email: bhamareketan0-tech@gmail.com (hardcoded as admin)
+URL: https://sparkling-sable-f45381.netlify.app/admin
+Everything is saved on GitHub — you can clone and run on any machine or new Replit using this reference!
