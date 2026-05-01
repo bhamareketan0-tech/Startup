@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: biospark-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.10.0
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        value: mongodb+srv://biospark_admin:biospark_admin@cluster0.ncvdwvn.mongodb.net/?appName=Cluster0
+      - key: JWT_SECRET
+        value: BioSpark_SuperSecure_JWT_2024_MinLength32Chars_YourSecretHere
+      - key: ADMIN_EMAIL
+        value: bhamareketan0@gmail.com
+      - key: FRONTEND_URL
+        value: https://your-frontend.netlify.app
+      - key: GOOGLE_CLIENT_ID
+        value: YOUR_GOOGLE_CLIENT_ID_HERE
+      - key: NODE_ENV
+        value: production
