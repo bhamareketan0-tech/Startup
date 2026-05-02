@@ -69,46 +69,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-if (!token) {
-  setLoading(false);
-  return;
-}
-
-fetch(`/api/auth/me`, {
-  headers: {
-    Authorization: `Bearer `
-  }
-})
-  .then((r) => {
-    if (!r.ok) return null;
-    return r.json();
-  })
-  .then((data: any) => {
-    if (!data) return;
-
-    const u = data.user || data;
-
-    if (u && u.email) {
-      setUser({
-        id: u.id || u._id || "",
-        email: u.email,
-        name: u.name,
-        avatar: u.avatar
-      });
-      setProfile(profileFromUser(u));
+    if (!token) {
+      setLoading(false);
+      return;
     }
-  })
-  .catch(() => {
-    console.log("Auth check skipped");
-  })
-  .finally(() => {
-    setLoading(false);
-  });
+
+    fetch(`/api/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((r) => {
+        if (!r.ok) return null;
+        return r.json();
+      })
+      .then((data: unknown) => {
+        if (!data) return;
+        const d = data as Record<string, unknown>;
+        const u = (d["user"] as Record<string, unknown>) || d;
+        if (u && u["email"]) {
+          setUser({
+            id: (u["id"] as string) || (u["_id"] as string) || "",
+            email: u["email"] as string,
+            name: u["name"] as string | undefined,
+            avatar: u["avatar"] as string | undefined,
+          });
           setProfile(profileFromUser(u));
         }
       })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .catch(() => {
+        console.log("Auth check skipped");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   async function signIn(email: string, password: string): Promise<{ error: Error | null }> {
@@ -116,7 +110,6 @@ fetch(`/api/auth/me`, {
       const res = await fetch(API + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        ,
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json() as Record<string, unknown>;
@@ -139,7 +132,6 @@ fetch(`/api/auth/me`, {
       const res = await fetch(API + "/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        ,
         body: JSON.stringify({ email, password, name, class: cls }),
       });
       const data = await res.json() as Record<string, unknown>;
@@ -154,7 +146,8 @@ fetch(`/api/auth/me`, {
   }
 
   async function signOut(): Promise<void> {
-    await fetch(API + "/api/auth/logout", { method: "POST",  }).catch(() => {});
+    await fetch(API + "/api/auth/logout", { method: "POST" }).catch(() => {});
+    localStorage.removeItem("token");
     setUser(null);
     setProfile(null);
   }
@@ -166,43 +159,25 @@ fetch(`/api/auth/me`, {
   }
 
   async function refreshProfile(): Promise<void> {
-    const res = await const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-if (!token) {
-  setLoading(false);
-  return;
-}
+    const res = await fetch(`/api/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => null);
 
-fetch(`/api/auth/me`, {
-  headers: {
-    Authorization: `Bearer `
-  }
-})
-  .then((r) => {
-    if (!r.ok) return null;
-    return r.json();
-  })
-  .then((data: any) => {
+    if (!res || !res.ok) return;
+    const data = await res.json().catch(() => null) as Record<string, unknown> | null;
     if (!data) return;
 
-    const u = data.user || data;
-
-    if (u && u.email) {
+    const u = (data["user"] as Record<string, unknown>) || data;
+    if (u && u["email"]) {
       setUser({
-        id: u.id || u._id || "",
-        email: u.email,
-        name: u.name,
-        avatar: u.avatar
+        id: (u["id"] as string) || (u["_id"] as string) || "",
+        email: u["email"] as string,
+        name: u["name"] as string | undefined,
+        avatar: u["avatar"] as string | undefined,
       });
-      setProfile(profileFromUser(u));
-    }
-  })
-  .catch(() => {
-    console.log("Auth check skipped");
-  })
-  .finally(() => {
-    setLoading(false);
-  });
       setProfile(profileFromUser(u));
     }
   }

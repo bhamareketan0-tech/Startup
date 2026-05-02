@@ -619,8 +619,7 @@ export function PracticePage() {
       if (user && !isStudyType) {
         try {
           const seenRes = await fetch(
-            `${API_BASE}/seen-questions?chapter=${chapterId}&subunit=${encodeURIComponent(decodedSubunit)}&class=${cls}&type=${typeId}`,
-            {  }
+            `${API_BASE}/seen-questions?chapter=${chapterId}&subunit=${encodeURIComponent(decodedSubunit)}&class=${cls}&type=${typeId}`
           );
           if (seenRes.ok) {
             const seenData = await seenRes.json() as { seen_ids: string[] };
@@ -706,7 +705,6 @@ export function PracticePage() {
         await fetch(`${API_BASE}/seen-questions/mark`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          ,
           body: JSON.stringify({ chapter: chapterId, subunit: decodedSubunit, class: cls, type: selectedType, question_ids: questionIds }),
         }).catch(() => null);
       }

@@ -28,7 +28,7 @@ export function ChaptersPage() {
       await Promise.all(
         chapters.map(async (ch) => {
           try {
-            const res = await fetch(`${API_BASE}/questions/counts?class=${cls}&chapter=${ch.id}`, {  });
+            const res = await fetch(`${API_BASE}/questions/counts?class=${cls}&chapter=${ch.id}`);
             if (!res.ok) return;
             const data = await res.json() as CountsResult;
             results[ch.id] = data.chapterTotal ?? 0;

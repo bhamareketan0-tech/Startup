@@ -3,8 +3,16 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "./App";
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(
-  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ""}>
-    <App />
-  </GoogleOAuthProvider>
-);
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
+
+const root = createRoot(document.getElementById("root")!);
+
+if (googleClientId) {
+  root.render(
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <App />
+    </GoogleOAuthProvider>
+  );
+} else {
+  root.render(<App />);
+}
