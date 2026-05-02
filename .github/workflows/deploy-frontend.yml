@@ -45,9 +45,6 @@ jobs:
         env:
           BASE_URL: /Startup/
 
-      - name: Add 404.html for SPA routing
-        run: cp bio-study-hub/artifacts/biospark/dist/public/index.html bio-study-hub/artifacts/biospark/dist/public/404.html
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

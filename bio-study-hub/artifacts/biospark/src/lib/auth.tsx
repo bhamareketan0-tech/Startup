@@ -60,6 +60,19 @@ function profileFromUser(u: Record<string, unknown>): UserProfile {
   };
 }
 
+async function safeJson(res: Response): Promise<Record<string, unknown>> {
+  try {
+    const text = await res.text();
+    const parsed = JSON.parse(text);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Record<string, unknown>;
+    }
+    return {};
+  } catch {
+    return {};
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -74,19 +87,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    fetch(`/api/auth/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    fetch(`${API}/api/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then((r) => {
+      .then(async (r) => {
         if (!r.ok) return null;
-        return r.json();
+        return safeJson(r);
       })
-      .then((data: unknown) => {
+      .then((data) => {
         if (!data) return;
-        const d = data as Record<string, unknown>;
-        const u = (d["user"] as Record<string, unknown>) || d;
+        const u = (data["user"] as Record<string, unknown>) || data;
         if (u && u["email"]) {
           setUser({
             id: (u["id"] as string) || (u["_id"] as string) || "",
@@ -97,12 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setProfile(profileFromUser(u));
         }
       })
-      .catch(() => {
-        console.log("Auth check skipped");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   async function signIn(email: string, password: string): Promise<{ error: Error | null }> {
@@ -112,8 +118,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json() as Record<string, unknown>;
-      if (!res.ok) return { error: new Error((data["error"] as string) || "Login failed.") };
+      const data = await safeJson(res);
+      if (!res.ok) {
+        const msg = (data["error"] as string) || (data["message"] as string) || "Login failed. Please check your credentials.";
+        return { error: new Error(msg) };
+      }
+      const token = data["token"] as string | undefined;
+      if (token) localStorage.setItem("token", token);
       const u = (data["user"] as Record<string, unknown>) || data;
       setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
       setProfile(profileFromUser(u));
@@ -123,7 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       return { error: null };
     } catch {
-      return { error: new Error("Network error. Please try again.") };
+      return { error: new Error("Unable to connect to the server. Please try again.") };
     }
   }
 
@@ -134,14 +145,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name, class: cls }),
       });
-      const data = await res.json() as Record<string, unknown>;
-      if (!res.ok) return { error: new Error((data["error"] as string) || "Registration failed.") };
+      const data = await safeJson(res);
+      if (!res.ok) {
+        const msg = (data["error"] as string) || (data["message"] as string) || "Registration failed. Please try again.";
+        return { error: new Error(msg) };
+      }
+      const token = data["token"] as string | undefined;
+      if (token) localStorage.setItem("token", token);
       const u = (data["user"] as Record<string, unknown>) || data;
       setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
       setProfile(profileFromUser(u));
       return { error: null };
     } catch {
-      return { error: new Error("Network error. Please try again.") };
+      return { error: new Error("Unable to connect to the server. Please try again.") };
     }
   }
 
@@ -161,15 +177,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function refreshProfile(): Promise<void> {
     const token = localStorage.getItem("token");
     if (!token) return;
-
-    const res = await fetch(`/api/auth/me`, {
+    const res = await fetch(`${API}/api/auth/me`, {
       headers: { Authorization: `Bearer ${token}` },
     }).catch(() => null);
-
     if (!res || !res.ok) return;
-    const data = await res.json().catch(() => null) as Record<string, unknown> | null;
-    if (!data) return;
-
+    const data = await safeJson(res);
     const u = (data["user"] as Record<string, unknown>) || data;
     if (u && u["email"]) {
       setUser({
