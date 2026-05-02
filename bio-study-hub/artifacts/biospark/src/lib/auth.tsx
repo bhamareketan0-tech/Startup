@@ -67,12 +67,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [comebackMessage, setComebackMessage] = useState<AuthContextType["comebackMessage"]>(null);
 
   useEffect(() => {
-    fetch(API + "/api/auth/me", { credentials: "include" })
-      .then((r) => r.json())
-      .then((data: Record<string, unknown>) => {
-        const u = (data["user"] as Record<string, unknown>) || data;
-        if (u && u["email"]) {
-          setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
+    const token = localStorage.getItem("token");
+
+if (!token) {
+  setLoading(false);
+  return;
+}
+
+fetch(`/api/auth/me`, {
+  headers: {
+    Authorization: `Bearer `
+  }
+})
+  .then((r) => {
+    if (!r.ok) return null;
+    return r.json();
+  })
+  .then((data: any) => {
+    if (!data) return;
+
+    const u = data.user || data;
+
+    if (u && u.email) {
+      setUser({
+        id: u.id || u._id || "",
+        email: u.email,
+        name: u.name,
+        avatar: u.avatar
+      });
+      setProfile(profileFromUser(u));
+    }
+  })
+  .catch(() => {
+    console.log("Auth check skipped");
+  })
+  .finally(() => {
+    setLoading(false);
+  });
           setProfile(profileFromUser(u));
         }
       })
@@ -85,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await fetch(API + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        ,
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json() as Record<string, unknown>;
@@ -108,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await fetch(API + "/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        ,
         body: JSON.stringify({ email, password, name, class: cls }),
       });
       const data = await res.json() as Record<string, unknown>;
@@ -123,7 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut(): Promise<void> {
-    await fetch(API + "/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
+    await fetch(API + "/api/auth/logout", { method: "POST",  }).catch(() => {});
     setUser(null);
     setProfile(null);
   }
@@ -135,12 +166,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function refreshProfile(): Promise<void> {
-    const res = await fetch(API + "/api/auth/me", { credentials: "include" }).catch(() => null);
-    if (!res?.ok) return;
-    const data = await res.json() as Record<string, unknown>;
-    const u = (data["user"] as Record<string, unknown>) || data;
-    if (u && u["email"]) {
-      setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
+    const res = await const token = localStorage.getItem("token");
+
+if (!token) {
+  setLoading(false);
+  return;
+}
+
+fetch(`/api/auth/me`, {
+  headers: {
+    Authorization: `Bearer `
+  }
+})
+  .then((r) => {
+    if (!r.ok) return null;
+    return r.json();
+  })
+  .then((data: any) => {
+    if (!data) return;
+
+    const u = data.user || data;
+
+    if (u && u.email) {
+      setUser({
+        id: u.id || u._id || "",
+        email: u.email,
+        name: u.name,
+        avatar: u.avatar
+      });
+      setProfile(profileFromUser(u));
+    }
+  })
+  .catch(() => {
+    console.log("Auth check skipped");
+  })
+  .finally(() => {
+    setLoading(false);
+  });
       setProfile(profileFromUser(u));
     }
   }
