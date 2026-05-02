@@ -10,6 +10,7 @@ import passagesRouter from "./passages";
 import pdfExtractRouter from "./pdfExtract";
 import chaptersRouter from "./chapters";
 import appSettingsRouter from "./appSettings";
+import seenQuestionsRouter from "./seenQuestions";
 
 const router: IRouter = Router();
 
@@ -24,5 +25,6 @@ router.use(passagesRouter);
 router.use(pdfExtractRouter);
 router.use(chaptersRouter);
 router.use(appSettingsRouter);
+router.use(seenQuestionsRouter);
 
 export default router;

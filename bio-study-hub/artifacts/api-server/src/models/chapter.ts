@@ -5,7 +5,7 @@ const chapterSchema = new mongoose.Schema(
     id: { type: String, required: true },
     name: { type: String, required: true },
     subject: { type: String, default: "Biology" },
-    class: { type: String, required: true, enum: ["11", "12"] },
+    class: { type: String, required: true },
     subunits: { type: [String], default: [] },
     order: { type: Number, default: 0 },
   },

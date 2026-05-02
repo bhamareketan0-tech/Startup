@@ -3,9 +3,36 @@ import { Question } from "../models/question";
 
 const router = Router();
 
+router.get("/questions/counts", async (req, res) => {
+  try {
+    const { class: cls, chapter } = req.query as Record<string, string>;
+    const filter: Record<string, unknown> = { is_active: true };
+    if (cls) filter.class = cls;
+    if (chapter) filter.chapter = chapter;
+
+    const counts = await Question.aggregate([
+      { $match: filter },
+      { $group: { _id: { subunit: "$subunit", type: "$type" }, count: { $sum: 1 } } },
+    ]);
+
+    const result: Record<string, { total: number; byType: Record<string, number> }> = {};
+    for (const item of counts) {
+      const sub = item._id.subunit || "";
+      if (!result[sub]) result[sub] = { total: 0, byType: {} };
+      result[sub].total += item.count;
+      result[sub].byType[item._id.type] = item.count;
+    }
+
+    const chapterTotal = await Question.countDocuments(filter);
+    res.json({ bySubunit: result, chapterTotal });
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
 router.get("/questions", async (req, res) => {
   try {
-    const { class: cls, subunit, type, is_active, chapter, limit = "50", skip = "0", search } = req.query as Record<string, string>;
+    const { class: cls, subunit, type, is_active, chapter, limit = "50", skip = "0", search, exclude } = req.query as Record<string, string>;
     const filter: Record<string, unknown> = {};
     if (cls) filter.class = cls;
     if (subunit) filter.subunit = subunit;
@@ -13,6 +40,10 @@ router.get("/questions", async (req, res) => {
     if (chapter) filter.chapter = chapter;
     if (is_active !== undefined) filter.is_active = is_active === "true";
     if (search) filter.question = { $regex: search, $options: "i" };
+    if (exclude) {
+      const excludeIds = exclude.split(",").filter(Boolean);
+      if (excludeIds.length > 0) filter._id = { $nin: excludeIds };
+    }
 
     const total = await Question.countDocuments(filter);
     const data = await Question.find(filter)

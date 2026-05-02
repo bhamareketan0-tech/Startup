@@ -1,36 +1,34 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Question } from "@/lib/supabase";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import {
-  ChevronRight,
-  ChevronLeft,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  ArrowLeft,
-  BookOpen,
-  List,
+  ChevronRight, ChevronLeft, Clock, CheckCircle, XCircle,
+  AlertCircle, ArrowLeft, BookOpen, List, Play, Lightbulb,
+  Trophy, RotateCcw, Target,
 } from "lucide-react";
 
+const API_BASE = (import.meta.env.VITE_API_URL ?? "") + "/api";
+
 const QUESTION_TYPES = [
-  { id: "paragraph", label: "Paragraph" },
-  { id: "pointer_notes", label: "Pointer Notes" },
-  { id: "mcq", label: "Standard MCQ" },
-  { id: "assertion", label: "Assertion Reason" },
-  { id: "statements", label: "No. of Correct Statements" },
-  { id: "truefalse", label: "True / False" },
-  { id: "fillblanks", label: "Fill in the Blanks" },
-  { id: "match", label: "Match the Column" },
-  { id: "diagram", label: "Diagram Based" },
-  { id: "table_based", label: "Table Based" },
+  { id: "video",        label: "Video",                    isStudy: true  },
+  { id: "paragraph",    label: "Paragraph",                isStudy: true  },
+  { id: "pointer_notes",label: "Pointer Notes",            isStudy: true  },
+  { id: "tricks",       label: "Tricks & Mnemonics",       isStudy: true  },
+  { id: "mcq",          label: "Standard MCQ",             isStudy: false },
+  { id: "assertion",    label: "Assertion Reason",         isStudy: false },
+  { id: "statements",   label: "No. of Correct Statements",isStudy: false },
+  { id: "truefalse",    label: "True / False",             isStudy: false },
+  { id: "fillblanks",   label: "Fill in the Blanks",       isStudy: false },
+  { id: "match",        label: "Match the Column",         isStudy: false },
+  { id: "diagram",      label: "Diagram Based",            isStudy: false },
+  { id: "table_based",  label: "Table Based",              isStudy: false },
+  { id: "pyq",          label: "Prev Year Questions",      isStudy: false },
 ];
 
-const STUDY_TYPES = ["paragraph", "pointer_notes"];
-
 const TIMER_DURATION = 30 * 60;
+const AUTOSAVE_INTERVAL = 30000;
 
 function HighlightedText({ text, highlights }: { text: string; highlights: string[] }) {
   const filtered = (highlights || []).map((h) => h.trim()).filter((h) => h.length > 0);
@@ -42,13 +40,60 @@ function HighlightedText({ text, highlights }: { text: string; highlights: strin
     <>
       {parts.map((part, i) => {
         const isHighlight = filtered.some((h) => h.toLowerCase() === part.toLowerCase());
-        return isHighlight ? (
-          <strong key={i} style={{ color: "var(--bs-accent-hex)", fontWeight: "bold" }}>{part}</strong>
-        ) : (
-          <span key={i}>{part}</span>
-        );
+        return isHighlight
+          ? <strong key={i} style={{ color: "var(--bs-accent-hex)", fontWeight: "bold" }}>{part}</strong>
+          : <span key={i}>{part}</span>;
       })}
     </>
+  );
+}
+
+function VideoRenderer({ q }: { q: Question }) {
+  const videoUrl = (q.meta?.videoUrl as string) || "";
+  const thumbnailUrl = (q.meta?.thumbnail as string) || "";
+  const getEmbedUrl = (url: string) => {
+    const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+    return url;
+  };
+  return (
+    <div className="max-w-3xl mx-auto">
+      <div className="flex items-center gap-2 mb-6">
+        <Play className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} />
+        <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "var(--bs-accent-hex)" }}>
+          Video Explanation
+        </span>
+      </div>
+      <div className="border border-l-4 p-6 mb-4" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <h3 className="text-xl font-black mb-4" style={{ color: "var(--bs-text)" }}>{q.question}</h3>
+        {videoUrl ? (
+          <div className="relative w-full overflow-hidden border" style={{ paddingTop: "56.25%", borderColor: "var(--bs-border-subtle)" }}>
+            <iframe
+              src={getEmbedUrl(videoUrl)}
+              className="absolute inset-0 w-full h-full"
+              allowFullScreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              title={q.question}
+            />
+          </div>
+        ) : thumbnailUrl ? (
+          <img src={thumbnailUrl} alt="Video thumbnail" className="w-full max-h-72 object-cover border" style={{ borderColor: "var(--bs-border-subtle)" }} />
+        ) : (
+          <div className="flex items-center justify-center h-48 border" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
+            <div className="text-center">
+              <Play className="w-12 h-12 mx-auto mb-2" style={{ color: "var(--bs-border-strong)" }} />
+              <p className="text-xs font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>No video URL configured</p>
+            </div>
+          </div>
+        )}
+      </div>
+      {q.explanation && (
+        <div className="border p-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)` }}>
+          <p className="text-xs font-black uppercase tracking-widest mb-2 font-mono" style={{ color: "var(--bs-accent-hex)" }}>Notes</p>
+          <p className="text-sm leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.explanation}</p>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -98,9 +143,7 @@ function PointerNotesRenderer({ q }: { q: Question }) {
                 <li key={i} className="flex items-start gap-3">
                   <span className="w-6 h-6 flex-shrink-0 text-xs font-black flex items-center justify-center mt-0.5" style={{ background: "var(--bs-accent-hex)", color: "black" }}>{i + 1}</span>
                   <span className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>
-                    {hasKey ? (
-                      <><strong style={{ color: "var(--bs-accent-hex)" }}>{bullet.slice(0, colonIdx)}</strong>{bullet.slice(colonIdx)}</>
-                    ) : bullet}
+                    {hasKey ? <><strong style={{ color: "var(--bs-accent-hex)" }}>{bullet.slice(0, colonIdx)}</strong>{bullet.slice(colonIdx)}</> : bullet}
                   </span>
                 </li>
               );
@@ -108,6 +151,42 @@ function PointerNotesRenderer({ q }: { q: Question }) {
           </ul>
         ) : (
           <p className="text-sm font-mono italic" style={{ color: "var(--bs-text-muted)" }}>No bullet points added.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function TricksRenderer({ q }: { q: Question }) {
+  const tricks = (q.meta?.tricks as string[]) || [];
+  const acronym = (q.meta?.acronym as string) || "";
+  return (
+    <div className="max-w-3xl mx-auto">
+      <div className="flex items-center gap-2 mb-6">
+        <Lightbulb className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} />
+        <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "var(--bs-accent-hex)" }}>Tricks & Mnemonics</span>
+      </div>
+      <div className="border border-l-4 p-6 mb-4" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+        <h3 className="text-xl font-black mb-4" style={{ color: "var(--bs-text)" }}>{q.question}</h3>
+        {acronym && (
+          <div className="border p-4 mb-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 8%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 25%, transparent)` }}>
+            <p className="text-xs font-black uppercase tracking-widest mb-2 font-mono" style={{ color: "var(--bs-accent-hex)" }}>Acronym / Short Form</p>
+            <p className="text-2xl font-black tracking-widest" style={{ color: "var(--bs-text)" }}>{acronym}</p>
+          </div>
+        )}
+        {tricks.length > 0 ? (
+          <ul className="space-y-3">
+            {tricks.map((trick, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="text-xl shrink-0 mt-0.5">💡</span>
+                <span className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{trick}</span>
+              </li>
+            ))}
+          </ul>
+        ) : q.explanation ? (
+          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.explanation}</p>
+        ) : (
+          <p className="text-sm font-mono italic" style={{ color: "var(--bs-text-muted)" }}>No tricks added yet.</p>
         )}
       </div>
     </div>
@@ -141,16 +220,30 @@ function OptionButton({ letter, value, isSelected, isCorrect, isWrong, submitted
   );
 }
 
-function StandardMCQRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
+function MCQRenderer({ q, currentIndex, answers, submitted, onAnswer, yearTag }: {
+  q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void; yearTag?: string;
+}) {
   const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
   return (
     <div>
+      {yearTag && (
+        <div className="flex items-center gap-2 mb-4">
+          <span className="px-3 py-1 border text-xs font-black uppercase tracking-widest" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 8%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 25%, transparent)`, color: "var(--bs-accent-hex)" }}>
+            NEET {yearTag}
+          </span>
+          {(q.meta?.exam as string) && (
+            <span className="px-2 py-1 border text-xs font-mono uppercase" style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }}>
+              {q.meta.exam as string}
+            </span>
+          )}
+        </div>
+      )}
       <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
         <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
       </div>
       <div className="space-y-3 mb-6">
         {options.map((opt, i) => (
-          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value || ""} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
         ))}
       </div>
     </div>
@@ -158,7 +251,6 @@ function StandardMCQRenderer({ q, currentIndex, answers, submitted, onAnswer }: 
 }
 
 function AssertionRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
-  const statementA = q.question;
   const statementR = (q.meta?.statementR as string) || "";
   const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
   return (
@@ -166,16 +258,16 @@ function AssertionRenderer({ q, currentIndex, answers, submitted, onAnswer }: { 
       <div className="space-y-3 mb-6">
         <div className="border border-l-4 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
           <span className="text-xs font-black uppercase tracking-widest font-mono block mb-2" style={{ color: "var(--bs-accent-hex)" }}>Statement (A) — Assertion</span>
-          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementA}</p>
+          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
         </div>
         <div className="border border-l-4 border-l-blue-400 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
           <span className="text-blue-400 text-xs font-black uppercase tracking-widest font-mono block mb-2">Statement (R) — Reason</span>
-          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementR || q.question}</p>
+          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementR || "—"}</p>
         </div>
       </div>
       <div className="space-y-3 mb-6">
         {options.map((opt, i) => (
-          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value || ""} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
         ))}
       </div>
     </div>
@@ -210,7 +302,7 @@ function StatementsRenderer({ q, currentIndex, answers, submitted, onAnswer }: {
       </div>
       <div className="space-y-3 mb-6">
         {options.map((opt, i) => (
-          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value || ""} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
         ))}
       </div>
     </div>
@@ -218,42 +310,23 @@ function StatementsRenderer({ q, currentIndex, answers, submitted, onAnswer }: {
 }
 
 function TrueFalseRenderer({ q, currentIndex, answers, submitted, onAnswer }: { q: Question; currentIndex: number; answers: Record<number, string>; submitted: boolean; onAnswer: (key: string) => void }) {
-  const tfOptions = [{ key: "option1", value: q.option1 || "True" }, { key: "option2", value: q.option2 || "False" }];
+  const allOptions = [
+    { key: "option1", value: q.option1 || "Both statements are true" },
+    { key: "option2", value: q.option2 || "Both statements are false" },
+    { key: "option3", value: q.option3 || "First is true, second is false" },
+    { key: "option4", value: q.option4 || "First is false, second is true" },
+  ];
+  const hasAll4 = q.option3 && q.option4;
+  const opts = hasAll4 ? allOptions : allOptions.slice(0, 2);
   return (
     <div>
       <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
         <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
       </div>
-      <p className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: "var(--bs-text-muted)" }}>Select the correct answer:</p>
-      <div className="flex gap-4 mb-6">
-        {tfOptions.map((opt) => {
-          const isSelected = answers[currentIndex] === opt.key;
-          const isCorrect = submitted && opt.key === q.correct;
-          const isWrong = submitted && isSelected && opt.key !== q.correct;
-          const isTrue = opt.value.toLowerCase() === "true";
-          return (
-            <button
-              key={opt.key}
-              onClick={() => !submitted && onAnswer(opt.key)}
-              disabled={submitted}
-              className="flex-1 py-6 border text-xl font-black uppercase tracking-widest transition-all"
-              style={isCorrect
-                ? { background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 50%, transparent)`, color: "var(--bs-accent-hex)" }
-                : isWrong
-                  ? { background: "rgba(239,68,68,0.1)", borderColor: "rgba(239,68,68,0.4)", color: "#f87171" }
-                  : isSelected
-                    ? { background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 30%, transparent)`, color: "var(--bs-accent-hex)" }
-                    : isTrue
-                      ? { background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }
-                      : { background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }
-              }
-            >
-              {opt.value}
-              {isCorrect && <CheckCircle className="w-5 h-5 mx-auto mt-2" style={{ color: "var(--bs-accent-hex)" }} />}
-              {isWrong && <XCircle className="w-5 h-5 mx-auto mt-2 text-red-400" />}
-            </button>
-          );
-        })}
+      <div className="space-y-3 mb-6">
+        {opts.map((opt, i) => (
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+        ))}
       </div>
     </div>
   );
@@ -275,10 +348,9 @@ function FillBlanksRenderer({ q, currentIndex, answers, submitted, onAnswer }: {
           )}
         </p>
       </div>
-      <p className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: "var(--bs-text-muted)" }}>Choose the word/phrase that fills the blank:</p>
       <div className="space-y-3 mb-6">
         {options.map((opt, i) => (
-          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value || ""} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
         ))}
       </div>
     </div>
@@ -291,7 +363,7 @@ function MatchColumnRenderer({ q, currentIndex, answers, submitted, onAnswer }: 
   const options = ["option1", "option2", "option3", "option4"].map((key) => ({ key, value: q[key as keyof Question] as string }));
   return (
     <div>
-      {(colLeft.length > 0 || colRight.length > 0) && (
+      {colLeft.length > 0 && (
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="border border-l-4 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
             <p className="text-xs font-black uppercase tracking-widest font-mono mb-4" style={{ color: "var(--bs-accent-hex)" }}>Column I</p>
@@ -322,37 +394,11 @@ function MatchColumnRenderer({ q, currentIndex, answers, submitted, onAnswer }: 
           <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
         </div>
       )}
-      <p className="text-xs font-mono uppercase tracking-widest mb-4" style={{ color: "var(--bs-text-muted)" }}>Choose the correct matching combination:</p>
       <div className="space-y-3 mb-6">
         {options.map((opt, i) => (
-          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value || ""} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
         ))}
       </div>
-    </div>
-  );
-}
-
-function TableRenderer({ tableData }: { tableData: { headers: string[]; rows: string[][] } }) {
-  return (
-    <div className="overflow-x-auto mb-5 border" style={{ borderColor: "var(--bs-border-subtle)" }}>
-      <table className="w-full text-sm border-collapse">
-        <thead>
-          <tr style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)` }}>
-            {tableData.headers.map((h, i) => (
-              <th key={i} className="px-4 py-2 text-left font-black uppercase tracking-wide text-xs border-b border-r last:border-r-0" style={{ color: "var(--bs-accent-hex)", borderColor: "var(--bs-border-subtle)" }}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {tableData.rows.map((row, ri) => (
-            <tr key={ri} style={{ background: ri % 2 === 0 ? "var(--bs-surface)" : `color-mix(in srgb, var(--bs-accent-hex) 3%, var(--bs-surface))` }}>
-              {row.map((cell, ci) => (
-                <td key={ci} className="px-4 py-2 border-b border-r last:border-r-0" style={{ color: "var(--bs-text)", borderColor: "var(--bs-border-subtle)" }}>{cell}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }
@@ -371,14 +417,114 @@ function ImageMCQRenderer({ q, currentIndex, answers, submitted, onAnswer, typeL
           <img src={imageUrl} alt={typeLabel} className="w-full max-h-72 object-contain p-3" style={{ background: "#fff" }} />
         </div>
       )}
-      {tableData && <TableRenderer tableData={tableData} />}
+      {tableData && (
+        <div className="overflow-x-auto mb-5 border" style={{ borderColor: "var(--bs-border-subtle)" }}>
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)` }}>
+                {tableData.headers.map((h, i) => (
+                  <th key={i} className="px-4 py-2 text-left font-black uppercase tracking-wide text-xs border-b border-r last:border-r-0" style={{ color: "var(--bs-accent-hex)", borderColor: "var(--bs-border-subtle)" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.rows.map((row, ri) => (
+                <tr key={ri} style={{ background: ri % 2 === 0 ? "var(--bs-surface)" : `color-mix(in srgb, var(--bs-accent-hex) 3%, var(--bs-surface))` }}>
+                  {row.map((cell, ci) => (
+                    <td key={ci} className="px-4 py-2 border-b border-r last:border-r-0" style={{ color: "var(--bs-text)", borderColor: "var(--bs-border-subtle)" }}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <div className="border border-l-4 p-6 mb-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
         <p className="text-lg leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
       </div>
       <div className="space-y-3 mb-6">
         {options.map((opt, i) => (
-          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
+          <OptionButton key={opt.key} letter={["A","B","C","D"][i]} value={opt.value || ""} isSelected={answers[currentIndex] === opt.key} isCorrect={submitted && opt.key === q.correct} isWrong={submitted && answers[currentIndex] === opt.key && opt.key !== q.correct} submitted={submitted} onClick={() => !submitted && onAnswer(opt.key)} />
         ))}
+      </div>
+    </div>
+  );
+}
+
+function CompletionScreen({
+  correct, wrong, skipped, total, timeTaken, subunit, chapterId, cls, onRetry, onChapterTest,
+}: {
+  correct: number; wrong: number; skipped: number; total: number; timeTaken: number;
+  subunit: string; chapterId: string; cls: string;
+  onRetry: () => void; onChapterTest: () => void;
+}) {
+  const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const accuracy = total - skipped > 0 ? Math.round((correct / (total - skipped)) * 100) : 0;
+  const minutes = Math.floor(timeTaken / 60);
+  const secs = timeTaken % 60;
+  return (
+    <div className="flex-1 flex items-center justify-center p-6">
+      <div className="max-w-lg w-full">
+        <div className="text-center mb-8">
+          <div
+            className="w-20 h-20 mx-auto flex items-center justify-center mb-4 transform -skew-x-12"
+            style={{ background: score >= 70 ? "var(--bs-accent-hex)" : score >= 40 ? "#f59e0b" : "#ef4444" }}
+          >
+            <Trophy className="w-10 h-10 transform skew-x-12 text-black" />
+          </div>
+          <h2 className="text-3xl font-black uppercase tracking-tighter mb-1" style={{ color: "var(--bs-text)" }}>
+            {score >= 70 ? "Excellent!" : score >= 40 ? "Good Effort!" : "Keep Practicing!"}
+          </h2>
+          <p className="font-mono uppercase tracking-wide text-sm" style={{ color: "var(--bs-text-muted)" }}>{subunit}</p>
+        </div>
+
+        <div className="text-center mb-8">
+          <div className="text-6xl font-black mb-1" style={{ color: score >= 70 ? "var(--bs-accent-hex)" : score >= 40 ? "#f59e0b" : "#ef4444" }}>
+            {score}%
+          </div>
+          <p className="font-mono uppercase tracking-widest text-xs" style={{ color: "var(--bs-text-muted)" }}>Score</p>
+        </div>
+
+        <div className="grid grid-cols-4 gap-3 mb-8">
+          {[
+            { label: "Correct", value: correct, color: "var(--bs-accent-hex)" },
+            { label: "Wrong", value: wrong, color: "#ef4444" },
+            { label: "Skipped", value: skipped, color: "#f59e0b" },
+            { label: "Accuracy", value: `${accuracy}%`, color: "var(--bs-text)" },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="border p-3 text-center" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+              <div className="text-xl font-black" style={{ color }}>{value}</div>
+              <div className="text-[10px] font-mono uppercase tracking-widest mt-1" style={{ color: "var(--bs-text-muted)" }}>{label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="border p-3 mb-6 text-center" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+          <p className="text-xs font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
+            Time taken: <span style={{ color: "var(--bs-text)" }}>{minutes}m {secs}s</span>
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <button
+            onClick={onChapterTest}
+            className="w-full py-3 font-black uppercase tracking-widest text-sm transform -skew-x-12 relative"
+            style={{ background: "var(--bs-accent-hex)", color: "black" }}
+          >
+            <span className="transform skew-x-12 inline-flex items-center gap-2">
+              <Target className="w-4 h-4" />
+              Start Chapter Mock Test
+            </span>
+          </button>
+          <button
+            onClick={onRetry}
+            className="w-full py-3 border font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2"
+            style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}
+          >
+            <RotateCcw className="w-4 h-4" />
+            Try Again
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -397,40 +543,95 @@ export function PracticePage() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [timeLeft, setTimeLeft] = useState(TIMER_DURATION);
   const [submitted, setSubmitted] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [completionStats, setCompletionStats] = useState({ correct: 0, wrong: 0, skipped: 0, total: 0, timeTaken: 0 });
+  const autosaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const decodedSubunit = subunit ? decodeURIComponent(subunit) : "";
-  const isStudyType = STUDY_TYPES.includes(selectedType);
+  const currentTypeObj = QUESTION_TYPES.find((t) => t.id === selectedType);
+  const isStudyType = currentTypeObj?.isStudy ?? false;
 
-  async function fetchQuestions() {
+  async function fetchQuestions(typeId: string) {
     setLoading(true);
     setQuestions([]);
     setAnswers({});
     setCurrentIndex(0);
     setSubmitted(false);
+    setCompleted(false);
     setTimeLeft(TIMER_DURATION);
 
     try {
-      const res = await api.get("/questions", { class: cls, chapter: chapterId, subunit: decodedSubunit, type: selectedType, is_active: true, limit: 200 });
-      setQuestions((res.data || []) as Question[]);
+      let excludeParam = "";
+      if (user && !isStudyType) {
+        try {
+          const seenRes = await fetch(
+            `${API_BASE}/seen-questions?user_id=${user.id}&chapter=${chapterId}&subunit=${encodeURIComponent(decodedSubunit)}&class=${cls}&type=${typeId}`,
+            { credentials: "include" }
+          );
+          if (seenRes.ok) {
+            const seenData = await seenRes.json() as { seen_ids: string[] };
+            if (seenData.seen_ids?.length > 0) excludeParam = seenData.seen_ids.join(",");
+          }
+        } catch {}
+      }
+
+      const params: Record<string, string | number | boolean> = {
+        class: cls || "",
+        chapter: chapterId || "",
+        subunit: decodedSubunit,
+        type: typeId,
+        is_active: true,
+        limit: 200,
+      };
+      if (excludeParam) params.exclude = excludeParam;
+
+      const res = await api.get("/questions", params);
+      const fetched = (res.data || []) as Question[];
+
+      if (fetched.length === 0 && excludeParam) {
+        const res2 = await api.get("/questions", { class: cls || "", chapter: chapterId || "", subunit: decodedSubunit, type: typeId, is_active: true, limit: 200 });
+        setQuestions((res2.data || []) as Question[]);
+      } else {
+        setQuestions(fetched);
+      }
     } catch {
       setQuestions([]);
     }
     setLoading(false);
   }
 
-  useEffect(() => { fetchQuestions(); }, [cls, chapterId, subunit, selectedType]);
+  useEffect(() => {
+    fetchQuestions(selectedType);
+  }, [cls, chapterId, subunit, selectedType]);
+
+  useEffect(() => {
+    if (isStudyType || submitted || questions.length === 0 || completed) return;
+    if (timeLeft <= 0) { handleSubmit(); return; }
+    const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, submitted, questions.length, isStudyType, completed]);
+
+  useEffect(() => {
+    if (submitted || isStudyType) return;
+    autosaveRef.current = setInterval(() => {
+      if (user && questions.length > 0) {
+        const done = Object.keys(answers).length;
+        if (done > 0) {
+          localStorage.setItem(
+            `biospark_progress_${cls}_${chapterId}_${encodeURIComponent(decodedSubunit)}_${selectedType}`,
+            JSON.stringify({ answers, currentIndex, timeLeft, savedAt: Date.now() })
+          );
+        }
+      }
+    }, AUTOSAVE_INTERVAL);
+    return () => { if (autosaveRef.current) clearInterval(autosaveRef.current); };
+  }, [answers, currentIndex, timeLeft, submitted, isStudyType, questions.length]);
 
   const handleTimerEnd = useCallback(() => { if (!submitted) handleSubmit(); }, [submitted, questions, answers]);
 
-  useEffect(() => {
-    if (isStudyType || submitted || questions.length === 0) return;
-    if (timeLeft <= 0) { handleTimerEnd(); return; }
-    const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft, submitted, questions.length, isStudyType]);
-
   async function handleSubmit() {
     setSubmitted(true);
+    setCompleted(true);
     const timeTaken = TIMER_DURATION - timeLeft;
     let correct = 0, wrong = 0, skipped = 0;
     const total = questions.length;
@@ -440,10 +641,22 @@ export function PracticePage() {
       else wrong++;
     });
     const score = Math.round((correct / total) * 100) || 0;
+    setCompletionStats({ correct, wrong, skipped, total, timeTaken });
+
+    localStorage.removeItem(`biospark_progress_${cls}_${chapterId}_${encodeURIComponent(decodedSubunit)}_${selectedType}`);
+
     if (user) {
       await api.post("/attempts", { user_id: user.id, chapter: chapterId, subunit: decodedSubunit, class: cls, score, correct, wrong, skipped, total, time_taken: timeTaken }).catch(() => null);
+      const questionIds = questions.map((q) => q.id).filter(Boolean);
+      if (questionIds.length > 0) {
+        await fetch(`${API_BASE}/seen-questions/mark`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ user_id: user.id, chapter: chapterId, subunit: decodedSubunit, class: cls, type: selectedType, question_ids: questionIds }),
+        }).catch(() => null);
+      }
     }
-    navigate("/score", { state: { correct, wrong, skipped, total, score, timeTaken } });
   }
 
   const formatTime = (s: number) => {
@@ -454,67 +667,70 @@ export function PracticePage() {
 
   const progress = questions.length > 0 ? ((currentIndex + 1) / questions.length) * 100 : 0;
   const currentQ = questions[currentIndex];
+  const currentTypeName = currentTypeObj?.label ?? selectedType;
 
   function renderQuestionContent() {
     if (!currentQ) return null;
     const commonProps = { q: currentQ, currentIndex, answers, submitted, onAnswer: (key: string) => setAnswers({ ...answers, [currentIndex]: key }) };
     switch (currentQ.type) {
-      case "paragraph": return <ParagraphRenderer q={currentQ} />;
-      case "pointer_notes": return <PointerNotesRenderer q={currentQ} />;
-      case "assertion": return <AssertionRenderer {...commonProps} />;
-      case "statements": return <StatementsRenderer {...commonProps} />;
-      case "truefalse": return <TrueFalseRenderer {...commonProps} />;
-      case "fillblanks": return <FillBlanksRenderer {...commonProps} />;
-      case "match": return <MatchColumnRenderer {...commonProps} />;
-      case "diagram": return <ImageMCQRenderer {...commonProps} typeLabel="Diagram" />;
-      case "table_based": return <ImageMCQRenderer {...commonProps} typeLabel="Table" />;
-      default: return <StandardMCQRenderer {...commonProps} />;
+      case "video":        return <VideoRenderer q={currentQ} />;
+      case "paragraph":    return <ParagraphRenderer q={currentQ} />;
+      case "pointer_notes":return <PointerNotesRenderer q={currentQ} />;
+      case "tricks":       return <TricksRenderer q={currentQ} />;
+      case "assertion":    return <AssertionRenderer {...commonProps} />;
+      case "statements":   return <StatementsRenderer {...commonProps} />;
+      case "truefalse":    return <TrueFalseRenderer {...commonProps} />;
+      case "fillblanks":   return <FillBlanksRenderer {...commonProps} />;
+      case "match":        return <MatchColumnRenderer {...commonProps} />;
+      case "diagram":      return <ImageMCQRenderer {...commonProps} typeLabel="Diagram" />;
+      case "table_based":  return <ImageMCQRenderer {...commonProps} typeLabel="Table" />;
+      case "pyq":          return <MCQRenderer {...commonProps} yearTag={(currentQ.meta?.year as string) || ""} />;
+      default:             return <MCQRenderer {...commonProps} />;
     }
   }
 
-  const currentTypeName = QUESTION_TYPES.find(t => t.id === selectedType)?.label ?? selectedType;
+  const SidebarTypeList = () => (
+    <div className="space-y-1">
+      {QUESTION_TYPES.map((type, idx) => (
+        <button
+          key={type.id}
+          onClick={() => { setSelectedType(type.id); setCurrentIndex(0); setAnswers({}); setSubmitted(false); setCompleted(false); }}
+          className="w-full text-left px-3 py-2 text-xs transition-all font-mono uppercase tracking-wide border-l-2"
+          style={selectedType === type.id
+            ? { borderLeftColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)", background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)` }
+            : { borderLeftColor: "transparent", color: "var(--bs-text-muted)" }
+          }
+        >
+          <span style={{ color: "var(--bs-border-strong)" }} className="mr-2">{idx + 1}.</span>
+          {type.label}
+          {type.isStudy && (
+            <span className="ml-1 text-[9px] opacity-60" style={{ color: "var(--bs-accent-hex)" }}>STUDY</span>
+          )}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen relative font-['Space_Grotesk']" style={{ background: "transparent" }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
+      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
 
       {/* ── MOBILE STEP 1: Type Selector ── */}
       <div className={`md:hidden relative z-10 flex flex-col min-h-screen ${mobileStep !== "type" ? "hidden" : ""}`}>
-        {/* Header */}
         <div className="sticky top-0 z-20 border-b px-5 py-4" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
           <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-xs font-mono uppercase tracking-wide mb-2" style={{ color: "var(--bs-text-muted)" }}>
             <ArrowLeft className="w-4 h-4" />Back
           </button>
           <h2 className="font-black text-base uppercase tracking-tight" style={{ color: "var(--bs-text)" }}>{decodedSubunit}</h2>
-          <p className="text-xs font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>Class {cls}</p>
-          {!isStudyType && (
-            <div className="flex items-center gap-2 mt-2">
-              <Clock className="w-3.5 h-3.5" style={{ color: "var(--bs-secondary-hex)" }} />
-              <span className="text-sm font-black font-mono" style={{ color: timeLeft < 300 ? "#ef4444" : "var(--bs-accent-hex)" }}>{formatTime(timeLeft)}</span>
-            </div>
-          )}
-          {isStudyType && (
-            <div className="flex items-center gap-2 mt-2">
-              <BookOpen className="w-3.5 h-3.5" style={{ color: "var(--bs-accent-hex)" }} />
-              <span className="text-xs font-mono uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>Study Mode</span>
-            </div>
-          )}
+          <p className="text-xs font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>{cls === "dropper" ? "Dropper" : `Class ${cls}`}</p>
         </div>
-
-        {/* Type list */}
         <div className="flex-1 overflow-y-auto px-5 py-5">
           <p className="text-xs mb-4 font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Choose Question Type</p>
           <div className="space-y-2">
             {QUESTION_TYPES.map((type, idx) => (
               <button
                 key={type.id}
-                onClick={() => { setSelectedType(type.id); setCurrentIndex(0); setAnswers({}); setMobileStep("question"); }}
+                onClick={() => { setSelectedType(type.id); setCurrentIndex(0); setAnswers({}); setSubmitted(false); setCompleted(false); setMobileStep("question"); }}
                 className="w-full flex items-center justify-between px-5 py-4 border-l-4 transition-all"
                 style={selectedType === type.id
                   ? { borderLeftColor: "var(--bs-accent-hex)", background: `color-mix(in srgb, var(--bs-accent-hex) 12%, var(--bs-surface))`, color: "var(--bs-accent-hex)" }
@@ -523,7 +739,10 @@ export function PracticePage() {
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-mono w-5" style={{ color: "var(--bs-border-strong)" }}>{idx + 1}.</span>
-                  <span className="font-black text-sm uppercase tracking-wide">{type.label}</span>
+                  <div>
+                    <div className="font-black text-sm uppercase tracking-wide">{type.label}</div>
+                    {type.isStudy && <div className="text-[10px] font-mono uppercase" style={{ color: "var(--bs-accent-hex)", opacity: 0.7 }}>Study</div>}
+                  </div>
                 </div>
                 <ChevronRight className="w-4 h-4 opacity-50" />
               </button>
@@ -534,117 +753,109 @@ export function PracticePage() {
 
       {/* ── MOBILE STEP 2: Question View ── */}
       <div className={`md:hidden relative z-10 flex flex-col min-h-screen ${mobileStep !== "question" ? "hidden" : ""}`}>
-        {/* Sticky top bar */}
         <div className="sticky top-0 z-20 border-b" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
           <div className="flex items-center justify-between px-5 py-4">
-            <button
-              onClick={() => setMobileStep("type")}
-              className="flex items-center gap-2 text-xs font-mono uppercase tracking-wide"
-              style={{ color: "var(--bs-text-muted)" }}
-            >
+            <button onClick={() => setMobileStep("type")} className="flex items-center gap-2 text-xs font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
               <ArrowLeft className="w-4 h-4" />Types
             </button>
             <div className="text-center">
               <p className="text-xs font-black uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>{currentTypeName}</p>
               <p className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>{currentIndex + 1} / {questions.length || 0}</p>
             </div>
-            {!isStudyType ? (
-              <span className="text-sm font-black font-mono" style={{ color: timeLeft < 300 ? "#ef4444" : "var(--bs-accent-hex)" }}>{formatTime(timeLeft)}</span>
-            ) : (
-              <BookOpen className="w-4 h-4" style={{ color: "var(--bs-accent-hex)" }} />
-            )}
+            {!isStudyType
+              ? <span className="text-sm font-black font-mono" style={{ color: timeLeft < 300 ? "#ef4444" : "var(--bs-accent-hex)" }}>{formatTime(timeLeft)}</span>
+              : <BookOpen className="w-4 h-4" style={{ color: "var(--bs-accent-hex)" }} />
+            }
           </div>
-          {/* Progress bar */}
           <div className="h-0.5 w-full" style={{ background: "var(--bs-border-subtle)" }}>
             <div className="h-full transition-all" style={{ width: `${progress}%`, background: "var(--bs-accent-hex)" }} />
           </div>
         </div>
 
-        {/* Question Content */}
-        <div className="flex-1 overflow-y-auto px-5 py-6">
-          {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="text-center">
-                <div className="w-10 h-10 border-2 border-t-transparent animate-spin mx-auto mb-3" style={{ borderColor: "var(--bs-accent-hex) transparent transparent transparent" }} />
-                <p className="font-mono uppercase text-xs" style={{ color: "var(--bs-text-muted)" }}>Loading...</p>
-              </div>
-            </div>
-          ) : questions.length === 0 ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="text-center">
-                <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--bs-border-strong)" }} />
-                <p className="font-black uppercase text-sm mb-1" style={{ color: "var(--bs-text)" }}>No content yet</p>
-                <p className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>No {currentTypeName} for this subunit</p>
-                <button onClick={() => setMobileStep("type")} className="mt-4 px-4 py-2 border text-xs font-black uppercase tracking-widest" style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>Choose Another Type</button>
-              </div>
-            </div>
-          ) : currentQ ? (
-            <div>
-              {/* Difficulty badge */}
-              {!isStudyType && currentQ.difficulty && (
-                <div className="mb-3">
-                  <span className={`px-2 py-0.5 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-green-500/10 border-green-500/20 text-green-500" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"}`}>
-                    {currentQ.difficulty}
-                  </span>
+        {completed && !isStudyType ? (
+          <CompletionScreen
+            {...completionStats}
+            subunit={decodedSubunit}
+            chapterId={chapterId || ""}
+            cls={cls || ""}
+            onRetry={() => { fetchQuestions(selectedType); setMobileStep("question"); }}
+            onChapterTest={() => navigate(`/mock-test?class=${cls}&chapter=${chapterId}`)}
+          />
+        ) : (
+          <>
+            <div className="flex-1 overflow-y-auto px-5 py-6">
+              {loading ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center">
+                    <div className="w-10 h-10 border-2 border-t-transparent animate-spin mx-auto mb-3" style={{ borderColor: "var(--bs-accent-hex) transparent transparent transparent" }} />
+                    <p className="font-mono uppercase text-xs" style={{ color: "var(--bs-text-muted)" }}>Loading...</p>
+                  </div>
                 </div>
-              )}
-              {renderQuestionContent()}
-              {/* Explanation */}
-              {!isStudyType && submitted && currentQ.explanation && (
-                <div className="border border-l-4 p-4 mt-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}>
-                  <h4 className="font-black text-xs uppercase tracking-widest mb-2" style={{ color: "var(--bs-accent-hex)" }}>Explanation</h4>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--bs-text-muted)" }}>{currentQ.explanation}</p>
+              ) : questions.length === 0 ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center">
+                    <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--bs-border-strong)" }} />
+                    <p className="font-black uppercase text-sm mb-1" style={{ color: "var(--bs-text)" }}>No content yet</p>
+                    <p className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>No {currentTypeName} for this subunit</p>
+                    <button onClick={() => setMobileStep("type")} className="mt-4 px-4 py-2 border text-xs font-black uppercase tracking-widest" style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>Choose Another Type</button>
+                  </div>
                 </div>
+              ) : currentQ ? (
+                <div>
+                  {!isStudyType && currentQ.difficulty && (
+                    <div className="mb-3">
+                      <span className={`px-2 py-0.5 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-green-500/10 border-green-500/20 text-green-500" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"}`}>
+                        {currentQ.difficulty}
+                      </span>
+                    </div>
+                  )}
+                  {renderQuestionContent()}
+                  {!isStudyType && submitted && currentQ.explanation && (
+                    <div className="border border-l-4 p-4 mt-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}>
+                      <h4 className="font-black text-xs uppercase tracking-widest mb-2" style={{ color: "var(--bs-accent-hex)" }}>Explanation</h4>
+                      <p className="text-sm leading-relaxed" style={{ color: "var(--bs-text-muted)" }}>{currentQ.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="sticky bottom-0 border-t px-4 py-4 flex gap-3" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
+              <button
+                onClick={() => currentIndex === 0 ? setMobileStep("type") : setCurrentIndex(currentIndex - 1)}
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 border text-xs font-black uppercase tracking-widest"
+                style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                {currentIndex === 0 ? "Types" : "Prev"}
+              </button>
+              <button
+                onClick={() => {
+                  if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
+                  else if (!isStudyType && !submitted) handleSubmit();
+                }}
+                disabled={questions.length === 0}
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs font-black uppercase tracking-widest disabled:opacity-40"
+                style={{ background: "var(--bs-accent-hex)", color: "black" }}
+              >
+                {currentIndex < questions.length - 1 ? <><span>Next</span><ChevronRight className="w-4 h-4" /></> : isStudyType ? <><span>Done</span><CheckCircle className="w-4 h-4" /></> : <><span>Submit</span><CheckCircle className="w-4 h-4" /></>}
+              </button>
+              {!isStudyType && (
+                <button
+                  onClick={handleSubmit}
+                  disabled={questions.length === 0}
+                  className="px-4 py-3.5 border text-xs font-black uppercase tracking-widest disabled:opacity-30"
+                  style={{ borderColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)" }}
+                >
+                  End
+                </button>
               )}
             </div>
-          ) : null}
-        </div>
-
-        {/* Bottom Navigation */}
-        <div className="sticky bottom-0 border-t px-4 py-4 flex gap-3" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
-          {/* Previous: first question → back to type selector */}
-          <button
-            onClick={() => {
-              if (currentIndex === 0) {
-                setMobileStep("type");
-              } else {
-                setCurrentIndex(currentIndex - 1);
-              }
-            }}
-            className="flex-1 flex items-center justify-center gap-2 py-3.5 border text-xs font-black uppercase tracking-widest"
-            style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}
-          >
-            <ChevronLeft className="w-4 h-4" />
-            {currentIndex === 0 ? "Types" : "Prev"}
-          </button>
-
-          {/* Next: advance through questions; disabled at the end */}
-          <button
-            onClick={() => {
-              if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
-            }}
-            disabled={currentIndex >= questions.length - 1}
-            className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs font-black uppercase tracking-widest disabled:opacity-40"
-            style={{ background: "var(--bs-accent-hex)", color: "black" }}
-          >
-            Next <ChevronRight className="w-4 h-4" />
-          </button>
-
-          {/* Submit/Done — only shown for quiz types */}
-          {!isStudyType && (
-            <button
-              onClick={handleSubmit}
-              disabled={questions.length === 0}
-              className="px-4 py-3.5 border text-xs font-black uppercase tracking-widest disabled:opacity-30"
-              style={{ borderColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)" }}
-            >
-              End
-            </button>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
-      {/* ── DESKTOP: Side-by-side layout (unchanged) ── */}
+      {/* ── DESKTOP Layout ── */}
       <div className="hidden md:flex relative z-10 pt-20 h-screen">
         {/* Sidebar */}
         <div className="w-72 border-r flex flex-col" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
@@ -653,10 +864,9 @@ export function PracticePage() {
               <ArrowLeft className="w-4 h-4" />Back
             </button>
             <h2 className="font-black text-sm truncate uppercase tracking-tight" style={{ color: "var(--bs-text)" }}>{decodedSubunit}</h2>
-            <p className="text-xs font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>Class {cls}</p>
+            <p className="text-xs font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>{cls === "dropper" ? "Dropper" : `Class ${cls}`}</p>
           </div>
 
-          {/* Timer — hidden for study types */}
           {!isStudyType && (
             <div className="p-4 border-b" style={{ borderColor: "var(--bs-border-subtle)" }}>
               <div className="flex items-center gap-2 mb-2">
@@ -679,7 +889,6 @@ export function PracticePage() {
             </div>
           )}
 
-          {/* Progress */}
           <div className="p-4 border-b" style={{ borderColor: "var(--bs-border-subtle)" }}>
             <div className="flex justify-between text-xs mb-2 font-mono uppercase" style={{ color: "var(--bs-text-muted)" }}>
               <span>Progress</span>
@@ -706,28 +915,11 @@ export function PracticePage() {
             )}
           </div>
 
-          {/* Question Types */}
           <div className="p-4 flex-1 overflow-y-auto">
             <p className="text-xs mb-3 font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Question Type</p>
-            <div className="space-y-1">
-              {QUESTION_TYPES.map((type, idx) => (
-                <button
-                  key={type.id}
-                  onClick={() => setSelectedType(type.id)}
-                  className="w-full text-left px-3 py-2 text-xs transition-all font-mono uppercase tracking-wide border-l-2"
-                  style={selectedType === type.id
-                    ? { borderLeftColor: "var(--bs-accent-hex)", color: "var(--bs-accent-hex)", background: `color-mix(in srgb, var(--bs-accent-hex) 10%, transparent)` }
-                    : { borderLeftColor: "transparent", color: "var(--bs-text-muted)" }
-                  }
-                >
-                  <span style={{ color: "var(--bs-border-strong)" }} className="mr-2">{idx + 1}.</span>
-                  {type.label}
-                </button>
-              ))}
-            </div>
+            <SidebarTypeList />
           </div>
 
-          {/* Submit — hidden for study types */}
           {!isStudyType && (
             <div className="p-4 border-t" style={{ borderColor: "var(--bs-border-subtle)" }}>
               <div className="relative group">
@@ -742,7 +934,16 @@ export function PracticePage() {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {loading ? (
+          {completed && !isStudyType ? (
+            <CompletionScreen
+              {...completionStats}
+              subunit={decodedSubunit}
+              chapterId={chapterId || ""}
+              cls={cls || ""}
+              onRetry={() => fetchQuestions(selectedType)}
+              onChapterTest={() => navigate(`/mock-test?class=${cls}&chapter=${chapterId}`)}
+            />
+          ) : loading ? (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <div className="w-12 h-12 border-2 border-t-transparent animate-spin mx-auto mb-4" style={{ borderColor: "var(--bs-accent-hex) transparent transparent transparent" }} />
@@ -755,9 +956,9 @@ export function PracticePage() {
                 <AlertCircle className="w-16 h-16 mx-auto mb-4" style={{ color: "var(--bs-border-strong)" }} />
                 <h3 className="text-xl font-black mb-2 uppercase tracking-tighter" style={{ color: "var(--bs-text)" }}>No content available</h3>
                 <p className="text-sm mb-6 font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
-                  No {QUESTION_TYPES.find(t => t.id === selectedType)?.label} found for this subunit yet.
+                  No {currentTypeName} found for this subunit yet.
                 </p>
-                <button onClick={() => navigate(-1)} className="px-6 py-2.5 border text-sm font-black uppercase tracking-widest transition-colors" style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>
+                <button onClick={() => navigate(-1)} className="px-6 py-2.5 border text-sm font-black uppercase tracking-widest" style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>
                   Go Back
                 </button>
               </div>
@@ -765,7 +966,6 @@ export function PracticePage() {
           ) : currentQ ? (
             <div className="flex-1 overflow-y-auto p-6">
               <div className="max-w-3xl mx-auto">
-                {/* Question number */}
                 <div className="flex items-center gap-3 mb-6">
                   <div
                     className="inline-flex items-center gap-2 border px-3 py-1 transform -skew-x-12"
@@ -782,21 +982,15 @@ export function PracticePage() {
                   )}
                 </div>
 
-                {/* Type-specific renderer */}
                 {renderQuestionContent()}
 
-                {/* Explanation — only for quiz types */}
                 {!isStudyType && submitted && currentQ.explanation && (
-                  <div
-                    className="border border-l-4 p-4 mb-6"
-                    style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}
-                  >
+                  <div className="border border-l-4 p-4 mb-6" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}>
                     <h4 className="font-black text-sm mb-2 uppercase tracking-widest" style={{ color: "var(--bs-accent-hex)" }}>Explanation</h4>
                     <p className="text-sm leading-relaxed" style={{ color: "var(--bs-text-muted)" }}>{currentQ.explanation}</p>
                   </div>
                 )}
 
-                {/* Navigation */}
                 <div className="flex items-center justify-between mt-6">
                   <button
                     onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
@@ -807,31 +1001,34 @@ export function PracticePage() {
                     <ChevronLeft className="w-4 h-4" />Previous
                   </button>
 
-                  <div className="relative group">
-                    <div className="absolute inset-0 transform -skew-x-12 translate-x-1.5 translate-y-1.5 opacity-30 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform" style={{ background: "var(--bs-accent-hex)" }} />
-                    <button
-                      onClick={() => {
-                        if (currentIndex < questions.length - 1) {
-                          setCurrentIndex(currentIndex + 1);
-                        } else if (!isStudyType) {
-                          handleSubmit();
-                        } else {
-                          navigate(-1);
-                        }
-                      }}
-                      className="relative flex items-center gap-2 px-5 py-2.5 font-black uppercase tracking-widest text-sm transform -skew-x-12 transition-colors"
-                      style={{ background: "var(--bs-accent-hex)", color: "black" }}
-                    >
-                      <span className="transform skew-x-12 inline-flex items-center gap-2">
-                        {currentIndex < questions.length - 1 ? (
-                          <>Next <ChevronRight className="w-4 h-4" /></>
-                        ) : isStudyType ? (
-                          <>Done <CheckCircle className="w-4 h-4" /></>
-                        ) : (
-                          <>Submit <CheckCircle className="w-4 h-4" /></>
-                        )}
-                      </span>
-                    </button>
+                  <div className="flex items-center gap-3">
+                    {!isStudyType && (
+                      <button
+                        onClick={() => { setAnswers({ ...answers, [currentIndex]: "" }); }}
+                        className="px-4 py-2.5 border text-sm font-black uppercase tracking-widest flex items-center gap-1"
+                        style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }}
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />Retry
+                      </button>
+                    )}
+                    <div className="relative group">
+                      <div className="absolute inset-0 transform -skew-x-12 translate-x-1.5 translate-y-1.5 opacity-30 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform" style={{ background: "var(--bs-accent-hex)" }} />
+                      <button
+                        onClick={() => {
+                          if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
+                          else if (!isStudyType && !submitted) handleSubmit();
+                          else navigate(-1);
+                        }}
+                        className="relative flex items-center gap-2 px-5 py-2.5 font-black uppercase tracking-widest text-sm transform -skew-x-12"
+                        style={{ background: "var(--bs-accent-hex)", color: "black" }}
+                      >
+                        <span className="transform skew-x-12 inline-flex items-center gap-2">
+                          {currentIndex < questions.length - 1 ? <><span>Next</span><ChevronRight className="w-4 h-4" /></>
+                            : isStudyType ? <><span>Done</span><CheckCircle className="w-4 h-4" /></>
+                            : <><span>Submit</span><CheckCircle className="w-4 h-4" /></>}
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
