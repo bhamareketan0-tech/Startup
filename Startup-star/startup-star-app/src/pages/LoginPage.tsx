@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useGoogleLogin } from "@react-oauth/google";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Zap, Eye, EyeOff, AlertCircle } from "lucide-react";
@@ -66,31 +65,10 @@ export function LoginPage() {
     }
   }
 
-  const handleGoogleSignIn = useGoogleLogin({
-    flow: "implicit",
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      setError("");
-      try {
-        const userInfo = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-        }).then(r => r.json());
-        const res = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/auth/google`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userInfo })
-        }).then(r => r.json());
-        if (res.error) { setError(res.error); return; }
-        localStorage.setItem("token", res.token);
-        window.location.href = "/home";
-      } catch {
-        setError("Google sign-in failed. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: () => setError("Google sign-in failed. Please try again.")
-  });
+  function handleGoogleSignIn() {
+    const apiUrl = import.meta.env.VITE_API_URL ?? "";
+    window.location.href = apiUrl + "/auth/google";
+  }
 
   const inputStyle = {
     background: "var(--bs-surface-2)",

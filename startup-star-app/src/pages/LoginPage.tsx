@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { Zap, Eye, EyeOff, AlertCircle } from "lucide-react";
-import { useGoogleLogin } from "@react-oauth/google";
-import { api } from "@/lib/api";
 
 export function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,39 +16,35 @@ export function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleRedirect = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const googleUser = params.get("googleUser");
-      const googleError = params.get("googleError");
-  
-      if (googleError) {
+    const params = new URLSearchParams(window.location.search);
+    const googleUser = params.get("googleUser");
+    const googleError = params.get("googleError");
+
+    if (googleError) {
+      setError("Google sign-in failed. Please try again.");
+      window.history.replaceState({}, "", window.location.pathname);
+      return;
+    }
+
+    if (googleUser) {
+      try {
+        const decoded = JSON.parse(
+          atob(googleUser.replace(/-/g, "+").replace(/_/g, "/"))
+        ) as Record<string, unknown>;
+        signInWithGoogle({
+          id: (decoded["id"] || decoded["googleId"]) as string,
+          email: decoded["email"] as string,
+          name: decoded["name"] as string,
+          avatar: decoded["avatar"] as string | undefined,
+        });
+        window.history.replaceState({}, "", window.location.pathname);
+        navigate("/home", { replace: true });
+      } catch {
         setError("Google sign-in failed. Please try again.");
         window.history.replaceState({}, "", window.location.pathname);
-        return;
       }
-  
-      if (googleUser) {
-        try {
-          const decoded = JSON.parse(atob(googleUser.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))) as Record<string, unknown>;
-          const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/google", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userInfo: { email: decoded["email"], name: decoded["name"], picture: decoded["picture"] } }),
-          });
-          const data = await res.json() as { token?: string; user?: Record<string, unknown>; error?: string };
-          if (!res.ok || !data.token) throw new Error(data.error || "Google login failed");
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          window.history.replaceState({}, "", window.location.pathname);
-          window.location.href = "/home";
-        } catch {
-          setError("Google sign-in failed. Please try again.");
-          window.history.replaceState({}, "", window.location.pathname);
-        }
-      }
-    };
-    handleRedirect();
-    }, []);
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -71,33 +65,10 @@ export function LoginPage() {
     }
   }
 
-  const handleGoogleSignIn = useGoogleLogin({
-    flow: "implicit",
-    ux_mode: "redirect",
-    redirect_uri: window.location.origin + "/login",
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      setError("");
-      try {
-        const userInfo = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-        }).then(r => r.json());
-        const res = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/auth/google`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userInfo })
-        }).then(r => r.json());
-        if (res.error) { setError(res.error); return; }
-        localStorage.setItem("token", res.token);
-        window.location.href = "/home";
-      } catch (e) {
-        setError("Google sign-in failed. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: () => setError("Google sign-in failed. Please try again.")
-  });
+  function handleGoogleSignIn() {
+    const apiUrl = import.meta.env.VITE_API_URL ?? "";
+    window.location.href = apiUrl + "/auth/google";
+  }
 
   const inputStyle = {
     background: "var(--bs-surface-2)",

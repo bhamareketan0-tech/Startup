@@ -66,7 +66,8 @@ export function LoginPage() {
   }
 
   function handleGoogleSignIn() {
-    window.location.href = "/.netlify/functions/auth-google";
+    const apiUrl = import.meta.env.VITE_API_URL ?? "";
+    window.location.href = apiUrl + "/auth/google";
   }
 
   const inputStyle = {
