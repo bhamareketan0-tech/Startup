@@ -1,0 +1,77 @@
+PROMPT 1 — Foundation Fix
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend).
+YOUR FIRST JOB: Full System Audit
+Before making ANY changes, scan every single file in the codebase. List all broken routes, disconnected API calls, missing data connections, and UI inconsistencies. Fix all of them silently.
+PERFORMANCE — THIS IS CRITICAL:
+
+Every page must load under 2 seconds
+No unnecessary re-renders anywhere
+Use React.memo and useMemo where needed
+Lazy load all pages using React.lazy and Suspense
+Images must be compressed and lazy loaded
+Remove all unused imports, dead code, console.logs
+No heavy animations that cause phone heating or lag
+All API calls must be debounced where applicable
+Use pagination everywhere lists exist (questions, students etc)
+MongoDB queries must use proper indexes
+Backend responses must be cached where possible
+No memory leaks — clean up all useEffect listeners properly
+
+MOBILE RESPONSIVENESS — CRITICAL:
+
+Every single page must work perfectly on mobile (375px to 428px width)
+All buttons minimum 44px touch target
+No horizontal scrolling anywhere
+Font sizes readable on mobile
+Navigation must be mobile friendly with hamburger menu
+Quiz interface must be fully usable on phone with one hand
+Admin panel must be usable on tablet minimum
+
+COLOR THEME — CRITICAL:
+
+Primary color: #00FF9D (green) — use this EVERYWHERE
+Remove ALL orange colors from entire codebase including mock test
+Remove ALL purple, cyan, teal accent colors
+One single green accent color throughout entire website
+Dark background: #0A0A0A
+Card background: #111111
+Text: #FFFFFF primary, #888888 secondary
+Apply these colors consistently to every single component, every page, every button
+
+NAVIGATION FIX:
+
+Fix all broken routes
+Every back button must work
+No dead links anywhere
+404 page must exist
+Loading states on every page transition
+
+DATA CONNECTION FIX:
+
+Audit every API endpoint in backend
+Every frontend API call must connect to correct backend route
+Fix all missing or wrong API URLs
+Environment variables must be properly set
+MongoDB connection must be stable with proper error handling
+All forms must properly save to MongoDB
+All data displayed must come from real MongoDB data not hardcoded
+
+UI CONSISTENCY:
+
+Same font family throughout (recommend Inter or Poppins)
+Same border radius on all cards (8px)
+Same button styles throughout
+Same spacing system (use 8px grid)
+Remove all inline styles, move to proper CSS classes
+No broken layouts anywhere
+
+After completing all above, give me a full report of:
+
+What was broken and what you fixed
+What routes existed and their status
+What API connections were fixed
+Current performance score estimate
+Any remaining issues that need attention in next prompt

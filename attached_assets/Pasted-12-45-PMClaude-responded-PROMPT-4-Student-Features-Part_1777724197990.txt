@@ -1,0 +1,162 @@
+12:45 PMClaude responded: PROMPT 4 — Student Features Part 1PROMPT 4 — Student Features Part 1
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend).
+GLOBAL UI/UX RULES — APPLY TO EVERY SINGLE THING YOU BUILD IN THIS PROMPT:
+
+Desktop layout: sidebar + main content, spacious, breathing room
+Tablet: collapsed sidebar, full content area
+Mobile (375px-428px): bottom navigation, stacked cards, no sidebar
+8px grid spacing system throughout
+Border radius: 8px on all cards, 6px on buttons
+No cramming — maximum 3-4 items per row on desktop, 1-2 on mobile
+Every feature hidden behind clean tabs, not all dumped on one screen
+Fonts: Inter or Poppins, consistent sizing
+Green theme: #00FF9D accent, #0A0A0A background, #111111 cards
+All buttons minimum 44px height for touch
+No horizontal scrolling ever
+Every section has proper heading, subheading, and breathing space
+Think Unacademy/PhysicsWallah level cleanliness — not clumsy at all
+Smooth transitions max 200ms — no heavy animations
+No phone heating, no lag, no janky scrolling
+
+
+STEP 1 — BOOKMARKS:
+
+Small bookmark icon 🔖 on every question (top right corner)
+One tap to save, one tap to unsave
+Saved to MongoDB under student profile
+Separate "My Bookmarks" page accessible from dashboard and profile
+Bookmarks organized by chapter and subunit
+Filter bookmarks by chapter, difficulty, question type
+Can practice only bookmarked questions (start quiz from bookmarks)
+Bookmark count shown on dashboard stats card
+
+STEP 2 — NOTES SYSTEM:
+
+Small notes icon 📝 on every question (next to bookmark icon)
+Click opens a small clean popup (not full page) — overlay style
+Student types note in popup
+Auto-saves to MongoDB every 2 seconds (no save button needed)
+Popup shows which question the note is attached to
+Close popup → continue question seamlessly
+Separate "My Notes" section in main navigation
+My Notes page shows all notes organized by chapter
+Each note shows: question preview, note text, date, chapter tag
+Can edit or delete any note
+Search notes by keyword
+Notes fully synced across devices via MongoDB
+
+STEP 3 — CUSTOM QUIZ BUILDER:
+Clean step by step builder interface:
+Step 1: Select Class (11 / 12 / Dropper)
+Step 2: Select Subject (Biology only for now, more later)
+Step 3: Select Chapters (multi-select with checkboxes, select all option)
+Step 4: Select Subunits (multi-select, select all option)
+Step 5: Select Question Types (multi-select all 13 types)
+Step 6: Select Difficulty (Easy / Medium / Hard / Mixed)
+Step 7: Number of questions (slider: 10 to 100)
+Step 8: Time limit (slider: 10 min to 3 hours, or no time limit option)
+Step 9: Random mix toggle (ON = fully random from all selected)
+Preview shows: "Your quiz will have X questions from Y chapters covering Z types"
+Big green START QUIZ button
+Quiz runs in same interface as practice/mock test.
+Results saved to MongoDB and shown in performance dashboard.
+STEP 4 — REVISION MODE:
+
+Accessible from dashboard and after every quiz/mock test
+Shows ONLY questions student got wrong previously
+Organized by chapter → subunit → question
+Each question shows: how many times attempted, how many times wrong
+Student can practice wrong questions until they get them right
+Once correct 3 times in a row → marked as "Mastered" ✅
+Mastered questions removed from revision pool
+Progress bar showing "X of Y questions mastered this chapter"
+Can filter revision by: chapter, date of mistake, difficulty
+
+STEP 5 — DAILY CHALLENGE:
+
+New section in main navigation called "Daily Challenge"
+Every day at midnight IST → new set of 10 questions generated automatically
+Questions selected from: mix of all chapters, all difficulties
+Timer: 10 minutes for 10 questions
+Rules: +4 correct, -1 wrong, same as NEET
+Student can only attempt daily challenge ONCE per day
+After attempt: score shown, correct answers revealed
+Streak system: complete daily challenge every day = streak increases
+Miss one day = streak resets to 0
+Streak shown on dashboard and public profile
+Top daily challenge scores shown on separate daily leaderboard
+Comeback streak bonus: if student returns after missing days → +50 XP bonus
+
+STEP 6 — STUDENT PERFORMANCE DASHBOARD:
+Dedicated page accessible from main navigation:
+Overview cards (top):
+
+Total questions attempted
+Overall accuracy %
+Current streak
+Total study time
+XP points
+Current level
+
+Charts (clean, not clumsy):
+
+Accuracy per chapter (horizontal bar chart)
+Questions attempted over time (line graph — last 30 days)
+Question type breakdown (donut chart)
+Difficulty distribution of attempted questions
+Best performing chapters (top 3 with green highlight)
+Worst performing chapters (bottom 3 with red highlight)
+
+Detailed stats:
+
+Time spent per chapter
+Average time per question
+Most missed questions (attempted 3+ times and still wrong)
+Improvement trend (this week vs last week)
+
+All charts must be lightweight (use recharts library — already light)
+No heavy chart libraries that cause phone heating.
+STEP 7 — SYLLABUS TRACKER:
+
+Dedicated page showing complete NEET Biology syllabus
+Class 11 and Class 12 all chapters and subunits listed
+Each subunit has a checkbox — student marks as "studied"
+Progress bar per chapter (X of Y subunits studied)
+Overall syllabus completion % shown on dashboard
+Color coding: Green = studied, Yellow = in progress, Grey = not started
+Synced to MongoDB per student
+
+STEP 8 — STUDY STREAK CALENDAR:
+
+GitHub contribution graph style
+Shows last 12 months of study activity
+Each day = a square
+Color intensity based on questions attempted that day:
+
+No activity = dark grey
+1-10 questions = light green
+11-30 questions = medium green
+31-50 questions = bright green
+50+ questions = neon green (#00FF9D)
+
+
+Hover on any day (desktop) / tap (mobile) = shows: date, questions attempted, accuracy that day
+Shown on student profile page and performance dashboard
+Calculated from MongoDB attempt history
+
+PERFORMANCE REQUIREMENTS FOR ALL ABOVE:
+
+All pages lazy loaded
+All charts use recharts (lightweight)
+Notes auto-save uses debounce (not every keystroke)
+Calendar uses virtual rendering (only visible squares rendered)
+Bookmark toggle instant (optimistic UI update)
+All lists paginated (max 20 items per page)
+MongoDB queries indexed on studentId, chapterId, date
+Zero phone heating
+Zero lag on any interaction
+
+After completing give full report of what was built and any issues. 🔥

@@ -16,6 +16,7 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   root: path.resolve(__dirname),
+  base: process.env.BASE_URL ?? "/",
   server: {
     host: "0.0.0.0",
     allowedHosts: true,

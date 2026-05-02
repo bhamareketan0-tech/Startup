@@ -1,0 +1,102 @@
+12:37 PMClaude responded: PROMPT 2 — Practice SectionPROMPT 2 — Practice Section
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend). The foundation has been fixed. Now build the complete Practice Section properly.
+STEP 1 — CLASS SELECTION PAGE:
+Currently there are only Class 11 and Class 12 options. Add a third option:
+
+Class 11
+Class 12
+Dropper (NEET Repeater)
+
+All three cards must look identical in size, alignment, and green theme. Dropper should have a special tag like "NEET Repeater" below it. Mobile responsive, all three cards stacked properly on mobile.
+STEP 2 — CHAPTER & SUBUNIT NAVIGATION:
+
+After selecting class, show all chapters of that class
+Each chapter shows number of subunits and number of questions available
+If questions = 0 in a subunit, show "Coming Soon" tag instead of letting student enter
+After selecting chapter, show all subunits
+Each subunit shows question count per type
+Smooth transitions between pages, no lag, no reload
+
+STEP 3 — QUESTION TYPES COMPLETE REBUILD:
+Remove existing question type system and rebuild with this exact order:
+
+Video — plays an animated explanation video of that subunit (URL stored in MongoDB, admin uploads link)
+Paragraph — full text paragraph of subunit content with important words highlighted in green
+Pointer Notes — same content converted to bullet points for fast revision
+Tricks & Mnemonics — memory tricks, acronyms, story methods for that subunit
+Standard MCQ — 4 options, one correct, NEET pattern
+Assertion Reason — Statement A and Statement B, 4 standard NEET options
+No. of Correct Statements — list of statements, options are "1 correct / 2 correct / 3 correct / all correct"
+True / False — statement given, 4 options in MCQ format (both true, both false, first true second false, first false second true)
+Fill in the Blanks — blank in sentence, 4 options to fill
+Match the Column — Column I and Column II, 4 combo options (A-1 B-2 C-3 D-4 style)
+Diagram Based — image shown, question about diagram, 4 options
+Table Based — table image shown, question about table, 4 options
+Previous Year Questions (PYQ) — same as Standard MCQ but tagged with year (e.g. NEET 2019)
+
+ALL question types must:
+
+Show 4 options always (MCQ format)
+Follow exact NEET exam pattern
+Be mobile friendly
+Have smooth animations between questions (no lag, no phone heating)
+Show question number and total (Q1 of 45)
+Show difficulty tag (Easy/Medium/Hard) in green
+
+STEP 4 — QUESTION INTERFACE:
+Left sidebar must show:
+
+Chapter name
+Class
+Timer (countdown)
+Progress bar
+Done / Left / Total count
+All 13 question types listed, clickable to jump to that type
+
+Bottom navigation:
+
+← Previous button (go to previous question)
+🔄 Reattempt box (small, retry current question)
+Next → button
+
+STEP 5 — QUESTION ROTATION SYSTEM (CRITICAL):
+Build a smart question tracking system in MongoDB:
+
+Every question attempt by every student is recorded (studentId, questionId, chapterId, date, correct/wrong)
+When student starts a new mock test or practice session, system checks which questions they have already seen
+Never show same question twice until ALL questions in that chapter are shown
+Track per student per chapter — maintain a "seen questions pool"
+Once all questions exhausted → reset pool and start fresh randomly
+Always randomize order within available unseen questions
+This tracking must work across sessions (stored in MongoDB not just browser)
+
+STEP 6 — AFTER CHAPTER COMPLETION:
+When student completes all questions in a subunit:
+
+Show completion screen with score, accuracy, time taken
+Show "Start Chapter Mock Test" button
+Chapter mock test pulls random questions from entire chapter (all subunits mixed)
+After chapter mock test → show detailed performance breakdown
+
+PERFORMANCE REQUIREMENTS:
+
+Questions must load instantly (prefetch next question in background)
+Timer must be accurate and never drift
+No lag when selecting options
+No phone heating from animations
+Auto-save progress every 30 seconds to MongoDB
+If student closes app mid-quiz, resume from where they left off
+
+ADMIN PANEL UPDATES FOR THIS PROMPT:
+In admin panel, for each question type add:
+
+Video type: URL field for video link + thumbnail
+Paragraph type: Rich text editor with highlight option
+Pointer Notes type: Add/remove bullet points interface
+Tricks & Mnemonics type: Text field with emoji support
+PYQ type: All standard MCQ fields + Year field (dropdown 2010-2024) + Exam field
+
+After completing, give full report of what was built and any issues. 🔥
