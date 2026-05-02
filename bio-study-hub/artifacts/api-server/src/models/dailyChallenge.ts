@@ -8,7 +8,6 @@ const dailyChallengeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-dailyChallengeSchema.index({ date: 1 });
 
 const userDailyChallengeSchema = new mongoose.Schema(
   {
@@ -28,8 +27,7 @@ userDailyChallengeSchema.index({ user_id: 1, completed: 1 });
 
 userDailyChallengeSchema.set("toJSON", {
   virtuals: true,
-  transform: (_doc, ret) => {
-    ret.id = ret._id.toString();
+  transform: (_doc, ret) => {ret.id = ret._id.toString(); // ✅
     ret.created_at = ret.createdAt?.toISOString?.() ?? "";
     delete ret._id;
     delete ret.__v;
