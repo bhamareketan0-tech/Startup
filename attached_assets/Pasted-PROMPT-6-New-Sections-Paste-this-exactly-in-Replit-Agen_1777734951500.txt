@@ -1,0 +1,228 @@
+PROMPT 6 — New Sections
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend).
+GLOBAL UI/UX RULES — APPLY TO EVERY SINGLE THING YOU BUILD IN THIS PROMPT:
+
+Desktop layout: sidebar + main content, spacious, breathing room
+Tablet: collapsed sidebar, full content area
+Mobile (375px-428px): bottom navigation, stacked cards, no sidebar
+8px grid spacing system throughout
+Border radius: 8px on all cards, 6px on buttons
+No cramming — maximum 3-4 items per row on desktop, 1-2 on mobile
+Every feature hidden behind clean tabs, not all dumped on one screen
+Fonts: Inter or Poppins, consistent sizing
+Green theme: #00FF9D accent, #0A0A0A background, #111111 cards
+All buttons minimum 44px height for touch
+No horizontal scrolling ever
+Smooth transitions max 200ms — no heavy animations
+No phone heating, no lag, no janky scrolling
+Think Unacademy/PhysicsWallah level cleanliness
+
+
+STEP 1 — MAA SECTION 🧘:
+Build a completely separate calming section called "MAA" accessible from main navigation.
+Opening experience:
+
+When student opens MAA → full screen calm experience
+Dark background, soft green glow, no distractions
+Gentle text: "Take a moment before you study"
+Auto-starts breathing exercise immediately
+
+Breathing Exercises (build all 4):
+Exercise 1 — Box Breathing (4-4-4-4):
+
+Inhale 4 seconds → Hold 4 seconds → Exhale 4 seconds → Hold 4 seconds
+Animated circle: expands on inhale, holds, shrinks on exhale
+Text guide: "Breathe In... Hold... Breathe Out... Hold..."
+4 rounds = 1 session (64 seconds total)
+Used for: calming anxiety before exam
+
+Exercise 2 — 4-7-8 Breathing:
+
+Inhale 4 seconds → Hold 7 seconds → Exhale 8 seconds
+Same animated circle
+4 rounds = 1 session
+Used for: deep relaxation, sleep
+
+Exercise 3 — Energizing Breath (2-1-4):
+
+Inhale 2 seconds → Hold 1 second → Exhale 4 seconds
+Faster pace
+6 rounds = 1 session
+Used for: increasing focus before studying
+
+Exercise 4 — Equal Breathing (5-5):
+
+Inhale 5 seconds → Exhale 5 seconds
+Simple and calming
+5 rounds = 1 session
+Used for: general calm
+
+After breathing session:
+
+Show: "You are ready to study 🌱"
+Show motivational quote (NEET specific — stored in MongoDB, admin can add quotes)
+Button: "Start Studying" → takes to dashboard
++10 XP for completing MAA session
+
+Memory Techniques Section (inside MAA):
+Add a separate tab inside MAA called "Memory Boost":
+Spaced Repetition Guide:
+
+Explain the system visually
+Show student their own spaced repetition schedule
+Which questions to review today based on 1/3/7/21 day intervals
+"Review Now" button → takes to those specific questions
+
+Memory Palace:
+
+Interactive clickable diagrams per chapter
+Student clicks on diagram part → tries to recall name → clicks to reveal
+Available for: Heart, Cell, Neuron, Leaf cross section, Flower parts
+Admin can add more diagrams from admin panel
+Each diagram stored as image in MongoDB with clickable coordinates and labels
+
+Sleep Revision Reminder:
+
+Student sets their bedtime in profile settings
+10 minutes before bedtime → push notification (browser notification)
+Notification shows: "Time to review before sleep! 5 questions waiting"
+Opens a special "Sleep Review" mode:
+
+Only 5 questions
+Questions = most recent wrong answers
+No timer, no pressure
+Soft UI — dimmed screen, calm mode
+After 5 questions → "Good night! Sleep well 🌙"
++15 XP for completing sleep review
+
+
+
+
+STEP 2 — SHORT NOTES SECTION:
+
+Separate section in main navigation called "Short Notes"
+Clean grid layout of note cards
+Each card shows: Chapter name, subunit, preview of first 2 lines, date added
+Click card → opens full note in clean reading view
+Notes uploaded by admin (content added later — build the structure now)
+Student can: bookmark a note, add personal annotation to any note
+Filter by: chapter, class, date
+Search notes by keyword
+Mobile: stacked single column cards
+Desktop: 3 column grid
+"Coming Soon" placeholder cards for chapters with no notes yet
+
+
+STEP 3 — FLASHCARDS SECTION:
+
+Separate section called "Flashcards"
+Cards organized by chapter and subunit
+Each flashcard: Front = question/term, Back = answer/definition
+Flip animation on click (CSS flip — lightweight, no library)
+Student swipes through cards (swipe left = don't know, swipe right = know)
+Cards marked "don't know" come back in rotation
+Cards marked "know" 3 times → marked as mastered
+Progress shown: X of Y cards mastered this chapter
+Admin uploads flashcard content (build structure now, content added later)
+"Coming Soon" for empty chapters
+Mobile: full screen card swipe experience
+Desktop: centered card with keyboard support (arrow keys)
+
+
+STEP 4 — PYQ SECTION:
+
+Separate section called "PYQ" (Previous Year Questions)
+Filter by: Year (2010-2024), Chapter, Difficulty
+Each question tagged with year clearly (e.g. "NEET 2019")
+Student can practice PYQ chapter-wise or year-wise
+Year-wise mode: attempt full year's questions as a set
+Chapter-wise mode: see all PYQ for one chapter across all years
+PYQ questions pulled from same MongoDB question bank (questions tagged as PYQ with year field)
+Performance tracked separately for PYQ attempts
+Show: "You have attempted X of Y PYQ questions"
+Most repeated PYQ topics highlighted (admin marks these)
+
+
+STEP 5 — COMPARISON CHARTS:
+
+Inside each chapter/subunit → add "Comparison" tab
+Shows side by side comparison tables of similar concepts
+Examples:
+
+Mitosis vs Meiosis
+Plant cell vs Animal cell
+Aerobic vs Anaerobic respiration
+C3 vs C4 plants
+
+
+Each comparison: clean 2-column table, green headers, alternating row colors
+Admin uploads comparison tables from admin panel
+Student can bookmark any comparison table
+Mobile: scrollable table, no horizontal overflow
+Build structure now, admin adds content later
+"Coming Soon" placeholder for empty comparisons
+
+
+STEP 6 — SAMPLE PAPER GENERATOR:
+
+Separate section called "Sample Papers"
+Student selects:
+
+Class (11 / 12 / Both / Dropper)
+Chapters to include (multi-select)
+Number of questions (90 for full NEET Biology = 360 marks)
+Difficulty mix (Easy 20% / Medium 60% / Hard 20% — default NEET pattern)
+Include PYQ (yes/no toggle)
+
+
+System generates paper automatically from MongoDB question bank
+Paper shown in clean exam format (numbered, proper spacing)
+Student can:
+
+Attempt paper online (same test interface as mock test)
+Download as PDF (clean formatted PDF)
+
+
+Results saved after attempting
+Previously generated papers saved in "My Papers" tab
+Maximum 5 saved papers per free student, unlimited for Pro
+
+
+STEP 7 — SPACED REPETITION SYSTEM:
+Build complete spaced repetition engine in MongoDB:
+Logic:
+
+Every question attempted → stored with: studentId, questionId, correct/wrong, date, attempt number
+Wrong questions scheduled for review:
+
+1st wrong → review after 1 day
+2nd wrong → review after 3 days
+3rd wrong → review after 7 days
+4th wrong → review after 21 days
+Correct in review → interval doubles next time
+Correct 3 times in a row → marked mastered, removed from schedule
+
+
+Every day → system calculates which questions are due for review per student
+Dashboard shows: "You have X questions due for review today"
+"Review Now" button → takes to those questions only
+Separate from regular practice — dedicated review session
++20 XP per question mastered through spaced repetition
+
+
+PERFORMANCE REQUIREMENTS:
+
+MAA breathing animation: CSS only, zero JS animation libraries
+Flashcard flip: CSS transform only, no library
+Spaced repetition calculations: run on backend, not frontend
+PYQ filter: debounced search, indexed MongoDB queries
+Sample paper generation: backend job, returns in under 3 seconds
+All images lazy loaded
+Comparison tables: simple HTML tables, no heavy components
+Sleep reminder: browser Notification API (no third party service needed)
+Zero phone heating on any of these sections
+
+After completing give full report of what was built and any issues. 🔥

@@ -87,4 +87,15 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
+router.post("/users/xp", async (req, res) => {
+  try {
+    const { userId, xp } = req.body as { userId: string; xp: number; reason?: string };
+    const user = await User.findByIdAndUpdate(userId, { $inc: { score: xp } }, { new: true });
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.json({ score: user.score });
+  } catch (err: unknown) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
 export default router;

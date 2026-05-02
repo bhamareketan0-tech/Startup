@@ -2,7 +2,11 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/ThemeContext";
-import { Sun, Moon, Menu, X, Zap, LogOut, User, Shield, Trophy, Clock, BarChart2, Flame, Bookmark, FileText, Sliders, RotateCcw, BookOpen, ChevronDown } from "lucide-react";
+import {
+  Sun, Moon, Menu, X, Zap, LogOut, User, Shield, Trophy, Clock,
+  BarChart2, Flame, Bookmark, FileText, Sliders, RotateCcw, BookOpen,
+  ChevronDown, Sparkles, Layers, GitCompareArrows, Award, FileQuestion
+} from "lucide-react";
 import { ADMIN_EMAIL } from "@/lib/constants";
 
 export function Navbar() {
@@ -27,21 +31,25 @@ export function Navbar() {
     { to: "/class-select", label: "PRACTICE", icon: null },
     { to: "/mock-test", label: "MOCK TEST", icon: Clock },
     { to: "/daily-challenge", label: "DAILY", icon: Flame },
-    { to: "/performance", label: "STATS", icon: BarChart2 },
+    { to: "/maa", label: "MAA", icon: Sparkles },
   ];
 
   const moreLinks = [
+    { to: "/pyq", label: "PYQ", icon: Award },
+    { to: "/flashcards", label: "Flashcards", icon: Layers },
+    { to: "/short-notes", label: "Short Notes", icon: FileText },
+    { to: "/sample-papers", label: "Sample Papers", icon: FileQuestion },
+    { to: "/comparisons", label: "Comparisons", icon: GitCompareArrows },
+    { to: "/performance", label: "Stats", icon: BarChart2 },
     { to: "/custom-quiz", label: "Custom Quiz", icon: Sliders },
     { to: "/revision", label: "Revision", icon: RotateCcw },
     { to: "/bookmarks", label: "Bookmarks", icon: Bookmark },
     { to: "/notes", label: "My Notes", icon: FileText },
     { to: "/syllabus", label: "Syllabus", icon: BookOpen },
     { to: "/leaderboard", label: "Ranks", icon: Trophy },
-    { to: "/community", label: "Arena", icon: null },
   ];
 
   const links = user ? primaryAuthLinks : publicLinks;
-
   const isActive = (to: string) => location.pathname === to;
 
   return (
@@ -83,13 +91,13 @@ export function Navbar() {
                   MORE <ChevronDown className={`w-3 h-3 transition-transform ${moreOpen ? "rotate-180" : ""}`} />
                 </button>
                 {moreOpen && (
-                  <div className="absolute top-full right-0 w-48 border shadow-xl z-50" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}
+                  <div className="absolute top-full right-0 w-52 border shadow-xl z-50 max-h-80 overflow-y-auto" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}
                     onMouseLeave={() => setMoreOpen(false)}>
                     {moreLinks.map((l) => (
                       <Link key={l.to} to={l.to} onClick={() => setMoreOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 text-sm font-black uppercase transition-all min-h-[44px]"
+                        className="flex items-center gap-3 px-4 py-2.5 text-xs font-black uppercase transition-all min-h-[44px]"
                         style={{ color: isActive(l.to) ? "#00FF9D" : "var(--bs-text-muted)", background: isActive(l.to) ? "rgba(0,255,157,0.06)" : "transparent" }}>
-                        {l.icon && <l.icon className="w-4 h-4" />}
+                        {l.icon && <l.icon className="w-3.5 h-3.5" />}
                         {l.label}
                       </Link>
                     ))}
@@ -177,7 +185,7 @@ export function Navbar() {
                 <div className="h-px my-1" style={{ background: "var(--bs-border-subtle)" }} />
                 {moreLinks.map((l) => (
                   <Link key={l.to} to={l.to} onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-3 py-3 min-h-[44px] font-bold text-sm"
+                    className="flex items-center gap-3 py-2.5 min-h-[44px] font-bold text-xs uppercase"
                     style={{ color: isActive(l.to) ? "#00FF9D" : "var(--bs-text-muted)" }}>
                     {l.icon && <l.icon className="w-4 h-4" />}
                     {l.label}

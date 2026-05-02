@@ -18,6 +18,13 @@ import dailyChallengeRouter from "./dailyChallenge";
 import performanceRouter from "./performance";
 import syllabusProgressRouter from "./syllabusProgress";
 import customQuizRouter from "./customQuiz";
+import shortNotesRouter from "./shortNotes";
+import flashcardsRouter from "./flashcards";
+import comparisonsRouter from "./comparisons";
+import memoryPalaceRouter from "./memoryPalace";
+import quotesRouter from "./quotes";
+import spacedRepetitionRouter from "./spacedRepetition";
+import samplePapersRouter from "./samplePapers";
 
 const router: IRouter = Router();
 
@@ -40,5 +47,12 @@ router.use(dailyChallengeRouter);
 router.use(performanceRouter);
 router.use(syllabusProgressRouter);
 router.use(customQuizRouter);
+router.use(shortNotesRouter);
+router.use(flashcardsRouter);
+router.use(comparisonsRouter);
+router.use(memoryPalaceRouter);
+router.use(quotesRouter);
+router.use(spacedRepetitionRouter);
+router.use(samplePapersRouter);
 
 export default router;

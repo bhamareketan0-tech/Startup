@@ -28,6 +28,12 @@ const RevisionPage = lazy(() => import("@/pages/RevisionPage").then(m => ({ defa
 const DailyChallengePage = lazy(() => import("@/pages/DailyChallengePage").then(m => ({ default: m.DailyChallengePage })));
 const PerformancePage = lazy(() => import("@/pages/PerformancePage").then(m => ({ default: m.PerformancePage })));
 const SyllabusPage = lazy(() => import("@/pages/SyllabusPage").then(m => ({ default: m.SyllabusPage })));
+const MaaPage = lazy(() => import("@/pages/MaaPage").then(m => ({ default: m.MaaPage })));
+const ShortNotesPage = lazy(() => import("@/pages/ShortNotesPage").then(m => ({ default: m.ShortNotesPage })));
+const FlashcardsPage = lazy(() => import("@/pages/FlashcardsPage").then(m => ({ default: m.FlashcardsPage })));
+const PYQPage = lazy(() => import("@/pages/PYQPage").then(m => ({ default: m.PYQPage })));
+const SamplePapersPage = lazy(() => import("@/pages/SamplePapersPage").then(m => ({ default: m.SamplePapersPage })));
+const ComparisonsPage = lazy(() => import("@/pages/ComparisonsPage").then(m => ({ default: m.ComparisonsPage })));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Spinner() {
@@ -81,6 +87,13 @@ function AppRoutes() {
         <Route path="/daily-challenge" element={<ProtectedRoute><Navbar /><DailyChallengePage /></ProtectedRoute>} />
         <Route path="/performance" element={<ProtectedRoute><Navbar /><PerformancePage /></ProtectedRoute>} />
         <Route path="/syllabus" element={<ProtectedRoute><Navbar /><SyllabusPage /></ProtectedRoute>} />
+        {/* New sections */}
+        <Route path="/maa" element={<ProtectedRoute><Navbar /><MaaPage /></ProtectedRoute>} />
+        <Route path="/short-notes" element={<ProtectedRoute><Navbar /><ShortNotesPage /></ProtectedRoute>} />
+        <Route path="/flashcards" element={<ProtectedRoute><Navbar /><FlashcardsPage /></ProtectedRoute>} />
+        <Route path="/pyq" element={<ProtectedRoute><Navbar /><PYQPage /></ProtectedRoute>} />
+        <Route path="/sample-papers" element={<ProtectedRoute><Navbar /><SamplePapersPage /></ProtectedRoute>} />
+        <Route path="/comparisons" element={<ProtectedRoute><Navbar /><ComparisonsPage /></ProtectedRoute>} />
         <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>

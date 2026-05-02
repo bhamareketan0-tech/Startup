@@ -1,0 +1,271 @@
+PROMPT 7 — Admin Panel
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend).
+GLOBAL UI/UX RULES — APPLY TO EVERY SINGLE THING YOU BUILD IN THIS PROMPT:
+
+Desktop layout: sidebar + main content, spacious, breathing room
+Tablet: collapsed sidebar, full content area
+Mobile (375px-428px): bottom navigation, stacked cards, no sidebar
+8px grid spacing system throughout
+Border radius: 8px on all cards, 6px on buttons
+No cramming — maximum 3-4 items per row on desktop, 1-2 on mobile
+Every feature hidden behind clean tabs, not all dumped on one screen
+Fonts: Inter or Poppins, consistent sizing
+Green theme: #00FF9D accent, #0A0A0A background, #111111 cards
+All buttons minimum 44px height for touch
+No horizontal scrolling ever
+Smooth transitions max 200ms — no heavy animations
+No phone heating, no lag, no janky scrolling
+Think Unacademy/PhysicsWallah level cleanliness
+
+
+STEP 1 — ADMIN PANEL COMPLETE REBUILD & AUDIT:
+First audit entire existing admin panel. Fix all broken sections. Then add everything below.
+Admin panel accessible at /admin — protected route, admin login only.
+Admin sidebar must have these sections in this exact order:
+OVERVIEW:
+
+Dashboard
+Analytics
+
+CONTENT:
+
+Questions
+Chapters & Topics
+Passages
+PDF Import
+AI Question Extractor
+Short Notes Manager
+Flashcard Manager
+Comparison Charts Manager
+Memory Palace Manager
+Motivational Quotes
+
+USERS:
+
+Students
+Subscriptions
+Reports
+
+COMMUNICATION:
+
+Email Messaging
+WhatsApp Messaging
+SMS Messaging
+Notifications
+
+MONETIZATION:
+
+Revenue Dashboard
+Razorpay Settings
+Pricing Plans
+Referral System
+
+SYSTEM:
+
+Settings
+Credentials & Keys
+MongoDB Status
+Maintenance Mode
+
+
+STEP 2 — QUESTIONS MANAGER (COMPLETE REBUILD):
+List view:
+
+Show all questions in paginated table (20 per page)
+Columns: Question preview, Chapter, Subunit, Class, Type, Difficulty, Year (if PYQ), Status, Actions
+Filter by: Class, Chapter, Type, Difficulty, Year, Status
+Search by keyword
+Bulk select with checkboxes
+Bulk actions: Delete selected, Change difficulty, Change status, Move to chapter
+
+Add Question — all 13 types supported:
+
+Video: Title, subunit selector, video URL, thumbnail URL, description
+Paragraph: Chapter selector, rich text editor, highlight important words option
+Pointer Notes: Chapter selector, add/remove bullet points interface
+Tricks & Mnemonics: Chapter selector, text with emoji support, category tag
+Standard MCQ: Question text, Option A/B/C/D, Correct answer, Explanation, Difficulty
+Assertion Reason: Statement A, Statement B, 4 standard options, correct answer, explanation
+No. of Correct Statements: List of statements (add/remove), options auto-generated, correct answer
+True/False: Statement 1, Statement 2, 4 combo options auto-generated, correct answer
+Fill in the Blanks: Sentence with blank marker, 4 options, correct answer, explanation
+Match the Column: Column I items (4), Column II items (4), correct mapping, auto-generate 4 combo options
+Diagram Based: Image upload or URL, question text, 4 options, correct answer, explanation
+Table Based: Table image upload or URL, question text, 4 options, correct answer, explanation
+PYQ: All Standard MCQ fields + Year dropdown (2010-2024) + Exam name field (NEET/AIPMT) + Source field
+
+Edit Question:
+
+All fields editable
+Change question type (with warning: existing data may be lost)
+Preview question exactly as student sees it
+
+Bulk Import:
+
+Existing PDF Import and AI Question Extractor — keep and improve
+Add bulk JSON import option
+Add bulk CSV import option
+
+
+STEP 3 — SHORT NOTES MANAGER:
+
+Add new note: Select class, chapter, subunit, title, rich text content editor
+Rich text editor supports: bold, italic, bullet points, tables, image insertion
+Important words can be highlighted in green
+Preview exactly as student sees it
+Edit/delete existing notes
+Reorder notes within chapter (drag and drop)
+Publish/unpublish toggle
+
+
+STEP 4 — FLASHCARD MANAGER:
+
+Add flashcard: Select class, chapter, subunit, front text, back text, optional image on front or back
+Bulk add: paste multiple flashcards in format "Front | Back" one per line
+Edit/delete existing flashcards
+Reorder within chapter
+Preview card flip as student sees it
+Publish/unpublish toggle
+
+
+STEP 5 — COMPARISON CHARTS MANAGER:
+
+Add comparison: Select class, chapter, title (e.g. "Mitosis vs Meiosis")
+Table builder: define column headers, add rows, fill cells
+Preview as student sees it
+Edit/delete
+Publish/unpublish toggle
+
+
+STEP 6 — MEMORY PALACE MANAGER:
+
+Upload diagram image for any chapter/subunit
+After upload → interactive label editor:
+
+Click any point on image → add label
+Label has: x/y coordinates (auto-detected from click), label text, reveal text
+
+
+Preview interactive diagram as student sees it
+Edit labels, move labels, delete labels
+Publish/unpublish
+
+
+STEP 7 — MOTIVATIONAL QUOTES MANAGER:
+
+Add quote: text, author (optional), category (morning/evening/exam/general)
+Quotes shown in MAA section and dashboard
+Edit/delete quotes
+Simple list view
+
+
+STEP 8 — COMMUNICATION SECTION:
+Email Messaging:
+
+Compose email: To (all students / Pro students / Free students / individual / by class)
+Subject, rich text body, preview
+Send now or schedule for later
+Sent history with open rate (if trackable)
+Note: Uses admin's own SMTP — just paste SMTP credentials in Settings
+
+WhatsApp Messaging:
+
+Compose message: To (same filters as email)
+Plain text only (WhatsApp limitation)
+Character counter (max 1000)
+Send via WhatsApp Business API — paste API key in Credentials & Keys
+Sent history
+
+SMS Messaging:
+
+Compose SMS: To (same filters)
+Plain text, 160 character limit
+Send via Twilio or MSG91 — paste API key in Credentials & Keys
+Sent history
+
+Push Notifications:
+
+Title, body, icon (optional), link (optional)
+Target: all / Pro / Free / by class
+Send immediately or schedule
+Notification history
+
+
+STEP 9 — REVENUE DASHBOARD:
+
+Total revenue (all time)
+Revenue this month
+Revenue this week
+Active subscriptions count
+Free vs paid student ratio (pie chart)
+Revenue trend graph (last 12 months)
+Recent transactions table: student name, plan, amount, date, status
+Export transactions as CSV button
+
+
+STEP 10 — RAZORPAY SETTINGS:
+
+Simple form: paste Razorpay Key ID and Key Secret
+Test mode / Live mode toggle
+Save → Razorpay integration activated automatically
+No coding needed — just paste and save
+Connection status shown (Connected ✅ / Not connected ❌)
+Test payment button to verify integration
+
+
+STEP 11 — PRICING PLANS MANAGER:
+
+Free Plan: Edit features list, edit limits (questions per day etc)
+Basic Plan (₹399): Edit price, edit features, edit duration (monthly/yearly)
+Pro Plan (₹699): Edit price, edit features, edit duration
+Each plan: toggle active/inactive
+Changes reflect immediately on pricing page for students
+
+
+STEP 12 — REFERRAL SYSTEM MANAGER:
+
+View all referrals: who referred whom, date, reward status
+Set referral reward: X days Pro for referrer, Y days Pro for referred
+Enable/disable referral system toggle
+Referral code format customization
+
+
+STEP 13 — REPORTS SECTION:
+
+Students can flag wrong answers or report issues on any question
+Reports appear here with: question preview, student name, report reason, date
+Admin actions: Mark as resolved, Edit question, Delete question, Dismiss report
+Filter by: status (pending/resolved/dismissed), date, chapter
+Pending reports count shown on dashboard as badge
+
+
+STEP 14 — SETTINGS:
+
+Site name, contact email
+Maintenance mode toggle (shows maintenance page to students)
+Accent color picker (green default)
+Logo upload
+Favicon upload
+Student registration: open/closed toggle
+Default class for new students
+Daily challenge time (what time new challenge generates — default midnight IST)
+Bedtime reminder default time
+
+
+PERFORMANCE REQUIREMENTS:
+
+Admin panel completely separate bundle from student frontend (code splitting)
+Admin tables paginated — never load all records at once
+Bulk operations run as background jobs — show progress bar
+Image uploads: compress before storing, max 2MB per image
+Rich text editor: use lightweight editor (Quill.js or similar)
+All admin API routes protected with admin middleware
+Rate limiting on admin API routes
+MongoDB indexes on all frequently queried fields
+Admin panel must work on tablet (admin may use iPad)
+No student data processing on frontend — all done on backend
+
+After completing give full report of what was built and any issues. 🔥
