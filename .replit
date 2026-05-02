@@ -1,10 +1,11 @@
-modules = ["nodejs-20"]
+modules = ["nodejs-20", "python-3.11"]
 [nix]
 channel = "stable-25_05"
 
 [agent]
 expertMode = true
 stack = "BEST_EFFORT_FALLBACK"
+integrations = ["github:1.0.0"]
 
 [[ports]]
 localPort = 3000
