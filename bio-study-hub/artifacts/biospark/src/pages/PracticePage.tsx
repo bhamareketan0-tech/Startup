@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Question } from "@/lib/supabase";
+import { Question } from "@/lib/types";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import {
@@ -260,9 +260,9 @@ function AssertionRenderer({ q, currentIndex, answers, submitted, onAnswer }: { 
           <span className="text-xs font-black uppercase tracking-widest font-mono block mb-2" style={{ color: "var(--bs-accent-hex)" }}>Statement (A) — Assertion</span>
           <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{q.question}</p>
         </div>
-        <div className="border border-l-4 border-l-blue-400 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-          <span className="text-blue-400 text-xs font-black uppercase tracking-widest font-mono block mb-2">Statement (R) — Reason</span>
-          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementR || "—"}</p>
+        <div className="border border-l-4 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+          <span className="text-xs font-black uppercase tracking-widest font-mono block mb-2" style={{ color: "var(--bs-accent-hex)" }}>Statement (R) — Reason</span>
+          <p className="text-base leading-relaxed" style={{ color: "var(--bs-text)" }}>{statementR || q.question}</p>
         </div>
       </div>
       <div className="space-y-3 mb-6">
@@ -376,12 +376,12 @@ function MatchColumnRenderer({ q, currentIndex, answers, submitted, onAnswer }: 
               ))}
             </ol>
           </div>
-          <div className="border border-l-4 border-l-blue-400 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-            <p className="text-blue-400 text-xs font-black uppercase tracking-widest font-mono mb-4">Column II</p>
+          <div className="border border-l-4 p-5" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)", borderLeftColor: "var(--bs-accent-hex)" }}>
+            <p className="text-xs font-black uppercase tracking-widest font-mono mb-4" style={{ color: "var(--bs-accent-hex)" }}>Column II</p>
             <ol className="space-y-3">
               {colRight.map((item, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-blue-400 font-black text-sm shrink-0">({i + 1})</span>
+                  <span className="font-black text-sm shrink-0" style={{ color: "var(--bs-accent-hex)" }}>({i + 1})</span>
                   <span className="text-sm leading-relaxed" style={{ color: "var(--bs-text)" }}>{item}</span>
                 </li>
               ))}
@@ -783,6 +783,7 @@ export function PracticePage() {
           />
         ) : (
           <>
+            {/* Question Content */}
             <div className="flex-1 overflow-y-auto px-5 py-6">
               {loading ? (
                 <div className="flex items-center justify-center py-20">
@@ -804,7 +805,7 @@ export function PracticePage() {
                 <div>
                   {!isStudyType && currentQ.difficulty && (
                     <div className="mb-3">
-                      <span className={`px-2 py-0.5 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-green-500/10 border-green-500/20 text-green-500" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"}`}>
+                      <span className={`px-2 py-0.5 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-[#00FF9D]/10 border-[#00FF9D]/20 text-[#00FF9D]" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-white/5 border-white/10 text-white/70"}`}>
                         {currentQ.difficulty}
                       </span>
                     </div>
@@ -976,7 +977,7 @@ export function PracticePage() {
                     </span>
                   </div>
                   {!isStudyType && currentQ.difficulty && (
-                    <span className={`px-3 py-1 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-green-500/10 border-green-500/20 text-green-500" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"}`}>
+                    <span className={`px-3 py-1 text-xs font-black uppercase tracking-widest border ${currentQ.difficulty === "easy" ? "bg-[#00FF9D]/10 border-[#00FF9D]/20 text-[#00FF9D]" : currentQ.difficulty === "hard" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-white/5 border-white/10 text-white/70"}`}>
                       {currentQ.difficulty}
                     </span>
                   )}

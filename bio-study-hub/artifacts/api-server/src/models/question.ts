@@ -21,6 +21,13 @@ const questionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+questionSchema.index({ class: 1, is_active: 1 });
+questionSchema.index({ chapter: 1, is_active: 1 });
+questionSchema.index({ chapter: 1, subunit: 1, is_active: 1 });
+questionSchema.index({ difficulty: 1 });
+questionSchema.index({ subject: 1, is_active: 1 });
+questionSchema.index({ createdAt: -1 });
+
 questionSchema.set("toJSON", {
   virtuals: true,
   transform: (_doc, ret) => {

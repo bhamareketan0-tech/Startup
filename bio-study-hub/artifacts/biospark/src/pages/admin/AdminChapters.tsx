@@ -7,8 +7,8 @@ import {
 import { getChapters, fetchChaptersFromAPI, saveChaptersToAPI, slugify } from "@/lib/chaptersManager";
 import type { Chapter } from "@/lib/chaptersManager";
 
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#aaff00]/50 focus:bg-white/8 transition-colors";
-const accentBtn = "flex items-center gap-1.5 px-3 py-1.5 bg-[#aaff00] text-black text-xs font-black uppercase tracking-wider rounded hover:bg-[#c8ff40] transition-colors disabled:opacity-40";
+const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 focus:bg-white/8 transition-colors";
+const accentBtn = "flex items-center gap-1.5 px-3 py-1.5 bg-[#00FF9D] text-black text-xs font-black uppercase tracking-wider rounded hover:bg-[#00e590] transition-colors disabled:opacity-40";
 const ghostBtn = "flex items-center gap-1 px-3 py-1.5 border border-white/15 text-white/60 text-xs rounded hover:text-white hover:border-white/30 transition-colors";
 const dangerBtn = "flex items-center gap-1.5 px-3 py-1.5 bg-red-500/15 border border-red-500/30 text-red-400 text-xs rounded hover:bg-red-500/25 transition-colors";
 
@@ -180,7 +180,7 @@ export function AdminChapters() {
             </button>
           )}
           {saveStatus === "saved" && (
-            <span className="text-[#aaff00] text-xs font-bold flex items-center gap-1">
+            <span className="text-[#00FF9D] text-xs font-bold flex items-center gap-1">
               <Check className="w-3.5 h-3.5" /> Saved to DB
             </span>
           )}
@@ -200,7 +200,7 @@ export function AdminChapters() {
             onClick={() => setCls(c.id)}
             className={`px-5 py-2 text-sm font-black uppercase tracking-widest border transition-all ${
               cls === c.id
-                ? "bg-[#aaff00] text-black border-[#aaff00]"
+                ? "bg-[#00FF9D] text-black border-[#00FF9D]"
                 : "bg-white/5 text-white/50 border-white/10 hover:text-white hover:border-white/20"
             }`}
           >
@@ -215,13 +215,13 @@ export function AdminChapters() {
         <div className="col-span-2 bg-[#0a1628] border border-white/10 rounded-xl overflow-hidden flex flex-col">
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/3">
             <div className="flex items-center gap-2">
-              <Layers className="w-4 h-4 text-[#aaff00]" />
+              <Layers className="w-4 h-4 text-[#00FF9D]" />
               <span className="text-white font-bold text-sm">Chapters</span>
               <span className="text-white/30 text-xs bg-white/5 px-2 py-0.5 rounded-full">{chapters.length}</span>
             </div>
             <button
               onClick={() => { setShowNewChapter(true); setNewChapterName(""); }}
-              className="flex items-center gap-1 px-2.5 py-1 bg-[#aaff00]/15 border border-[#aaff00]/25 text-[#aaff00] rounded text-xs font-bold hover:bg-[#aaff00]/25 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1 bg-[#00FF9D]/15 border border-[#00FF9D]/25 text-[#00FF9D] rounded text-xs font-bold hover:bg-[#00FF9D]/25 transition-colors"
             >
               <Plus className="w-3 h-3" /> Add
             </button>
@@ -229,8 +229,8 @@ export function AdminChapters() {
 
           {/* New chapter form */}
           {showNewChapter && (
-            <div className="px-3 py-3 border-b border-white/10 bg-[#aaff00]/5 space-y-2">
-              <label className="text-xs text-[#aaff00]/80 font-bold uppercase tracking-wider block">New Chapter Name</label>
+            <div className="px-3 py-3 border-b border-white/10 bg-[#00FF9D]/5 space-y-2">
+              <label className="text-xs text-[#00FF9D]/80 font-bold uppercase tracking-wider block">New Chapter Name</label>
               <input
                 value={newChapterName}
                 onChange={(e) => setNewChapterName(e.target.value)}
@@ -256,9 +256,9 @@ export function AdminChapters() {
               const isSelected = selectedIdx === idx;
               const isEditing = editingChapter?.index === idx;
               return (
-                <div key={ch.id} className={`transition-colors ${isSelected ? "bg-[#aaff00]/8" : "hover:bg-white/3"}`}>
+                <div key={ch.id} className={`transition-colors ${isSelected ? "bg-[#00FF9D]/8" : "hover:bg-white/3"}`}>
                   {isEditing ? (
-                    <div className="px-3 py-2.5 bg-[#aaff00]/5 space-y-2">
+                    <div className="px-3 py-2.5 bg-[#00FF9D]/5 space-y-2">
                       <input
                         value={editingChapter.name}
                         onChange={(e) => setEditingChapter({ ...editingChapter, name: e.target.value })}
@@ -278,10 +278,10 @@ export function AdminChapters() {
                     >
                       <GripVertical className="w-3.5 h-3.5 text-white/15 shrink-0" />
                       <ChevronRight
-                        className={`w-3.5 h-3.5 shrink-0 transition-transform ${isSelected ? "rotate-90 text-[#aaff00]" : "text-white/20"}`}
+                        className={`w-3.5 h-3.5 shrink-0 transition-transform ${isSelected ? "rotate-90 text-[#00FF9D]" : "text-white/20"}`}
                       />
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm truncate ${isSelected ? "text-[#aaff00] font-semibold" : "text-white/75"}`}>
+                        <p className={`text-sm truncate ${isSelected ? "text-[#00FF9D] font-semibold" : "text-white/75"}`}>
                           {ch.name}
                         </p>
                         <p className="text-white/25 text-xs">{ch.subunits.length} subunit{ch.subunits.length !== 1 ? "s" : ""}</p>
@@ -305,7 +305,7 @@ export function AdminChapters() {
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setEditingChapter({ index: idx, name: ch.name, subject: ch.subject }); }}
-                          className="p-1 text-white/30 hover:text-[#aaff00] transition-colors"
+                          className="p-1 text-white/30 hover:text-[#00FF9D] transition-colors"
                           title="Rename"
                         >
                           <Edit className="w-3 h-3" />
@@ -337,7 +337,7 @@ export function AdminChapters() {
             <>
               <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/3">
                 <div className="flex items-center gap-2">
-                  <List className="w-4 h-4 text-[#aaff00]" />
+                  <List className="w-4 h-4 text-[#00FF9D]" />
                   <div>
                     <span className="text-white font-bold text-sm">{selected.name}</span>
                     <span className="text-white/30 text-xs ml-2">— Subunits</span>
@@ -355,16 +355,16 @@ export function AdminChapters() {
                   return (
                     <div key={sIdx} className="group hover:bg-white/3 transition-colors">
                       {isEditing ? (
-                        <div className="px-4 py-2.5 flex items-center gap-2 bg-[#aaff00]/5">
-                          <span className="text-[#aaff00]/50 font-mono text-xs w-5 shrink-0">{sIdx + 1}.</span>
+                        <div className="px-4 py-2.5 flex items-center gap-2 bg-[#00FF9D]/5">
+                          <span className="text-[#00FF9D]/50 font-mono text-xs w-5 shrink-0">{sIdx + 1}.</span>
                           <input
                             value={editingSubunit.value}
                             onChange={(e) => setEditingSubunit({ ...editingSubunit, value: e.target.value })}
                             onKeyDown={(e) => { if (e.key === "Enter") saveSubunitEdit(); if (e.key === "Escape") setEditingSubunit(null); }}
-                            className="flex-1 bg-white/5 border border-[#aaff00]/30 rounded px-3 py-1.5 text-white text-sm focus:outline-none focus:border-[#aaff00]/60"
+                            className="flex-1 bg-white/5 border border-[#00FF9D]/30 rounded px-3 py-1.5 text-white text-sm focus:outline-none focus:border-[#00FF9D]/60"
                             autoFocus
                           />
-                          <button onClick={saveSubunitEdit} className="p-1.5 bg-[#aaff00] text-black rounded hover:bg-[#c8ff40] transition-colors">
+                          <button onClick={saveSubunitEdit} className="p-1.5 bg-[#00FF9D] text-black rounded hover:bg-[#00e590] transition-colors">
                             <Check className="w-3.5 h-3.5" />
                           </button>
                           <button onClick={() => setEditingSubunit(null)} className="p-1.5 border border-white/15 text-white/50 rounded hover:text-white transition-colors">
@@ -374,7 +374,7 @@ export function AdminChapters() {
                       ) : (
                         <div className="px-4 py-2.5 flex items-center gap-3">
                           <GripVertical className="w-3.5 h-3.5 text-white/15 shrink-0" />
-                          <span className="text-[#aaff00]/50 font-mono text-xs w-5 shrink-0">{sIdx + 1}.</span>
+                          <span className="text-[#00FF9D]/50 font-mono text-xs w-5 shrink-0">{sIdx + 1}.</span>
                           <span className="text-sm text-white/80 flex-1">{sub}</span>
                           <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
@@ -395,7 +395,7 @@ export function AdminChapters() {
                             </button>
                             <button
                               onClick={() => setEditingSubunit({ index: sIdx, value: sub })}
-                              className="p-1 text-white/30 hover:text-[#aaff00] transition-colors"
+                              className="p-1 text-white/30 hover:text-[#00FF9D] transition-colors"
                               title="Rename"
                             >
                               <Edit className="w-3.5 h-3.5" />
@@ -424,7 +424,7 @@ export function AdminChapters() {
                     onChange={(e) => setNewSubunit(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && addSubunit()}
                     placeholder="e.g. Mechanism of Breathing"
-                    className="flex-1 bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#aaff00]/50 transition-colors"
+                    className="flex-1 bg-white/5 border border-white/10 rounded px-3 py-2 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#00FF9D]/50 transition-colors"
                   />
                   <button
                     onClick={addSubunit}
@@ -442,10 +442,10 @@ export function AdminChapters() {
 
       {/* Unsaved changes banner */}
       {isDirty && (
-        <div className="flex items-center justify-between px-4 py-3 bg-[#aaff00]/10 border border-[#aaff00]/25 rounded-xl">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#00FF9D]/10 border border-[#00FF9D]/25 rounded-xl">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-[#aaff00] rounded-full animate-pulse" />
-            <span className="text-[#aaff00] text-sm font-bold">Unsaved changes</span>
+            <div className="w-2 h-2 bg-[#00FF9D] rounded-full animate-pulse" />
+            <span className="text-[#00FF9D] text-sm font-bold">Unsaved changes</span>
             <span className="text-white/50 text-xs">— Click "Save Changes" to apply and persist</span>
           </div>
           <div className="flex gap-2">

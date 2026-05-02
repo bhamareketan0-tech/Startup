@@ -3,8 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/ThemeContext";
 import { Sun, Moon, Menu, X, Zap, LogOut, User, Shield, ChevronDown } from "lucide-react";
-
-const ADMIN_EMAIL = "bhamareketan18@gmail.com";
+import { ADMIN_EMAIL } from "@/lib/constants";
 
 export function Navbar() {
   const { user, profile, signOut } = useAuth();
@@ -36,12 +35,12 @@ export function Navbar() {
           <Link to="/home" className="flex items-center gap-3 group">
             <div
               className="w-10 h-10 flex items-center justify-center transform -skew-x-12 transition-colors"
-              style={{ background: "var(--bs-accent-hex)" }}
+              style={{ background: "#00FF9D" }}
             >
               <Zap className="w-6 h-6 text-black transform skew-x-12" />
             </div>
             <span className="text-2xl font-black tracking-tighter" style={{ color: "var(--bs-text)" }}>
-              BIO<span style={{ color: "var(--bs-accent-hex)" }}>SPARK</span>
+              BIO<span style={{ color: "#00FF9D" }}>SPARK</span>
             </span>
           </Link>
 
@@ -54,7 +53,7 @@ export function Navbar() {
                 className="text-sm transition-all relative py-2"
                 style={{
                   color: location.pathname === link.to
-                    ? "var(--bs-accent-hex)"
+                    ? "#00FF9D"
                     : "var(--bs-text-muted)",
                 }}
               >
@@ -62,7 +61,7 @@ export function Navbar() {
                 {location.pathname === link.to && (
                   <div
                     className="absolute bottom-0 left-0 w-full h-0.5 transform -skew-x-12"
-                    style={{ background: "var(--bs-accent-hex)" }}
+                    style={{ background: "#00FF9D" }}
                   />
                 )}
               </Link>
@@ -71,7 +70,7 @@ export function Navbar() {
               <Link
                 to="/admin"
                 className="text-sm flex items-center gap-1 transition-colors"
-                style={{ color: "var(--bs-secondary-hex)" }}
+                style={{ color: "#00FF9D" }}
               >
                 <Shield className="w-4 h-4" />
                 ADMIN
@@ -84,14 +83,12 @@ export function Navbar() {
             {/* Mode toggle */}
             <button
               onClick={() => setMode(isDark ? "light" : "dark")}
-              className="p-2 border transition-colors"
-              style={{
-                borderColor: "var(--bs-border-subtle)",
-              }}
+              className="p-2 border transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              style={{ borderColor: "var(--bs-border-subtle)" }}
               title={isDark ? "Switch to Light" : "Switch to Dark"}
             >
               {isDark
-                ? <Sun className="w-4 h-4" style={{ color: "var(--bs-accent-hex)" }} />
+                ? <Sun className="w-4 h-4" style={{ color: "#00FF9D" }} />
                 : <Moon className="w-4 h-4" style={{ color: "var(--bs-text-muted)" }} />}
             </button>
 
@@ -102,15 +99,15 @@ export function Navbar() {
               >
                 <Link
                   to="/profile"
-                  className="flex items-center gap-2 group transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 group transition-opacity hover:opacity-80 min-h-[44px]"
                 >
                   <div
                     className="w-8 h-8 border flex items-center justify-center transform -skew-x-12"
                     style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-strong)" }}
                   >
                     {user.avatar
-                      ? <img src={user.avatar} alt="avatar" className="w-full h-full object-cover transform skew-x-12" />
-                      : <User className="w-4 h-4 transform skew-x-12" style={{ color: "var(--bs-accent-hex)" }} />}
+                      ? <img src={user.avatar} alt="avatar" className="w-full h-full object-cover transform skew-x-12" loading="lazy" />
+                      : <User className="w-4 h-4 transform skew-x-12" style={{ color: "#00FF9D" }} />}
                   </div>
                   <span className="text-sm font-bold uppercase" style={{ color: "var(--bs-text-muted)" }}>
                     {profile?.name?.split(" ")[0] || user.email?.split("@")[0]}
@@ -119,9 +116,9 @@ export function Navbar() {
                 </Link>
                 <button
                   onClick={signOut}
-                  className="transition-colors"
+                  className="transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                   style={{ color: "var(--bs-text-muted)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--bs-secondary-hex)")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#ff4444")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "var(--bs-text-muted)")}
                   title="Sign out"
                 >
@@ -131,8 +128,8 @@ export function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="hidden md:flex items-center px-5 py-2 text-sm font-black uppercase tracking-widest transform -skew-x-12 transition-colors"
-                style={{ background: "var(--bs-accent-hex)", color: "black" }}
+                className="hidden md:flex items-center px-5 py-2 text-sm font-black uppercase tracking-widest transform -skew-x-12 transition-colors min-h-[44px]"
+                style={{ background: "#00FF9D", color: "black" }}
               >
                 <span className="transform skew-x-12">Sign In</span>
               </Link>
@@ -140,8 +137,8 @@ export function Navbar() {
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2"
-              style={{ color: "var(--bs-accent-hex)" }}
+              className="md:hidden p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              style={{ color: "#00FF9D" }}
             >
               {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -161,10 +158,10 @@ export function Navbar() {
                 key={link.to}
                 to={link.to}
                 onClick={() => setMenuOpen(false)}
-                className="text-lg font-bold"
+                className="text-lg font-bold py-2 min-h-[44px] flex items-center"
                 style={{
                   color: location.pathname === link.to
-                    ? "var(--bs-accent-hex)"
+                    ? "#00FF9D"
                     : "var(--bs-text-muted)",
                 }}
               >
@@ -175,8 +172,8 @@ export function Navbar() {
               <Link
                 to="/admin"
                 onClick={() => setMenuOpen(false)}
-                className="font-bold flex items-center gap-1"
-                style={{ color: "var(--bs-secondary-hex)" }}
+                className="font-bold flex items-center gap-1 min-h-[44px]"
+                style={{ color: "#00FF9D" }}
               >
                 <Shield className="w-4 h-4" /> ADMIN
               </Link>
@@ -187,16 +184,16 @@ export function Navbar() {
                 <Link
                   to="/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 font-bold py-1 uppercase"
+                  className="flex items-center gap-2 font-bold py-2 uppercase min-h-[44px]"
                   style={{ color: "var(--bs-text-muted)" }}
                 >
-                  <User className="w-4 h-4" style={{ color: "var(--bs-accent-hex)" }} />
+                  <User className="w-4 h-4" style={{ color: "#00FF9D" }} />
                   {profile?.name?.split(" ")[0] || user.email?.split("@")[0]} — Profile
                 </Link>
                 <button
                   onClick={() => { signOut(); setMenuOpen(false); }}
-                  className="text-left font-bold py-1 uppercase"
-                  style={{ color: "var(--bs-secondary-hex)" }}
+                  className="text-left font-bold py-2 uppercase min-h-[44px] flex items-center"
+                  style={{ color: "#ff4444" }}
                 >
                   Sign Out
                 </button>
@@ -205,8 +202,8 @@ export function Navbar() {
               <Link
                 to="/login"
                 onClick={() => setMenuOpen(false)}
-                className="font-bold"
-                style={{ color: "var(--bs-accent-hex)" }}
+                className="font-bold min-h-[44px] flex items-center"
+                style={{ color: "#00FF9D" }}
               >
                 Sign In
               </Link>

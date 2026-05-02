@@ -1,64 +1,63 @@
-import type { Question } from "./supabase";
+import type { Question } from "./types";
+import { api } from "./api";
 
-const LS_KEY = "biospark_questions";
-
-function loadAll(): Question[] {
+export async function getQuestionsForPracticeFromAPI(
+  chapter: string,
+  subunit: string,
+  cls: string,
+  type?: string
+): Promise<Question[]> {
   try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) return JSON.parse(raw) as Question[];
-  } catch {}
+    const params: Record<string, string | number> = { chapter, subunit, cls, limit: 200 };
+    if (type) params.type = type;
+    const res = await api.get("/questions", params) as { data?: Question[] };
+    return (res.data || []).filter((q: Question) => q.is_active);
+  } catch {
+    return [];
+  }
+}
+
+export async function getAllQuestionsFromAPI(filters?: Record<string, string | number>): Promise<Question[]> {
+  try {
+    const params = { limit: 200, ...filters };
+    const res = await api.get("/questions", params) as { data?: Question[] };
+    return res.data || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function createQuestionAPI(q: Partial<Question>): Promise<Question | null> {
+  try {
+    const res = await api.post("/questions", q) as { data?: Question };
+    return res.data || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateQuestionAPI(id: string, updates: Partial<Question>): Promise<boolean> {
+  try {
+    await api.put(`/questions/${id}`, updates);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteQuestionAPI(id: string): Promise<boolean> {
+  try {
+    await api.del(`/questions/${id}`);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function getQuestionsForPractice(_chapter: string, _subunit: string): Question[] {
   return [];
 }
 
-function saveAll(questions: Question[]): void {
-  localStorage.setItem(LS_KEY, JSON.stringify(questions));
-}
-
-export function getAllQuestions(): Question[] {
-  return loadAll();
-}
-
-export function addQuestion(q: Partial<Question>): Question {
-  const all = loadAll();
-  const now = new Date().toISOString();
-  const newQ: Question = {
-    id: `local_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-    question: q.question || "",
-    option1: q.option1 || "",
-    option2: q.option2 || "",
-    option3: q.option3 || "",
-    option4: q.option4 || "",
-    correct: q.correct || "option1",
-    subject: q.subject || "Biology",
-    chapter: q.chapter || "",
-    subunit: q.subunit || "",
-    type: q.type || "mcq",
-    explanation: q.explanation || "",
-    class: q.class || "11",
-    difficulty: q.difficulty || "medium",
-    is_active: q.is_active ?? true,
-    meta: q.meta ?? null,
-    created_at: now,
-  };
-  saveAll([newQ, ...all]);
-  return newQ;
-}
-
-export function updateQuestion(id: string, updates: Partial<Question>): void {
-  const all = loadAll().map((q) => (q.id === id ? { ...q, ...updates } : q));
-  saveAll(all);
-}
-
-export function deleteQuestion(id: string): void {
-  saveAll(loadAll().filter((q) => q.id !== id));
-}
-
-export function getQuestionsForPractice(chapter: string, subunit: string): Question[] {
-  return loadAll().filter(
-    (q) => q.chapter === chapter && q.subunit === subunit && q.is_active
-  );
-}
-
-export function isLocalQuestion(id: string): boolean {
-  return id.startsWith("local_");
+export function isLocalQuestion(_id: string): boolean {
+  return false;
 }

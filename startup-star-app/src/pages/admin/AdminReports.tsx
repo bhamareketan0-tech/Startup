@@ -9,8 +9,8 @@ export function AdminReports() {
       </div>
 
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-12 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 rounded-2xl bg-[#f59e0b]/10 border border-[#f59e0b]/20 flex items-center justify-center mb-4">
-          <Shield className="w-8 h-8 text-[#f59e0b]" />
+        <div className="w-16 h-16 rounded-2xl bg-[#00FF9D]/10 border border-[#00FF9D]/20 flex items-center justify-center mb-4">
+          <Shield className="w-8 h-8 text-[#00FF9D]" />
         </div>
         <h3 className="text-white font-bold text-lg mb-2">Content Reports</h3>
         <p className="text-white/40 text-sm max-w-sm leading-relaxed mb-6">
@@ -19,14 +19,14 @@ export function AdminReports() {
         <div className="flex gap-6 text-center">
           <div className="bg-white/5 border border-white/10 rounded-xl px-5 py-3">
             <div className="flex items-center gap-2 justify-center mb-1">
-              <Flag className="w-3.5 h-3.5 text-[#f59e0b]" />
+              <Flag className="w-3.5 h-3.5 text-[#00FF9D]" />
               <span className="text-white/40 text-xs">Pending</span>
             </div>
             <p className="text-2xl font-bold text-white">0</p>
           </div>
           <div className="bg-white/5 border border-white/10 rounded-xl px-5 py-3">
             <div className="flex items-center gap-2 justify-center mb-1">
-              <Shield className="w-3.5 h-3.5 text-[#00ffb3]" />
+              <Shield className="w-3.5 h-3.5 text-[#00FF9D]" />
               <span className="text-white/40 text-xs">Resolved</span>
             </div>
             <p className="text-2xl font-bold text-white">0</p>

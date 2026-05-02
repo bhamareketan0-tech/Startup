@@ -1,5 +1,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { UserProfile } from "./supabase";
+
+export type UserProfile = {
+  id: string;
+  name: string;
+  email: string;
+  class: string;
+  score: number;
+  plan: string;
+  created_at: string;
+};
 
 type AuthUser = { id: string; email: string; name?: string; avatar?: string; role?: string };
 

@@ -16,6 +16,11 @@ const attemptSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+attemptSchema.index({ user_id: 1 });
+attemptSchema.index({ user_id: 1, chapter: 1 });
+attemptSchema.index({ chapter: 1 });
+attemptSchema.index({ createdAt: -1 });
+
 attemptSchema.set("toJSON", {
   virtuals: true,
   transform: (_doc, ret) => {

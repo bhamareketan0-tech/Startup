@@ -15,8 +15,8 @@ function ScoreRing({ score }: { score: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const color =
-    score >= 75 ? "#00ffb3" :
-    score >= 50 ? "#f59e0b" :
+    score >= 75 ? "#00FF9D" :
+    score >= 50 ? "#00FF9D" :
     "#ef4444";
 
   useEffect(() => {
@@ -128,8 +128,8 @@ export function ScorePage() {
   };
 
   const scoreColor =
-    score >= 75 ? "#00ffb3" :
-    score >= 50 ? "#f59e0b" :
+    score >= 75 ? "#00FF9D" :
+    score >= 50 ? "#00FF9D" :
     "#ef4444";
 
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
@@ -180,7 +180,7 @@ export function ScorePage() {
         >
           {/* Stat bars */}
           <div className="space-y-4 mb-6">
-            <StatBar label="Correct" value={correct} total={total} color="#00ffb3" icon={CheckCircle} />
+            <StatBar label="Correct" value={correct} total={total} color="#00FF9D" icon={CheckCircle} />
             <StatBar label="Wrong" value={wrong} total={total} color="#ef4444" icon={XCircle} />
             <StatBar label="Skipped" value={skipped} total={total} color="rgba(255,255,255,0.3)" icon={SkipForward} />
           </div>
@@ -192,7 +192,7 @@ export function ScorePage() {
           <div className="grid grid-cols-2 gap-3">
             <div className="border p-4 text-center" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
               <div className="text-[10px] font-mono uppercase tracking-widest mb-1" style={{ color: "var(--bs-text-muted)" }}>Accuracy</div>
-              <div className="text-2xl font-black" style={{ color: accuracy >= 50 ? "#00ffb3" : accuracy >= 25 ? "#f59e0b" : "#ef4444" }}>
+              <div className="text-2xl font-black" style={{ color: accuracy >= 50 ? "#00FF9D" : accuracy >= 25 ? "#00FF9D" : "#ef4444" }}>
                 {accuracy}%
               </div>
             </div>

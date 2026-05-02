@@ -15,16 +15,14 @@ const COLLECTIONS = [
   { name: "discussions", label: "Discussions" },
 ];
 
-export function AdminSupabaseConfig() {
+export function AdminMongoStatus() {
   const [collections, setCollections] = useState<CollectionCount[]>(
     COLLECTIONS.map((c) => ({ name: c.name, count: 0, loading: true }))
   );
   const [connectionStatus, setConnectionStatus] = useState<"connected" | "error" | "checking">("checking");
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    checkAndFetch();
-  }, []);
+  useEffect(() => { checkAndFetch(); }, []);
 
   async function checkAndFetch() {
     setConnectionStatus("checking");
@@ -49,16 +47,8 @@ export function AdminSupabaseConfig() {
     setRefreshing(false);
   }
 
-  const StatusIcon = connectionStatus === "connected"
-    ? CheckCircle
-    : connectionStatus === "error"
-    ? AlertCircle
-    : Activity;
-
-  const statusColor =
-    connectionStatus === "connected" ? "#00ffb3"
-    : connectionStatus === "error" ? "#f43f5e"
-    : "#f59e0b";
+  const StatusIcon = connectionStatus === "connected" ? CheckCircle : connectionStatus === "error" ? AlertCircle : Activity;
+  const statusColor = connectionStatus === "connected" ? "#00FF9D" : connectionStatus === "error" ? "#ff4444" : "#ccaa00";
 
   return (
     <div className="space-y-6">
@@ -99,8 +89,8 @@ export function AdminSupabaseConfig() {
           return (
             <div key={col.name} className="rounded-2xl border border-white/8 p-5" style={{ background: "#07111f" }}>
               <div className="flex items-center gap-2 mb-3">
-                <Database className="w-4 h-4" style={{ color: "#00ffb3" }} />
-                <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "#00ffb3" }}>{label}</span>
+                <Database className="w-4 h-4" style={{ color: "#00FF9D" }} />
+                <span className="text-xs font-black uppercase tracking-widest font-mono" style={{ color: "#00FF9D" }}>{label}</span>
               </div>
               {col.loading ? (
                 <div className="h-8 w-16 rounded bg-white/5 animate-pulse" />
@@ -116,12 +106,12 @@ export function AdminSupabaseConfig() {
       </div>
 
       <div className="rounded-2xl border border-white/8 p-5" style={{ background: "#07111f" }}>
-        <p className="text-xs font-black uppercase tracking-widest font-mono mb-3" style={{ color: "#00ffb3" }}>Architecture</p>
+        <p className="text-xs font-black uppercase tracking-widest font-mono mb-3" style={{ color: "#00FF9D" }}>Architecture</p>
         <div className="space-y-2 text-sm text-white/60">
           <p>• <span className="text-white/80">Frontend</span> — React + Vite (port 3000)</p>
           <p>• <span className="text-white/80">API Server</span> — Express + Mongoose (port 8080, proxied via Vite)</p>
           <p>• <span className="text-white/80">Database</span> — MongoDB Atlas (MONGODB_URI environment secret)</p>
-          <p>• <span className="text-white/80">Auth</span> — Demo mode (hardcoded credentials, no Supabase)</p>
+          <p>• <span className="text-white/80">Auth</span> — JWT-based, no Supabase dependency</p>
         </div>
       </div>
     </div>

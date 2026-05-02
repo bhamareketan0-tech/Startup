@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
+import { ADMIN_EMAIL } from "@/lib/constants";
 import { Settings, Palette, Bell, Check, Save, Key, Globe, RefreshCw, Eye, EyeOff, AlertCircle } from "lucide-react";
 
-const inputCls = "w-full bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 font-mono";
+const inputCls = "w-full bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 font-mono";
 const labelCls = "block text-xs text-white/50 mb-1 font-medium";
 
 interface AppSettings {
@@ -20,11 +21,11 @@ interface AppSettings {
 
 const DEFAULTS: AppSettings = {
   site_name: "BioSpark",
-  contact_email: "bhamareketan18@gmail.com",
+  contact_email: ADMIN_EMAIL,
   maintenance_mode: false,
-  accent_color: "#00ffb3",
-  primary_color: "#a855f7",
-  secondary_color: "#00d4ff",
+  accent_color: "#00FF9D",
+  primary_color: "#00FF9D",
+  secondary_color: "#00FF9D",
   vite_api_url: "",
   google_client_id: "",
   session_secret: "",
@@ -34,7 +35,7 @@ const DEFAULTS: AppSettings = {
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
   return (
     <div
-      className={`w-12 h-6 rounded-full transition-colors cursor-pointer shrink-0 ${value ? "bg-[#00ffb3]" : "bg-white/10"}`}
+      className={`w-12 h-6 rounded-full transition-colors cursor-pointer shrink-0 ${value ? "bg-[#00FF9D]" : "bg-white/10"}`}
       onClick={() => onChange(!value)}
     >
       <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform mt-0.5 ${value ? "translate-x-6 ml-1" : "ml-0.5"}`} />
@@ -114,7 +115,7 @@ export function AdminSettings() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-[#00ffb3] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#00FF9D] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -134,9 +135,9 @@ export function AdminSettings() {
             onClick={saveSettings}
             disabled={saving}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all disabled:opacity-60 ${
-              saveStatus === "saved" ? "bg-[#00ffb3]/20 text-[#00ffb3] border border-[#00ffb3]/30"
+              saveStatus === "saved" ? "bg-[#00FF9D]/20 text-[#00FF9D] border border-[#00FF9D]/30"
               : saveStatus === "error" ? "bg-red-500/20 text-red-400 border border-red-500/30"
-              : "bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black hover:opacity-90"
+              : "bg-gradient-to-r from-[#00FF9D] to-[#00FF9D] text-black hover:opacity-90"
             }`}
           >
             {saveStatus === "saved" ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
@@ -146,16 +147,16 @@ export function AdminSettings() {
       </div>
 
       {dbError && (
-        <div className="flex items-center gap-3 px-4 py-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
-          <AlertCircle className="w-4 h-4 text-yellow-400 shrink-0" />
-          <p className="text-yellow-400 text-sm">MongoDB not connected — settings loaded from local cache. Connect your DB to persist settings across deployments.</p>
+        <div className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl">
+          <AlertCircle className="w-4 h-4 text-white/70 shrink-0" />
+          <p className="text-white/70 text-sm">MongoDB not connected — settings loaded from local cache. Connect your DB to persist settings across deployments.</p>
         </div>
       )}
 
       {/* General */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <Settings className="w-4 h-4 text-[#00d4ff]" />
+          <Settings className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">General</h3>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -180,13 +181,13 @@ export function AdminSettings() {
       {/* API & Connection URLs */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <Globe className="w-4 h-4 text-[#00ffb3]" />
+          <Globe className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">Connection Settings</h3>
           <span className="text-xs text-white/30 ml-1">— For GitHub Pages / Render deployment</span>
         </div>
 
-        <div className="p-3 bg-[#00ffb3]/5 border border-[#00ffb3]/15 rounded-xl">
-          <p className="text-[#00ffb3] text-xs font-bold mb-1">Deployment Instructions</p>
+        <div className="p-3 bg-[#00FF9D]/5 border border-[#00FF9D]/15 rounded-xl">
+          <p className="text-[#00FF9D] text-xs font-bold mb-1">Deployment Instructions</p>
           <p className="text-white/50 text-xs leading-relaxed">
             Backend is deployed on Render. Frontend is deployed on GitHub Pages.<br />
             Set <span className="text-white font-mono">VITE_API_URL</span> to your Render backend URL in GitHub Actions variables.<br />
@@ -220,12 +221,12 @@ export function AdminSettings() {
       {/* API Keys */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <Key className="w-4 h-4 text-[#a855f7]" />
+          <Key className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">API Keys & Secrets</h3>
         </div>
 
-        <div className="p-3 bg-yellow-500/5 border border-yellow-500/15 rounded-xl">
-          <p className="text-yellow-400 text-xs">These values are stored in MongoDB. Set them as environment variables in Render for production — environment variables take priority.</p>
+        <div className="p-3 bg-white/5 border border-white/10 rounded-xl">
+          <p className="text-white/70 text-xs">These values are stored in MongoDB. Set them as environment variables in Render for production — environment variables take priority.</p>
         </div>
 
         <div>
@@ -253,7 +254,7 @@ export function AdminSettings() {
       {/* Appearance */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <Palette className="w-4 h-4 text-[#a855f7]" />
+          <Palette className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">Appearance</h3>
         </div>
         <div className="grid grid-cols-3 gap-4">
@@ -268,7 +269,7 @@ export function AdminSettings() {
                 <input type="color" value={settings[key]} onChange={(e) => set(key, e.target.value)}
                   className="w-10 h-10 rounded-lg border border-white/20 cursor-pointer bg-transparent shrink-0" />
                 <input value={settings[key]} onChange={(e) => set(key, e.target.value)}
-                  className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 font-mono text-xs" />
+                  className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 font-mono text-xs" />
               </div>
             </div>
           ))}
@@ -294,7 +295,7 @@ export function AdminSettings() {
       {/* Notifications */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-3">
         <div className="flex items-center gap-2 mb-1">
-          <Bell className="w-4 h-4 text-[#f59e0b]" />
+          <Bell className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">Notification Preferences</h3>
         </div>
         {([

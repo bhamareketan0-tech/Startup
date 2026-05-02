@@ -15,12 +15,12 @@ interface Subscription {
 }
 
 const PLAN_STYLES: Record<string, string> = {
-  elite: "text-[#a855f7] bg-[#a855f7]/10 border-[#a855f7]/20",
-  pro: "text-[#00d4ff] bg-[#00d4ff]/10 border-[#00d4ff]/20",
+  elite: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  pro: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  active: "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20",
+  active: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
   expired: "text-white/40 bg-white/5 border-white/10",
   cancelled: "text-red-400 bg-red-500/10 border-red-500/20",
 };
@@ -67,17 +67,17 @@ export function AdminSubscriptions() {
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-5">
-          <Crown className="w-5 h-5 text-[#a855f7] mb-2" />
+          <Crown className="w-5 h-5 text-[#00FF9D] mb-2" />
           <div className="text-2xl font-bold text-white">{summary.total}</div>
           <div className="text-xs text-white/40">Total Subscriptions</div>
         </div>
         <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-5">
-          <Users className="w-5 h-5 text-[#00ffb3] mb-2" />
+          <Users className="w-5 h-5 text-[#00FF9D] mb-2" />
           <div className="text-2xl font-bold text-white">{summary.active}</div>
           <div className="text-xs text-white/40">Active Now</div>
         </div>
         <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-5">
-          <TrendingUp className="w-5 h-5 text-[#00d4ff] mb-2" />
+          <TrendingUp className="w-5 h-5 text-[#00FF9D] mb-2" />
           <div className="text-2xl font-bold text-white">₹{summary.revenue.toLocaleString("en-IN")}</div>
           <div className="text-xs text-white/40">Total Revenue</div>
         </div>
@@ -86,7 +86,7 @@ export function AdminSubscriptions() {
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#00ffb3] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#00FF9D] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <table className="w-full text-sm">

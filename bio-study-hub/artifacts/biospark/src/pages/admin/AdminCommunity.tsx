@@ -15,9 +15,9 @@ interface Discussion {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  open: "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20",
-  solved: "text-[#00d4ff] bg-[#00d4ff]/10 border-[#00d4ff]/20",
-  reported: "text-[#f43f5e] bg-[#f43f5e]/10 border-[#f43f5e]/20",
+  open: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  solved: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  reported: "text-[#ff4444] bg-[#ff4444]/10 border-[#ff4444]/20",
   removed: "text-white/30 bg-white/5 border-white/10",
 };
 
@@ -75,10 +75,10 @@ export function AdminCommunity() {
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search discussions..."
-            className="w-full bg-[#0d1b2a] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#00ffb3]/50" />
+            className="w-full bg-[#0d1b2a] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#00FF9D]/50" />
         </div>
         <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); }}
-          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00ffb3]/50">
+          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00FF9D]/50">
           <option value="">All Status</option>
           <option value="open">Open</option>
           <option value="solved">Solved</option>
@@ -96,7 +96,7 @@ export function AdminCommunity() {
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#00ffb3] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#00FF9D] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -139,13 +139,13 @@ export function AdminCommunity() {
                       </button>
                       {d.status !== "solved" && (
                         <button onClick={() => updateStatus(d.id, "solved")} title="Mark Solved"
-                          className="p-1.5 bg-[#00d4ff]/10 border border-[#00d4ff]/20 text-[#00d4ff] rounded-lg hover:bg-[#00d4ff]/20 transition-colors">
+                          className="p-1.5 bg-[#00FF9D]/10 border border-[#00FF9D]/20 text-[#00FF9D] rounded-lg hover:bg-[#00FF9D]/20 transition-colors">
                           <CheckCircle className="w-3.5 h-3.5" />
                         </button>
                       )}
                       {d.status !== "reported" && (
                         <button onClick={() => updateStatus(d.id, "reported")} title="Flag as Reported"
-                          className="p-1.5 bg-[#f43f5e]/10 border border-[#f43f5e]/20 text-[#f43f5e] rounded-lg hover:bg-[#f43f5e]/20 transition-colors">
+                          className="p-1.5 bg-[#ff4444]/10 border border-[#ff4444]/20 text-[#ff4444] rounded-lg hover:bg-[#ff4444]/20 transition-colors">
                           <Flag className="w-3.5 h-3.5" />
                         </button>
                       )}
@@ -200,7 +200,7 @@ export function AdminCommunity() {
               <div className="flex gap-2 pt-2">
                 {selectedDiscussion.status !== "solved" && (
                   <button onClick={() => { updateStatus(selectedDiscussion.id, "solved"); setSelectedDiscussion(null); }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00d4ff]/10 border border-[#00d4ff]/20 text-[#00d4ff] rounded-lg text-xs hover:bg-[#00d4ff]/20 transition-colors">
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00FF9D]/10 border border-[#00FF9D]/20 text-[#00FF9D] rounded-lg text-xs hover:bg-[#00FF9D]/20 transition-colors">
                     <CheckCircle className="w-3.5 h-3.5" /> Mark Solved
                   </button>
                 )}

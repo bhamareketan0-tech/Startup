@@ -25,8 +25,8 @@ async function wakeUpBackend(): Promise<boolean> {
   return false;
 }
 
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
-const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
+const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50";
+const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50";
 const labelCls = "block text-xs text-white/50 mb-1 font-medium";
 
 const TYPE_LABELS: Record<string, string> = {
@@ -40,13 +40,13 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  mcq: "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20",
-  assertion: "text-[#f43f5e] bg-[#f43f5e]/10 border-[#f43f5e]/20",
-  match: "text-[#f59e0b] bg-[#f59e0b]/10 border-[#f59e0b]/20",
-  statements: "text-[#fb923c] bg-[#fb923c]/10 border-[#fb923c]/20",
-  truefalse: "text-[#34d399] bg-[#34d399]/10 border-[#34d399]/20",
-  fillblanks: "text-[#c084fc] bg-[#c084fc]/10 border-[#c084fc]/20",
-  table_based: "text-[#60a5fa] bg-[#60a5fa]/10 border-[#60a5fa]/20",
+  mcq: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  assertion: "text-[#ff4444] bg-[#ff4444]/10 border-[#ff4444]/20",
+  match: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  statements: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  truefalse: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  fillblanks: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  table_based: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
 };
 
 interface ExtractedQuestion {
@@ -77,9 +77,9 @@ function QRow({ q, idx, selected, onToggle, onChange }: {
   const typeColor = TYPE_COLORS[q.type] ?? "text-white/50 bg-white/5 border-white/10";
 
   return (
-    <div className={`border rounded-xl transition-all ${selected ? "border-[#00ffb3]/30 bg-[#00ffb3]/5" : "border-white/8 bg-white/3"}`}>
+    <div className={`border rounded-xl transition-all ${selected ? "border-[#00FF9D]/30 bg-[#00FF9D]/5" : "border-white/8 bg-white/3"}`}>
       <div className="flex items-center gap-3 px-4 py-3">
-        <input type="checkbox" checked={selected} onChange={onToggle} className="w-4 h-4 accent-[#00ffb3] cursor-pointer shrink-0" />
+        <input type="checkbox" checked={selected} onChange={onToggle} className="w-4 h-4 accent-[#00FF9D] cursor-pointer shrink-0" />
         <span className="text-white/30 text-xs w-6 shrink-0">#{idx + 1}</span>
         <span className={`text-[10px] font-semibold border px-2 py-0.5 rounded-md shrink-0 ${typeColor}`}>
           {TYPE_LABELS[q.type] ?? q.type}
@@ -250,7 +250,7 @@ export function AdminTextExtractor() {
       {/* Step 1 */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-5 h-5 rounded-full bg-[#00ffb3] text-black text-[10px] font-black flex items-center justify-center shrink-0">1</div>
+          <div className="w-5 h-5 rounded-full bg-[#00FF9D] text-black text-[10px] font-black flex items-center justify-center shrink-0">1</div>
           <h3 className="text-white font-semibold text-sm">Select Chapter & Class</h3>
         </div>
         <div className="grid grid-cols-3 gap-4">
@@ -282,7 +282,7 @@ export function AdminTextExtractor() {
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-[#00ffb3] text-black text-[10px] font-black flex items-center justify-center shrink-0">2</div>
+            <div className="w-5 h-5 rounded-full bg-[#00FF9D] text-black text-[10px] font-black flex items-center justify-center shrink-0">2</div>
             <div>
               <h3 className="text-white font-semibold text-sm">Paste Question Text</h3>
               <p className="text-white/30 text-xs mt-0.5">Any format works — Gemini understands all common MCQ layouts</p>
@@ -305,13 +305,13 @@ export function AdminTextExtractor() {
           value={rawText}
           onChange={(e) => setRawText(e.target.value)}
           placeholder={"Paste questions here in any format. For example:\n\n1. The powerhouse of the cell is?\n   (a) Nucleus  (b) Mitochondria  (c) Ribosome  (d) Golgi body\nAnswer: (b)\n\n2. DNA replication is...\n..."}
-          className="w-full bg-[#060f1c] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 resize-y min-h-[220px] font-mono leading-relaxed placeholder:text-white/20"
+          className="w-full bg-[#060f1c] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 resize-y min-h-[220px] font-mono leading-relaxed placeholder:text-white/20"
         />
 
         <button
           onClick={handleExtract}
           disabled={extracting || !rawText.trim()}
-          className="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black font-bold text-sm hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl bg-gradient-to-r from-[#00FF9D] to-[#00FF9D] text-black font-bold text-sm hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {extracting ? (
             <>
@@ -324,9 +324,9 @@ export function AdminTextExtractor() {
         </button>
 
         {extracting && extractStatus?.startsWith("Connecting") && (
-          <div className="flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-3">
-            <Zap className="w-4 h-4 text-yellow-400 shrink-0" />
-            <p className="text-yellow-300 text-xs">
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+            <Zap className="w-4 h-4 text-white/70 shrink-0" />
+            <p className="text-white/70 text-xs">
               Backend server may be waking up from sleep — this can take up to 30 seconds on first use.
             </p>
           </div>
@@ -345,7 +345,7 @@ export function AdminTextExtractor() {
         <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-[#00ffb3] text-black text-[10px] font-black flex items-center justify-center shrink-0">3</div>
+              <div className="w-5 h-5 rounded-full bg-[#00FF9D] text-black text-[10px] font-black flex items-center justify-center shrink-0">3</div>
               <div>
                 <h3 className="text-white font-semibold text-sm">
                   Review & Save ({selected.size} of {questions.length} selected)
@@ -369,7 +369,7 @@ export function AdminTextExtractor() {
               <button
                 onClick={addToWebsite}
                 disabled={saving || selected.size === 0}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#00ffb3] text-black text-sm font-bold hover:bg-[#00e5a0] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#00FF9D] text-black text-sm font-bold hover:bg-[#00e5a0] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 {saving ? "Saving…" : `Add ${selected.size} to Website`}
@@ -381,15 +381,15 @@ export function AdminTextExtractor() {
             <div className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
               saveResult.failed > 0
                 ? "bg-red-500/10 border border-red-500/20"
-                : "bg-[#00ffb3]/10 border border-[#00ffb3]/20"
+                : "bg-[#00FF9D]/10 border border-[#00FF9D]/20"
             }`}>
               {saveResult.failed > 0
                 ? <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                : <CheckCircle className="w-4 h-4 text-[#00ffb3] shrink-0" />
+                : <CheckCircle className="w-4 h-4 text-[#00FF9D] shrink-0" />
               }
               <p className="text-sm text-white">
                 {saveResult.added > 0 && (
-                  <span className="text-[#00ffb3] font-semibold">{saveResult.added} questions added to website! </span>
+                  <span className="text-[#00FF9D] font-semibold">{saveResult.added} questions added to website! </span>
                 )}
                 {saveResult.failed > 0 && (
                   <span className="text-red-300">{saveResult.failed} failed — check database connection.</span>

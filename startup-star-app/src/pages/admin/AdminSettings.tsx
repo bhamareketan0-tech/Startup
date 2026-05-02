@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { ADMIN_EMAIL } from "@/lib/constants";
 import { Settings, Palette, Bell, Check, Save } from "lucide-react";
 
 interface AppSettings {
@@ -16,11 +16,11 @@ interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   site_name: "BioSpark",
-  contact_email: "bhamareketan18@gmail.com",
+  contact_email: ADMIN_EMAIL,
   maintenance_mode: false,
-  accent_color: "#00ffb3",
-  primary_color: "#a855f7",
-  secondary_color: "#00d4ff",
+  accent_color: "#00FF9D",
+  primary_color: "#00FF9D",
+  secondary_color: "#00FF9D",
   notify_new_user: true,
   notify_report: true,
   notify_payment: false,
@@ -57,30 +57,30 @@ export function AdminSettings() {
       {/* General */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-5">
-          <Settings className="w-4 h-4 text-[#00d4ff]" />
+          <Settings className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">General</h3>
         </div>
         <div className="space-y-4">
           <div>
             <label className="block text-xs text-white/50 mb-1">Site Name</label>
             <input value={settings.site_name} onChange={(e) => set("site_name", e.target.value)}
-              className="w-full max-w-sm bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50" />
+              className="w-full max-w-sm bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50" />
           </div>
           <div>
             <label className="block text-xs text-white/50 mb-1">Contact Email</label>
             <input value={settings.contact_email} onChange={(e) => set("contact_email", e.target.value)}
               type="email"
-              className="w-full max-w-sm bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50" />
+              className="w-full max-w-sm bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50" />
           </div>
           <div className="flex items-center gap-3">
             <div
-              className={`w-12 h-6 rounded-full transition-colors cursor-pointer ${settings.maintenance_mode ? "bg-[#f43f5e]" : "bg-white/10"}`}
+              className={`w-12 h-6 rounded-full transition-colors cursor-pointer ${settings.maintenance_mode ? "bg-[#ff4444]" : "bg-white/10"}`}
               onClick={() => set("maintenance_mode", !settings.maintenance_mode)}
             >
               <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform mt-0.5 ${settings.maintenance_mode ? "translate-x-6 ml-1" : "ml-0.5"}`} />
             </div>
             <span className="text-white/70 text-sm">Maintenance Mode</span>
-            {settings.maintenance_mode && <span className="px-2 py-0.5 bg-[#f43f5e]/10 text-[#f43f5e] rounded text-xs border border-[#f43f5e]/20">ACTIVE</span>}
+            {settings.maintenance_mode && <span className="px-2 py-0.5 bg-[#ff4444]/10 text-[#ff4444] rounded text-xs border border-[#ff4444]/20">ACTIVE</span>}
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ export function AdminSettings() {
       {/* Appearance */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-5">
-          <Palette className="w-4 h-4 text-[#a855f7]" />
+          <Palette className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">Appearance</h3>
         </div>
         <div className="grid grid-cols-3 gap-4">
@@ -98,7 +98,7 @@ export function AdminSettings() {
               <input type="color" value={settings.accent_color} onChange={(e) => set("accent_color", e.target.value)}
                 className="w-10 h-10 rounded-lg border border-white/20 cursor-pointer bg-transparent" />
               <input value={settings.accent_color} onChange={(e) => set("accent_color", e.target.value)}
-                className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 font-mono text-xs" />
+                className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 font-mono text-xs" />
             </div>
           </div>
           <div>
@@ -107,7 +107,7 @@ export function AdminSettings() {
               <input type="color" value={settings.primary_color} onChange={(e) => set("primary_color", e.target.value)}
                 className="w-10 h-10 rounded-lg border border-white/20 cursor-pointer bg-transparent" />
               <input value={settings.primary_color} onChange={(e) => set("primary_color", e.target.value)}
-                className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 font-mono text-xs" />
+                className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 font-mono text-xs" />
             </div>
           </div>
           <div>
@@ -116,7 +116,7 @@ export function AdminSettings() {
               <input type="color" value={settings.secondary_color} onChange={(e) => set("secondary_color", e.target.value)}
                 className="w-10 h-10 rounded-lg border border-white/20 cursor-pointer bg-transparent" />
               <input value={settings.secondary_color} onChange={(e) => set("secondary_color", e.target.value)}
-                className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 font-mono text-xs" />
+                className="flex-1 bg-[#111e30] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 font-mono text-xs" />
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export function AdminSettings() {
       {/* Notifications */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-5">
-          <Bell className="w-4 h-4 text-[#f59e0b]" />
+          <Bell className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">Notification Preferences</h3>
         </div>
         <div className="space-y-3">
@@ -157,7 +157,7 @@ export function AdminSettings() {
                 <p className="text-white/30 text-xs">{desc}</p>
               </div>
               <div
-                className={`w-12 h-6 rounded-full transition-colors cursor-pointer ${settings[key] ? "bg-[#00ffb3]" : "bg-white/10"}`}
+                className={`w-12 h-6 rounded-full transition-colors cursor-pointer ${settings[key] ? "bg-[#00FF9D]" : "bg-white/10"}`}
                 onClick={() => set(key, !settings[key])}
               >
                 <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform mt-0.5 ${settings[key] ? "translate-x-6 ml-1" : "ml-0.5"}`} />
@@ -168,7 +168,7 @@ export function AdminSettings() {
       </div>
 
       <button onClick={saveSettings}
-        className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all ${saved ? "bg-[#00ffb3]/20 text-[#00ffb3] border border-[#00ffb3]/30" : "bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black hover:opacity-90"}`}>
+        className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all ${saved ? "bg-[#00FF9D]/20 text-[#00FF9D] border border-[#00FF9D]/30" : "bg-gradient-to-r from-[#00FF9D] to-[#00FF9D] text-black hover:opacity-90"}`}>
         {saved ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
         {saved ? "Settings Saved!" : "Save Settings"}
       </button>

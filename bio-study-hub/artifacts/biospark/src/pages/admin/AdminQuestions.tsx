@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Question } from "@/lib/supabase";
+import { Question } from "@/lib/types";
 import { getChapters } from "@/lib/chaptersManager";
 import { api } from "@/lib/api";
 import {
@@ -27,17 +27,17 @@ const QUESTION_TYPES = [
 const DIFFICULTIES = ["easy", "medium", "hard"];
 
 const DIFF_COLORS: Record<string, string> = {
-  easy: "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20",
-  medium: "text-[#f59e0b] bg-[#f59e0b]/10 border-[#f59e0b]/20",
-  hard: "text-[#f43f5e] bg-[#f43f5e]/10 border-[#f43f5e]/20",
+  easy: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  medium: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  hard: "text-[#ff4444] bg-[#ff4444]/10 border-[#ff4444]/20",
 };
 
 const PAGE_SIZE = 20;
 
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
-const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
+const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50";
+const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50";
 const labelCls = "block text-xs text-white/50 mb-1 font-medium";
-const textareaCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm resize-none focus:outline-none focus:border-[#00ffb3]/50";
+const textareaCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm resize-none focus:outline-none focus:border-[#00FF9D]/50";
 
 const emptyQuestion: Partial<Question> = {
   question: "",
@@ -88,7 +88,7 @@ function DynamicList({
                 onChange(next);
               }}
               placeholder={placeholder}
-              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50"
+              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50"
             />
             <button
               type="button"
@@ -103,7 +103,7 @@ function DynamicList({
           <button
             type="button"
             onClick={() => onChange([...items, ""])}
-            className="flex items-center gap-1.5 text-xs text-[#00ffb3]/70 hover:text-[#00ffb3] transition-colors mt-1"
+            className="flex items-center gap-1.5 text-xs text-[#00FF9D]/70 hover:text-[#00FF9D] transition-colors mt-1"
           >
             <PlusCircle className="w-4 h-4" /> Add item
           </button>
@@ -361,7 +361,7 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
               <MinusCircle className="w-3 h-3" /> Remove Row
             </button>
             <button type="button" onClick={addRow} disabled={n >= 8}
-              className="flex items-center gap-1 px-2.5 py-1 bg-[#aaff00]/10 border border-[#aaff00]/20 text-[#aaff00] rounded text-xs hover:bg-[#aaff00]/20 disabled:opacity-30 transition-colors">
+              className="flex items-center gap-1 px-2.5 py-1 bg-[#00FF9D]/10 border border-[#00FF9D]/20 text-[#00FF9D] rounded text-xs hover:bg-[#00FF9D]/20 disabled:opacity-30 transition-colors">
               <PlusCircle className="w-3 h-3" /> Add Row
             </button>
           </div>
@@ -369,24 +369,24 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
         {/* Dual-column entry table */}
         <div className="border border-white/10 rounded-xl overflow-hidden">
           <div className="grid grid-cols-2 border-b border-white/10">
-            <div className="px-4 py-2 bg-[#aaff00]/8 border-r border-white/10">
-              <span className="text-[#aaff00] text-xs font-black uppercase tracking-wider">Column I</span>
+            <div className="px-4 py-2 bg-[#00FF9D]/8 border-r border-white/10">
+              <span className="text-[#00FF9D] text-xs font-black uppercase tracking-wider">Column I</span>
             </div>
-            <div className="px-4 py-2 bg-blue-500/8">
-              <span className="text-blue-400 text-xs font-black uppercase tracking-wider">Column II</span>
+            <div className="px-4 py-2 bg-[#00FF9D]/8">
+              <span className="text-[#00FF9D] text-xs font-black uppercase tracking-wider">Column II</span>
             </div>
           </div>
           {Array.from({ length: n }, (_, i) => (
             <div key={i} className="grid grid-cols-2 border-b border-white/5 last:border-0">
-              <div className="flex items-center gap-2 px-3 py-2.5 border-r border-white/10 bg-[#aaff00]/3">
-                <span className="text-[#aaff00] font-black text-xs w-5 shrink-0 text-center">({leftLabels[i]})</span>
+              <div className="flex items-center gap-2 px-3 py-2.5 border-r border-white/10 bg-[#00FF9D]/3">
+                <span className="text-[#00FF9D] font-black text-xs w-5 shrink-0 text-center">({leftLabels[i]})</span>
                 <input value={colLeft[i]} onChange={(e) => updateLeft(i, e.target.value)} placeholder={`Column I item ${i + 1}`}
-                  className="flex-1 bg-transparent text-white text-sm focus:outline-none placeholder-white/20 border-b border-transparent focus:border-[#aaff00]/40 pb-0.5" />
+                  className="flex-1 bg-transparent text-white text-sm focus:outline-none placeholder-white/20 border-b border-transparent focus:border-[#00FF9D]/40 pb-0.5" />
               </div>
-              <div className="flex items-center gap-2 px-3 py-2.5 bg-blue-500/3">
-                <span className="text-blue-400 font-black text-xs w-5 shrink-0 text-center">({i + 1})</span>
+              <div className="flex items-center gap-2 px-3 py-2.5 bg-[#00FF9D]/3">
+                <span className="text-[#00FF9D] font-black text-xs w-5 shrink-0 text-center">({i + 1})</span>
                 <input value={colRight[i]} onChange={(e) => updateRight(i, e.target.value)} placeholder={`Column II item ${i + 1}`}
-                  className="flex-1 bg-transparent text-white text-sm focus:outline-none placeholder-white/20 border-b border-transparent focus:border-blue-400/40 pb-0.5" />
+                  className="flex-1 bg-transparent text-white text-sm focus:outline-none placeholder-white/20 border-b border-transparent focus:border-[#00FF9D]/40 pb-0.5" />
               </div>
             </div>
           ))}
@@ -403,13 +403,13 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
           <div className="p-3 grid grid-cols-2 gap-2">
             {Array.from({ length: n }, (_, i) => (
               <div key={i} className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 flex-1 bg-[#aaff00]/8 border border-[#aaff00]/20 rounded px-2 py-1.5 min-w-0">
-                  <span className="text-[#aaff00] font-black text-xs shrink-0">({leftLabels[i]})</span>
+                <div className="flex items-center gap-1.5 flex-1 bg-[#00FF9D]/8 border border-[#00FF9D]/20 rounded px-2 py-1.5 min-w-0">
+                  <span className="text-[#00FF9D] font-black text-xs shrink-0">({leftLabels[i]})</span>
                   <span className="text-white/60 text-xs truncate">{colLeft[i] || `Item ${leftLabels[i]}`}</span>
                 </div>
                 <ArrowRight className="w-4 h-4 text-white/25 shrink-0" />
                 <select value={correctMapping[i] ?? i} onChange={(e) => setMapping(i, Number(e.target.value))}
-                  className="flex-1 bg-[#0d1b2a] border border-blue-500/30 rounded px-2 py-1.5 text-blue-300 text-xs focus:outline-none focus:border-blue-400/60 min-w-0">
+                  className="flex-1 bg-[#0d1b2a] border border-[#00FF9D]/30 rounded px-2 py-1.5 text-[#00FF9D] text-xs focus:outline-none focus:border-[#00FF9D]/60 min-w-0">
                   {Array.from({ length: n }, (_, j) => (
                     <option key={j} value={j}>({j + 1}) {colRight[j] || `Item ${j + 1}`}</option>
                   ))}
@@ -423,7 +423,7 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
       {/* Auto-generate button */}
       <div className="col-span-2">
         <button type="button" onClick={generateCombos} disabled={!hasItems}
-          className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#aaff00]/12 border border-[#aaff00]/30 text-[#aaff00] rounded-xl font-black text-sm uppercase tracking-widest hover:bg-[#aaff00]/22 transition-colors disabled:opacity-30">
+          className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#00FF9D]/12 border border-[#00FF9D]/30 text-[#00FF9D] rounded-xl font-black text-sm uppercase tracking-widest hover:bg-[#00FF9D]/22 transition-colors disabled:opacity-30">
           <Zap className="w-4 h-4" /> Auto-Generate 4 Combo Options from Mapping
         </button>
         <p className="text-white/25 text-xs mt-1 text-center">Correct pairing → Option A. 3 wrong permutations auto-calculated.</p>
@@ -436,21 +436,21 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
           {(["option1", "option2", "option3", "option4"] as const).map((opt, i) => {
             const isCorrect = editingQ.correct === opt;
             return (
-              <div key={opt} className={`border rounded-xl p-2.5 transition-colors ${isCorrect ? "border-[#aaff00]/40 bg-[#aaff00]/8" : "border-white/10 bg-white/3"}`}>
+              <div key={opt} className={`border rounded-xl p-2.5 transition-colors ${isCorrect ? "border-[#00FF9D]/40 bg-[#00FF9D]/8" : "border-white/10 bg-white/3"}`}>
                 <div className="flex items-center gap-2 mb-1.5">
                   <button type="button" onClick={() => setEditingQ({ ...editingQ, correct: opt })}
                     title="Set as correct answer"
-                    className={`w-6 h-6 text-xs font-black rounded flex items-center justify-center shrink-0 transition-colors ${isCorrect ? "bg-[#aaff00] text-black" : "bg-white/10 text-white/40 hover:bg-white/20"}`}>
+                    className={`w-6 h-6 text-xs font-black rounded flex items-center justify-center shrink-0 transition-colors ${isCorrect ? "bg-[#00FF9D] text-black" : "bg-white/10 text-white/40 hover:bg-white/20"}`}>
                     {["A", "B", "C", "D"][i]}
                   </button>
-                  <span className={`text-xs ${isCorrect ? "text-[#aaff00]/80" : "text-white/30"}`}>
+                  <span className={`text-xs ${isCorrect ? "text-[#00FF9D]/80" : "text-white/30"}`}>
                     {isCorrect ? "✓ Correct answer" : "Wrong option"}
                   </span>
                 </div>
                 <input value={editingQ[opt as keyof Question] as string || ""}
                   onChange={(e) => setEditingQ({ ...editingQ, [opt]: e.target.value })}
                   placeholder="e.g. A-1, B-2, C-3, D-4"
-                  className="w-full bg-transparent text-white text-xs focus:outline-none placeholder-white/20 border-b border-white/10 focus:border-[#aaff00]/30 pb-0.5" />
+                  className="w-full bg-transparent text-white text-xs focus:outline-none placeholder-white/20 border-b border-white/10 focus:border-[#00FF9D]/30 pb-0.5" />
               </div>
             );
           })}
@@ -473,19 +473,19 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
             )}
             <div className="grid grid-cols-2 divide-x divide-white/10">
               <div className="p-3">
-                <p className="text-[#aaff00] text-xs font-black uppercase tracking-wider mb-2">Column I</p>
+                <p className="text-[#00FF9D] text-xs font-black uppercase tracking-wider mb-2">Column I</p>
                 {colLeft.map((item, i) => item && (
                   <div key={i} className="flex items-start gap-2 mb-1.5">
-                    <span className="text-[#aaff00] text-xs font-bold shrink-0">({leftLabels[i]})</span>
+                    <span className="text-[#00FF9D] text-xs font-bold shrink-0">({leftLabels[i]})</span>
                     <span className="text-white/70 text-xs leading-snug">{item}</span>
                   </div>
                 ))}
               </div>
               <div className="p-3">
-                <p className="text-blue-400 text-xs font-black uppercase tracking-wider mb-2">Column II</p>
+                <p className="text-[#00FF9D] text-xs font-black uppercase tracking-wider mb-2">Column II</p>
                 {colRight.map((item, i) => item && (
                   <div key={i} className="flex items-start gap-2 mb-1.5">
-                    <span className="text-blue-400 text-xs font-bold shrink-0">({i + 1})</span>
+                    <span className="text-[#00FF9D] text-xs font-bold shrink-0">({i + 1})</span>
                     <span className="text-white/70 text-xs leading-snug">{item}</span>
                   </div>
                 ))}
@@ -498,7 +498,7 @@ function MatchForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; set
                   if (!val) return null;
                   const isCorrect = editingQ.correct === opt;
                   return (
-                    <div key={opt} className={`px-3 py-1.5 rounded text-xs border ${isCorrect ? "bg-[#aaff00]/10 border-[#aaff00]/30 text-[#aaff00]" : "bg-white/3 border-white/10 text-white/50"}`}>
+                    <div key={opt} className={`px-3 py-1.5 rounded text-xs border ${isCorrect ? "bg-[#00FF9D]/10 border-[#00FF9D]/30 text-[#00FF9D]" : "bg-white/3 border-white/10 text-white/50"}`}>
                       <span className="font-bold">{["A", "B", "C", "D"][i]}.</span> {val}{isCorrect && " ✓"}
                     </div>
                   );
@@ -567,7 +567,7 @@ function ImageMCQForm({ editingQ, setEditingQ, typeLabel }: { editingQ: Partial<
             type="file"
             accept="image/*"
             onChange={handleFileUpload}
-            className="block w-full text-xs text-white/50 file:mr-3 file:py-1.5 file:px-3 file:border-0 file:text-xs file:font-semibold file:bg-[#00ffb3]/20 file:text-[#00ffb3] file:cursor-pointer hover:file:bg-[#00ffb3]/30 cursor-pointer"
+            className="block w-full text-xs text-white/50 file:mr-3 file:py-1.5 file:px-3 file:border-0 file:text-xs file:font-semibold file:bg-[#00FF9D]/20 file:text-[#00FF9D] file:cursor-pointer hover:file:bg-[#00FF9D]/30 cursor-pointer"
           />
           <p className="text-xs text-white/30">— or paste an image URL below —</p>
           <input
@@ -833,7 +833,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
           <p className="text-white/40 text-sm mt-1">{total} questions total</p>
         </div>
         <button onClick={startNew}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black font-semibold rounded-xl text-sm hover:opacity-90 transition-opacity">
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00FF9D] to-[#00FF9D] text-black font-semibold rounded-xl text-sm hover:opacity-90 transition-opacity">
           <Plus className="w-4 h-4" /> Add Question
         </button>
       </div>
@@ -843,22 +843,22 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search questions..."
-            className="w-full bg-[#0d1b2a] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#00ffb3]/50" />
+            className="w-full bg-[#0d1b2a] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-[#00FF9D]/50" />
         </div>
         <select value={filterClass} onChange={(e) => { setFilterClass(e.target.value); setPage(0); }}
-          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00ffb3]/50">
+          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00FF9D]/50">
           <option value="">All Classes</option>
           <option value="11">Class 11</option>
           <option value="12">Class 12</option>
           <option value="dropper">Dropper</option>
         </select>
         <select value={filterDifficulty} onChange={(e) => { setFilterDifficulty(e.target.value); setPage(0); }}
-          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00ffb3]/50">
+          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00FF9D]/50">
           <option value="">All Difficulties</option>
           {DIFFICULTIES.map((d) => <option key={d} value={d} className="capitalize">{d}</option>)}
         </select>
         <select value={filterType} onChange={(e) => { setFilterType(e.target.value); setPage(0); }}
-          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00ffb3]/50">
+          className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00FF9D]/50">
           <option value="">All Types</option>
           {QUESTION_TYPES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
         </select>
@@ -874,7 +874,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-8 h-8 border-2 border-[#00ffb3] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#00FF9D] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -900,7 +900,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
                     {q.subunit && <div className="text-white/35 mt-0.5">{q.subunit}</div>}
                   </td>
                   <td className="px-4 py-3">
-                    <span className="px-1.5 py-0.5 bg-[#00d4ff]/10 text-[#00d4ff] rounded text-xs border border-[#00d4ff]/20">{q.class}</span>
+                    <span className="px-1.5 py-0.5 bg-[#00FF9D]/10 text-[#00FF9D] rounded text-xs border border-[#00FF9D]/20">{q.class}</span>
                   </td>
                   <td className="px-4 py-3 text-white/50 text-xs capitalize">{q.type}</td>
                   <td className="px-4 py-3">
@@ -909,14 +909,14 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`px-1.5 py-0.5 rounded text-xs border ${q.is_active ? "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20" : "text-red-400 bg-red-500/10 border-red-500/20"}`}>
+                    <span className={`px-1.5 py-0.5 rounded text-xs border ${q.is_active ? "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20" : "text-red-400 bg-red-500/10 border-red-500/20"}`}>
                       {q.is_active ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2 justify-end">
                       <button onClick={() => startEdit(q)}
-                        className="p-1.5 bg-[#00d4ff]/10 border border-[#00d4ff]/20 text-[#00d4ff] rounded-lg hover:bg-[#00d4ff]/20 transition-colors">
+                        className="p-1.5 bg-[#00FF9D]/10 border border-[#00FF9D]/20 text-[#00FF9D] rounded-lg hover:bg-[#00FF9D]/20 transition-colors">
                         <Edit className="w-3.5 h-3.5" />
                       </button>
                       <button onClick={() => deleteQuestion(q.id)}
@@ -1046,14 +1046,14 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
               <div className="flex items-center gap-2 pt-1">
                 <input type="checkbox" id="is_active" checked={editingQ.is_active ?? true}
                   onChange={(e) => setEditingQ({ ...editingQ, is_active: e.target.checked })}
-                  className="w-4 h-4 accent-[#00ffb3]" />
+                  className="w-4 h-4 accent-[#00FF9D]" />
                 <label htmlFor="is_active" className="text-xs text-white/50 cursor-pointer">Active (visible to students)</label>
               </div>
             </div>
 
             <div className="flex gap-3 mt-5 pt-4 border-t border-white/10">
               <button onClick={saveQuestion} disabled={saving}
-                className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black font-semibold rounded-xl text-sm hover:opacity-90 disabled:opacity-50 transition-opacity">
+                className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#00FF9D] to-[#00FF9D] text-black font-semibold rounded-xl text-sm hover:opacity-90 disabled:opacity-50 transition-opacity">
                 <Check className="w-4 h-4" />
                 {saving ? "Saving..." : isNew ? "Add Question" : "Save Changes"}
               </button>

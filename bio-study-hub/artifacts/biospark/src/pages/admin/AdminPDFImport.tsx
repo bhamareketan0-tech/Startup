@@ -11,8 +11,8 @@ import {
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
-const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
-const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50";
+const inputCls = "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50";
+const selectCls = "w-full bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50";
 const labelCls = "block text-xs text-white/50 mb-1 font-medium";
 
 const TYPE_LABELS: Record<string, string> = {
@@ -27,14 +27,14 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  paragraph: "text-[#60a5fa] bg-[#60a5fa]/10 border-[#60a5fa]/20",
-  pointer_notes: "text-[#a78bfa] bg-[#a78bfa]/10 border-[#a78bfa]/20",
-  mcq: "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20",
-  match: "text-[#f59e0b] bg-[#f59e0b]/10 border-[#f59e0b]/20",
-  assertion: "text-[#f43f5e] bg-[#f43f5e]/10 border-[#f43f5e]/20",
-  statements: "text-[#fb923c] bg-[#fb923c]/10 border-[#fb923c]/20",
-  truefalse: "text-[#34d399] bg-[#34d399]/10 border-[#34d399]/20",
-  fillblanks: "text-[#c084fc] bg-[#c084fc]/10 border-[#c084fc]/20",
+  paragraph: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  pointer_notes: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  mcq: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  match: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  assertion: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  statements: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  truefalse: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
+  fillblanks: "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20",
 };
 
 async function extractTextFromPDF(file: File): Promise<string> {
@@ -79,13 +79,13 @@ function QRow({ q, idx, selected, onToggle, onChange }: QRowProps) {
   const typeColor = TYPE_COLORS[q.type] ?? "text-white/50 bg-white/5 border-white/10";
 
   return (
-    <div className={`border rounded-xl transition-all ${selected ? "border-[#00ffb3]/30 bg-[#00ffb3]/5" : "border-white/8 bg-white/3"}`}>
+    <div className={`border rounded-xl transition-all ${selected ? "border-[#00FF9D]/30 bg-[#00FF9D]/5" : "border-white/8 bg-white/3"}`}>
       <div className="flex items-center gap-3 px-4 py-3">
         <input
           type="checkbox"
           checked={selected}
           onChange={onToggle}
-          className="w-4 h-4 accent-[#00ffb3] cursor-pointer"
+          className="w-4 h-4 accent-[#00FF9D] cursor-pointer"
         />
         <span className="text-white/30 text-xs w-6 shrink-0">#{idx + 1}</span>
         <span className={`text-[10px] font-semibold border px-2 py-0.5 rounded-md shrink-0 ${typeColor}`}>
@@ -93,9 +93,9 @@ function QRow({ q, idx, selected, onToggle, onChange }: QRowProps) {
         </span>
         <p className="text-sm text-white/80 flex-1 truncate">{q.question}</p>
         <span className={`text-[10px] px-2 py-0.5 rounded-md border shrink-0 ${
-          q.difficulty === "easy" ? "text-[#00ffb3] bg-[#00ffb3]/10 border-[#00ffb3]/20" :
-          q.difficulty === "hard" ? "text-[#f43f5e] bg-[#f43f5e]/10 border-[#f43f5e]/20" :
-          "text-[#f59e0b] bg-[#f59e0b]/10 border-[#f59e0b]/20"
+          q.difficulty === "easy" ? "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20" :
+          q.difficulty === "hard" ? "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20" :
+          "text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20"
         }`}>
           {q.difficulty}
         </span>
@@ -212,7 +212,7 @@ function QuestionReview({
           <button
             onClick={onAddToWebsite}
             disabled={saving || selected.size === 0}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#00ffb3] text-black text-sm font-bold hover:bg-[#00e5a0] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#00FF9D] text-black text-sm font-bold hover:bg-[#00e5a0] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Adding…</>
@@ -225,14 +225,14 @@ function QuestionReview({
 
       {saveResult && (
         <div className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
-          saveResult.failed > 0 ? "bg-red-500/10 border border-red-500/20" : "bg-[#00ffb3]/10 border border-[#00ffb3]/20"
+          saveResult.failed > 0 ? "bg-red-500/10 border border-red-500/20" : "bg-[#00FF9D]/10 border border-[#00FF9D]/20"
         }`}>
           {saveResult.failed > 0
             ? <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-            : <CheckCircle className="w-4 h-4 text-[#00ffb3] shrink-0" />
+            : <CheckCircle className="w-4 h-4 text-[#00FF9D] shrink-0" />
           }
           <p className="text-sm text-white">
-            {saveResult.added > 0 && <span className="text-[#00ffb3] font-semibold">{saveResult.added} questions added to website! </span>}
+            {saveResult.added > 0 && <span className="text-[#00FF9D] font-semibold">{saveResult.added} questions added to website! </span>}
             {saveResult.failed > 0 && <span className="text-red-300">{saveResult.failed} failed — check database connection.</span>}
           </p>
         </div>
@@ -369,7 +369,7 @@ function RegexImporter({ chapter, subunit, cls, questionType }: { chapter: strin
         <h3 className="text-white text-sm font-semibold">Upload PDF</h3>
         <div
           className={`relative border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer ${
-            dragging ? "border-[#00ffb3] bg-[#00ffb3]/5" : "border-white/15 hover:border-white/30 hover:bg-white/3"
+            dragging ? "border-[#00FF9D] bg-[#00FF9D]/5" : "border-white/15 hover:border-white/30 hover:bg-white/3"
           }`}
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
@@ -379,14 +379,14 @@ function RegexImporter({ chapter, subunit, cls, questionType }: { chapter: strin
           <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={onFileChange} />
           {parsing ? (
             <>
-              <Loader2 className="w-10 h-10 text-[#00ffb3] animate-spin" />
+              <Loader2 className="w-10 h-10 text-[#00FF9D] animate-spin" />
               <p className="text-white font-medium">Reading PDF & parsing questions…</p>
               <p className="text-white/40 text-sm">This takes just a few seconds</p>
             </>
           ) : (
             <>
-              <div className="w-14 h-14 rounded-2xl bg-[#00ffb3]/10 flex items-center justify-center">
-                <Upload className="w-7 h-7 text-[#00ffb3]" />
+              <div className="w-14 h-14 rounded-2xl bg-[#00FF9D]/10 flex items-center justify-center">
+                <Upload className="w-7 h-7 text-[#00FF9D]" />
               </div>
               <div className="text-center">
                 <p className="text-white font-medium">Drop your PDF here or click to browse</p>
@@ -394,7 +394,7 @@ function RegexImporter({ chapter, subunit, cls, questionType }: { chapter: strin
               </div>
               {fileName && (
                 <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2">
-                  <FileText className="w-4 h-4 text-[#00ffb3]" />
+                  <FileText className="w-4 h-4 text-[#00FF9D]" />
                   <span className="text-white/70 text-sm">{fileName}</span>
                 </div>
               )}
@@ -423,7 +423,7 @@ function RegexImporter({ chapter, subunit, cls, questionType }: { chapter: strin
           onToggleAll={toggleAll}
           onAddToWebsite={addToWebsite}
           badge="Regex Parser"
-          badgeColor="text-[#60a5fa] bg-[#60a5fa]/10 border-[#60a5fa]/20"
+          badgeColor="text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20"
         />
       )}
     </div>
@@ -570,8 +570,8 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
 
   return (
     <div className="space-y-4">
-      <div className="bg-blue-500/5 border border-blue-500/20 rounded-2xl px-5 py-4 flex items-start gap-3">
-        <ClipboardPaste className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" />
+      <div className="bg-[#00FF9D]/5 border border-[#00FF9D]/20 rounded-2xl px-5 py-4 flex items-start gap-3">
+        <ClipboardPaste className="w-5 h-5 text-[#00FF9D] mt-0.5 shrink-0" />
         <div>
           <p className="text-white text-sm font-medium">Paste Text Importer</p>
           <p className="text-white/50 text-xs mt-0.5 leading-relaxed">
@@ -589,7 +589,7 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
           value={rawText}
           onChange={(e) => { setRawText(e.target.value); setParseError(null); }}
           placeholder={"Paste MCQs, notes, or passages here…\n\nExample MCQ format:\n1. Which organelle is called the powerhouse of the cell?\n(a) Nucleus  (b) Mitochondria  (c) Ribosome  (d) Golgi body\nAns: (b)\n\nExample notes:\n• Mitochondria produces ATP via oxidative phosphorylation\n• Double membrane-bound organelle"}
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00d4ff]/50 resize-y font-mono leading-relaxed"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 resize-y font-mono leading-relaxed"
           rows={14}
         />
 
@@ -597,7 +597,7 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
           <button
             onClick={parseText}
             disabled={parsing || !rawText.trim()}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00d4ff]/10 border border-[#00d4ff]/30 text-[#00d4ff] text-sm font-semibold hover:bg-[#00d4ff]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00FF9D]/10 border border-[#00FF9D]/30 text-[#00FF9D] text-sm font-semibold hover:bg-[#00FF9D]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {parsing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
             {parsing ? "Parsing…" : "Parse Questions"}
@@ -640,7 +640,7 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
           onToggleAll={toggleAll}
           onAddToWebsite={addToWebsite}
           badge="Text Parser"
-          badgeColor="text-[#00d4ff] bg-[#00d4ff]/10 border-[#00d4ff]/20"
+          badgeColor="text-[#00FF9D] bg-[#00FF9D]/10 border-[#00FF9D]/20"
         />
       )}
     </div>
@@ -664,9 +664,9 @@ export function AdminPDFImport() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-[#00ffb3]/5 border border-[#00ffb3]/20 rounded-2xl px-6 py-4 flex items-start gap-4">
-        <div className="w-10 h-10 rounded-xl bg-[#00ffb3]/10 flex items-center justify-center shrink-0">
-          <BookOpen className="w-5 h-5 text-[#00ffb3]" />
+      <div className="bg-[#00FF9D]/5 border border-[#00FF9D]/20 rounded-2xl px-6 py-4 flex items-start gap-4">
+        <div className="w-10 h-10 rounded-xl bg-[#00FF9D]/10 flex items-center justify-center shrink-0">
+          <BookOpen className="w-5 h-5 text-[#00FF9D]" />
         </div>
         <div>
           <h2 className="text-white font-semibold text-sm mb-0.5">Question Importer</h2>
@@ -729,9 +729,9 @@ export function AdminPDFImport() {
           </div>
         </div>
         {(!chapter || !subunit) && (
-          <div className="flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-2.5">
-            <AlertCircle className="w-4 h-4 text-yellow-400 shrink-0" />
-            <p className="text-yellow-300 text-xs">
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5">
+            <AlertCircle className="w-4 h-4 text-white/70 shrink-0" />
+            <p className="text-white/70 text-xs">
               {!chapter
                 ? "Select a chapter and subtopic before adding questions."
                 : "Select a subtopic — questions need a subtopic to appear in the right section on the website."}
@@ -746,7 +746,7 @@ export function AdminPDFImport() {
           onClick={() => setActiveTab("regex")}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
             activeTab === "regex"
-              ? "bg-[#00ffb3]/10 border border-[#00ffb3]/30 text-[#00ffb3]"
+              ? "bg-[#00FF9D]/10 border border-[#00FF9D]/30 text-[#00FF9D]"
               : "bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/8"
           }`}
         >
@@ -757,7 +757,7 @@ export function AdminPDFImport() {
           onClick={() => setActiveTab("text")}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
             activeTab === "text"
-              ? "bg-[#00d4ff]/10 border border-[#00d4ff]/30 text-[#00d4ff]"
+              ? "bg-[#00FF9D]/10 border border-[#00FF9D]/30 text-[#00FF9D]"
               : "bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/8"
           }`}
         >

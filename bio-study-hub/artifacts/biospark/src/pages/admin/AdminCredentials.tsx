@@ -79,7 +79,7 @@ const CREDENTIALS: CredDef[] = [
 ];
 
 const inputCls =
-  "w-full bg-[#060f1c] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-[#00ffb3]/50 font-mono transition-colors";
+  "w-full bg-[#060f1c] border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-[#00FF9D]/50 font-mono transition-colors";
 const labelCls = "block text-sm text-white font-medium mb-1";
 
 function SecretField({
@@ -161,7 +161,7 @@ export function AdminCredentials() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-[#00ffb3] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#00FF9D] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -188,10 +188,10 @@ export function AdminCredentials() {
             disabled={saving}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all disabled:opacity-60 ${
               saveStatus === "saved"
-                ? "bg-[#00ffb3]/20 text-[#00ffb3] border border-[#00ffb3]/30"
+                ? "bg-[#00FF9D]/20 text-[#00FF9D] border border-[#00FF9D]/30"
                 : saveStatus === "error"
                 ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                : "bg-gradient-to-r from-[#00ffb3] to-[#00d4ff] text-black hover:opacity-90"
+                : "bg-gradient-to-r from-[#00FF9D] to-[#00FF9D] text-black hover:opacity-90"
             }`}
           >
             {saveStatus === "saved" ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
@@ -216,15 +216,15 @@ export function AdminCredentials() {
       )}
 
       {/* How it works banner */}
-      <div className="flex items-start gap-3 px-5 py-4 bg-[#00ffb3]/5 border border-[#00ffb3]/15 rounded-2xl">
-        <Info className="w-4 h-4 text-[#00ffb3] mt-0.5 shrink-0" />
+      <div className="flex items-start gap-3 px-5 py-4 bg-[#00FF9D]/5 border border-[#00FF9D]/15 rounded-2xl">
+        <Info className="w-4 h-4 text-[#00FF9D] mt-0.5 shrink-0" />
         <div className="text-xs text-white/50 leading-relaxed space-y-1">
           <p>
             <span className="text-white font-semibold">How this works:</span> Credentials saved here are stored in
             MongoDB and the backend uses them as live overrides. Environment variables (Replit Secrets / Render env
             vars) always take priority, but if an env var is missing the server reads from here.
           </p>
-          <p className="text-yellow-400">
+          <p className="text-white/70">
             MONGODB_URI cannot be stored here (it IS the database). Update it directly in Replit Secrets or Render
             environment variables.
           </p>
@@ -234,7 +234,7 @@ export function AdminCredentials() {
       {/* Credential fields */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6 space-y-5">
         <div className="flex items-center gap-2 pb-2 border-b border-white/8">
-          <Key className="w-4 h-4 text-[#a855f7]" />
+          <Key className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">API Keys & Secrets</h3>
         </div>
 
@@ -256,7 +256,7 @@ export function AdminCredentials() {
                   href={cred.helpUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ml-auto flex items-center gap-1 text-[10px] text-[#00ffb3]/70 hover:text-[#00ffb3] transition-colors"
+                  className="ml-auto flex items-center gap-1 text-[10px] text-[#00FF9D]/70 hover:text-[#00FF9D] transition-colors"
                 >
                   <ExternalLink className="w-3 h-3" />
                   {cred.helpLabel ?? cred.helpUrl}
@@ -286,9 +286,9 @@ export function AdminCredentials() {
       {/* MONGODB_URI read-only note */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Shield className="w-4 h-4 text-[#f59e0b]" />
+          <Shield className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold">MongoDB URI</h3>
-          <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded font-mono">
+          <span className="text-[10px] px-1.5 py-0.5 bg-white/5 text-white/70 border border-white/10 rounded font-mono">
             MANAGED SEPARATELY
           </span>
         </div>
@@ -300,12 +300,12 @@ export function AdminCredentials() {
           </p>
           <ul className="space-y-2">
             <li className="flex items-center gap-2 text-sm text-white/40">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#00ffb3] shrink-0" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00FF9D] shrink-0" />
               <span className="text-white/60 font-medium">Replit:</span>
               Secrets tab → MONGODB_URI
             </li>
             <li className="flex items-center gap-2 text-sm text-white/40">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#00ffb3] shrink-0" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00FF9D] shrink-0" />
               <span className="text-white/60 font-medium">Render:</span>
               Environment tab → MONGODB_URI
             </li>

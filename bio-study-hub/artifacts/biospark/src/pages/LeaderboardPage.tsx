@@ -215,7 +215,7 @@ export function LeaderboardPage() {
                         </div>
                         <div className="text-xs font-mono flex items-center gap-2" style={{ color: "var(--bs-text-muted)" }}>
                           <span>Class {u.class || "–"}</span>
-                          {u.plan === "pro" && <span style={{ color: "#f59e0b" }}>⭐ Pro</span>}
+                          {u.plan === "pro" && <span style={{ color: "#00FF9D" }}>⭐ Pro</span>}
                         </div>
                       </div>
                       <div className="text-right shrink-0">

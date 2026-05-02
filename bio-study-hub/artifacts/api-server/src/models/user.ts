@@ -10,9 +10,13 @@ const userSchema = new mongoose.Schema(
     class: { type: String, default: "11" },
     plan: { type: String, default: "free" },
     score: { type: Number, default: 0 },
+    role: { type: String, enum: ["student", "admin"], default: "student" },
   },
   { timestamps: true }
 );
+
+userSchema.index({ email: 1 });
+userSchema.index({ role: 1, createdAt: -1 });
 
 userSchema.set("toJSON", {
   virtuals: true,

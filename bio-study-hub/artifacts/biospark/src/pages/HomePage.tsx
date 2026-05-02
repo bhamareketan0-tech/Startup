@@ -215,14 +215,14 @@ export function HomePage() {
               </div>
               <div className="p-12 grid grid-cols-2 gap-3 content-start">
                 {[
-                  { icon: "📝", type: "Standard MCQ", color: "#00ffb3" },
-                  { icon: "🔗", type: "Assertion-Reason", color: "#f59e0b" },
-                  { icon: "📋", type: "Match the Column", color: "#f43f5e" },
-                  { icon: "✓✗", type: "True / False", color: "#34d399" },
-                  { icon: "___", type: "Fill in the Blanks", color: "#c084fc" },
-                  { icon: "📊", type: "No. of Statements", color: "#fb923c" },
-                  { icon: "🖼️", type: "Diagram Based", color: "#60a5fa" },
-                  { icon: "📖", type: "Passage Based", color: "#a78bfa" },
+                  { icon: "📝", type: "Standard MCQ", color: "#00FF9D" },
+                  { icon: "🔗", type: "Assertion-Reason", color: "#00FF9D" },
+                  { icon: "📋", type: "Match the Column", color: "#ff4444" },
+                  { icon: "✓✗", type: "True / False", color: "#00FF9D" },
+                  { icon: "___", type: "Fill in the Blanks", color: "#00FF9D" },
+                  { icon: "📊", type: "No. of Statements", color: "#00FF9D" },
+                  { icon: "🖼️", type: "Diagram Based", color: "#00FF9D" },
+                  { icon: "📖", type: "Passage Based", color: "#00FF9D" },
                 ].map(({ icon, type, color }) => (
                   <div key={type} className="flex items-center gap-3 border p-3 text-sm font-bold group transition-all hover:scale-[1.02]"
                     style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}>
@@ -241,9 +241,9 @@ export function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Target, title: "Smart Practice", desc: "Filter by chapter, subtopic, difficulty and question type. Focus only on what you need.", color: "#00ffb3" },
-              { icon: Layers, title: "Full Syllabus", desc: "All 38 chapters of NEET Biology — Class 11 and Class 12 — completely covered.", color: "#f59e0b" },
-              { icon: Clock, title: "Timed Mock Tests", desc: "Full NEET-style mock tests with countdown timer, review mode, and detailed score analysis.", color: "#f43f5e" },
+              { icon: Target, title: "Smart Practice", desc: "Filter by chapter, subtopic, difficulty and question type. Focus only on what you need.", color: "#00FF9D" },
+              { icon: Layers, title: "Full Syllabus", desc: "All 38 chapters of NEET Biology — Class 11 and Class 12 — completely covered.", color: "#00FF9D" },
+              { icon: Clock, title: "Timed Mock Tests", desc: "Full NEET-style mock tests with countdown timer, review mode, and detailed score analysis.", color: "#ff4444" },
             ].map((f) => (
               <div key={f.title} className="border p-8 relative overflow-hidden group transition-all hover:shadow-lg" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -305,7 +305,7 @@ export function HomePage() {
           <div className="relative border p-16 text-center overflow-hidden" style={{ borderColor: "var(--bs-border-subtle)", background: "var(--bs-surface)" }}>
             <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(135deg, color-mix(in srgb, var(--bs-accent-hex) 5%, transparent), transparent)" }} />
             <div className="absolute top-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, var(--bs-accent-hex), transparent)` }} />
-            <div className="absolute bottom-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, var(--bs-secondary-hex, #f59e0b), transparent)` }} />
+            <div className="absolute bottom-0 left-0 w-full h-1" style={{ background: `linear-gradient(90deg, transparent, var(--bs-secondary-hex, #00FF9D), transparent)` }} />
             <Zap className="w-12 h-12 mx-auto mb-6" style={{ color: "var(--bs-accent-hex)" }} />
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-4" style={{ color: "var(--bs-text)" }}>
               Ready to <span style={{ color: "var(--bs-accent-hex)" }}>Dominate?</span>

@@ -38,20 +38,20 @@ interface RecentQuestion {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  mcq: "#00ffb3",
-  passage: "#00d4ff",
-  assertion: "#a855f7",
-  truefalse: "#f59e0b",
-  match: "#f43f5e",
-  pointer: "#84cc16",
-  statements: "#06b6d4",
-  fillinblanks: "#ec4899",
+  mcq: "#00FF9D",
+  passage: "#00FF9D",
+  assertion: "#00FF9D",
+  truefalse: "#00FF9D",
+  match: "#00FF9D",
+  pointer: "#00FF9D",
+  statements: "#00FF9D",
+  fillinblanks: "#00FF9D",
 };
 
 const DIFF_COLORS: Record<string, string> = {
-  easy: "#00ffb3",
-  medium: "#f59e0b",
-  hard: "#f43f5e",
+  easy: "#00FF9D",
+  medium: "#00FF9D",
+  hard: "#ff4444",
 };
 
 export function AdminDashboard() {
@@ -88,16 +88,16 @@ export function AdminDashboard() {
   }
 
   const statCards = [
-    { label: "Total Questions", value: stats.questions, icon: BookOpen, color: "#00ffb3" },
-    { label: "Total Students", value: stats.students, icon: Users, color: "#00d4ff" },
-    { label: "Premium Users", value: stats.premium, icon: Crown, color: "#a855f7" },
-    { label: "Discussions", value: stats.discussions, icon: MessageSquare, color: "#f59e0b" },
+    { label: "Total Questions", value: stats.questions, icon: BookOpen, color: "#00FF9D" },
+    { label: "Total Students", value: stats.students, icon: Users, color: "#00FF9D" },
+    { label: "Premium Users", value: stats.premium, icon: Crown, color: "#00FF9D" },
+    { label: "Discussions", value: stats.discussions, icon: MessageSquare, color: "#00FF9D" },
   ];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-2 border-[#00ffb3] border-t-transparent rounded-full animate-spin" />
+        <div className="w-10 h-10 border-2 border-[#00FF9D] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -127,7 +127,7 @@ export function AdminDashboard() {
         {/* Bar Chart */}
         <div className="col-span-2 bg-[#0d1b2a] border border-white/10 rounded-2xl p-5">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-4 h-4 text-[#00d4ff]" />
+            <Activity className="w-4 h-4 text-[#00FF9D]" />
             <h3 className="text-white font-semibold text-sm">Quiz Attempts — Last 7 Days</h3>
           </div>
           <ResponsiveContainer width="100%" height={200}>
@@ -139,7 +139,7 @@ export function AdminDashboard() {
                 contentStyle={{ background: "#0d1b2a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "white" }}
                 cursor={{ fill: "rgba(255,255,255,0.05)" }}
               />
-              <Bar dataKey="solved" fill="#00d4ff" radius={[4, 4, 0, 0]} name="Attempts" />
+              <Bar dataKey="solved" fill="#00FF9D" radius={[4, 4, 0, 0]} name="Attempts" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -159,7 +159,7 @@ export function AdminDashboard() {
                     className="h-full rounded-full transition-all"
                     style={{
                       width: `${t.pct}%`,
-                      backgroundColor: TYPE_COLORS[t.type] || "#6366f1"
+                      backgroundColor: TYPE_COLORS[t.type] || "#00FF9D"
                     }}
                   />
                 </div>
@@ -175,7 +175,7 @@ export function AdminDashboard() {
       {/* Recent Questions */}
       <div className="bg-[#0d1b2a] border border-white/10 rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-4">
-          <Clock className="w-4 h-4 text-[#a855f7]" />
+          <Clock className="w-4 h-4 text-[#00FF9D]" />
           <h3 className="text-white font-semibold text-sm">Recently Added Questions</h3>
         </div>
         <div className="overflow-x-auto">
@@ -198,14 +198,14 @@ export function AdminDashboard() {
                   </td>
                   <td className="py-3 px-3 text-white/50 text-xs">{q.chapter || "—"}</td>
                   <td className="py-3 px-3">
-                    <span className="px-1.5 py-0.5 bg-[#00d4ff]/10 text-[#00d4ff] rounded text-xs">{q.class}</span>
+                    <span className="px-1.5 py-0.5 bg-[#00FF9D]/10 text-[#00FF9D] rounded text-xs">{q.class}</span>
                   </td>
                   <td className="py-3 px-3">
                     <span
                       className="px-1.5 py-0.5 rounded text-xs capitalize"
                       style={{
-                        backgroundColor: (DIFF_COLORS[q.difficulty] || "#6366f1") + "20",
-                        color: DIFF_COLORS[q.difficulty] || "#6366f1",
+                        backgroundColor: (DIFF_COLORS[q.difficulty] || "#00FF9D") + "20",
+                        color: DIFF_COLORS[q.difficulty] || "#00FF9D",
                       }}
                     >
                       {q.difficulty}

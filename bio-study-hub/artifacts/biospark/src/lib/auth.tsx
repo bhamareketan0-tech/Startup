@@ -1,7 +1,16 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { UserProfile } from "./supabase";
 
-type AuthUser = { id: string; email: string; name?: string; avatar?: string };
+export type UserProfile = {
+  id: string;
+  name: string;
+  email: string;
+  class: string;
+  score: number;
+  plan: string;
+  created_at: string;
+};
+
+type AuthUser = { id: string; email: string; name?: string; avatar?: string; role?: string };
 
 type AuthContextType = {
   user: AuthUser | null;
@@ -11,16 +20,18 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string, name: string, cls: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  signInWithGoogle: (googleProfile: { id: string; email: string; name: string; avatar?: string }) => void;
+  signInWithGoogle: (googleProfile: { id: string; email: string; name: string; avatar?: string; token?: string }) => void;
   refreshProfile: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API = (import.meta.env.VITE_API_URL ?? "");
+
 function profileFromUser(u: Record<string, unknown>): UserProfile {
   return {
-    id: u["id"] as string,
-    name: (u["name"] as string) || (u["email"] as string),
+    id: (u["id"] as string) || (u["_id"] as string) || "",
+    name: (u["name"] as string) || (u["email"] as string) || "",
     email: u["email"] as string,
     class: (u["class"] as string) || "11",
     score: (u["score"] as number) || 0,
@@ -35,12 +46,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/me", { credentials: "include" })
+    fetch(API + "/api/auth/me", { credentials: "include" })
       .then((r) => r.json())
-      .then((data: { user?: Record<string, unknown> }) => {
-        if (data.user) {
-          setUser({ id: data.user["id"] as string, email: data.user["email"] as string, name: data.user["name"] as string, avatar: data.user["avatar"] as string | undefined });
-          setProfile(profileFromUser(data.user));
+      .then((data: Record<string, unknown>) => {
+        const u = (data["user"] as Record<string, unknown>) || data;
+        if (u && u["email"]) {
+          setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
+          setProfile(profileFromUser(u));
         }
       })
       .catch(() => {})
@@ -49,16 +61,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signIn(email: string, password: string): Promise<{ error: Error | null }> {
     try {
-      const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/login", {
+      const res = await fetch(API + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json() as { user?: Record<string, unknown>; error?: string };
-      if (!res.ok) return { error: new Error(data.error || "Login failed.") };
-      setUser({ id: data.user!["id"] as string, email: data.user!["email"] as string, name: data.user!["name"] as string | undefined, avatar: data.user!["avatar"] as string | undefined });
-      setProfile(profileFromUser(data.user!));
+      const data = await res.json() as Record<string, unknown>;
+      if (!res.ok) return { error: new Error((data["error"] as string) || "Login failed.") };
+      const u = (data["user"] as Record<string, unknown>) || data;
+      setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
+      setProfile(profileFromUser(u));
       return { error: null };
     } catch {
       return { error: new Error("Network error. Please try again.") };
@@ -67,16 +80,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signUp(email: string, password: string, name: string, cls: string): Promise<{ error: Error | null }> {
     try {
-      const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/register", {
+      const res = await fetch(API + "/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ email, password, name, class: cls }),
       });
-      const data = await res.json() as { user?: Record<string, unknown>; error?: string };
-      if (!res.ok) return { error: new Error(data.error || "Registration failed.") };
-      setUser({ id: data.user!["id"] as string, email: data.user!["email"] as string, name: data.user!["name"] as string | undefined, avatar: data.user!["avatar"] as string | undefined });
-      setProfile(profileFromUser(data.user!));
+      const data = await res.json() as Record<string, unknown>;
+      if (!res.ok) return { error: new Error((data["error"] as string) || "Registration failed.") };
+      const u = (data["user"] as Record<string, unknown>) || data;
+      setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
+      setProfile(profileFromUser(u));
       return { error: null };
     } catch {
       return { error: new Error("Network error. Please try again.") };
@@ -84,24 +98,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut(): Promise<void> {
-    await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
+    await fetch(API + "/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
     setUser(null);
     setProfile(null);
   }
 
-  function signInWithGoogle(googleProfile: { id: string; email: string; name: string; avatar?: string }): void {
+  function signInWithGoogle(googleProfile: { id: string; email: string; name: string; avatar?: string; token?: string }): void {
     const u: AuthUser = { id: googleProfile.id, email: googleProfile.email, name: googleProfile.name, avatar: googleProfile.avatar };
     setUser(u);
     setProfile(profileFromUser(u as unknown as Record<string, unknown>));
   }
 
   async function refreshProfile(): Promise<void> {
-    const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/me", { credentials: "include" }).catch(() => null);
+    const res = await fetch(API + "/api/auth/me", { credentials: "include" }).catch(() => null);
     if (!res?.ok) return;
-    const data = await res.json() as { user?: Record<string, unknown> };
-    if (data.user) {
-      setUser({ id: data.user["id"] as string, email: data.user["email"] as string, name: data.user["name"] as string | undefined, avatar: data.user["avatar"] as string | undefined });
-      setProfile(profileFromUser(data.user));
+    const data = await res.json() as Record<string, unknown>;
+    const u = (data["user"] as Record<string, unknown>) || data;
+    if (u && u["email"]) {
+      setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
+      setProfile(profileFromUser(u));
     }
   }
 

@@ -182,18 +182,18 @@ export function MockTestPage() {
           backgroundSize: "40px 40px",
         }} />
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] blur-[160px] opacity-15 pointer-events-none"
-          style={{ background: "#f59e0b" }} />
+          style={{ background: "#00FF9D" }} />
 
         <div className="relative z-10 w-full max-w-2xl space-y-8">
           {/* Header */}
           <div className="text-center">
             <div className="inline-flex items-center gap-2 border px-4 py-2 mb-6 transform -skew-x-12"
-              style={{ background: "var(--bs-surface)", borderColor: "#f59e0b" }}>
-              <Clock className="w-4 h-4 transform skew-x-12" style={{ color: "#f59e0b" }} />
-              <span className="text-xs font-black uppercase tracking-widest transform skew-x-12" style={{ color: "#f59e0b" }}>Mock Exam</span>
+              style={{ background: "var(--bs-surface)", borderColor: "#00FF9D" }}>
+              <Clock className="w-4 h-4 transform skew-x-12" style={{ color: "#00FF9D" }} />
+              <span className="text-xs font-black uppercase tracking-widest transform skew-x-12" style={{ color: "#00FF9D" }}>Mock Exam</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-3" style={{ color: "var(--bs-text)" }}>
-              Mock <span style={{ color: "#f59e0b" }}>Test</span>
+              Mock <span style={{ color: "#00FF9D" }}>Test</span>
             </h1>
             <p className="text-sm font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
               NEET-style timed test with randomised questions from your class
@@ -211,9 +211,9 @@ export function MockTestPage() {
                   <button key={c} onClick={() => setCls(c)}
                     className="p-5 border font-black uppercase tracking-widest text-xl transform -skew-x-12 transition-all"
                     style={{
-                      background: cls === c ? "#f59e0b" : "var(--bs-surface-2)",
+                      background: cls === c ? "#00FF9D" : "var(--bs-surface-2)",
                       color: cls === c ? "black" : "var(--bs-text-muted)",
-                      borderColor: cls === c ? "#f59e0b" : "var(--bs-border-subtle)",
+                      borderColor: cls === c ? "#00FF9D" : "var(--bs-border-subtle)",
                     }}>
                     <span className="transform skew-x-12 inline-block">Class {c}</span>
                   </button>
@@ -229,10 +229,10 @@ export function MockTestPage() {
                   <button key={c.label} onClick={() => setConfigIdx(i)}
                     className="p-5 border flex flex-col items-center gap-1 transition-all transform -skew-x-12"
                     style={{
-                      background: configIdx === i ? "color-mix(in srgb, #f59e0b 12%, var(--bs-surface-2))" : "var(--bs-surface-2)",
-                      borderColor: configIdx === i ? "#f59e0b" : "var(--bs-border-subtle)",
+                      background: configIdx === i ? "color-mix(in srgb, #00FF9D 12%, var(--bs-surface-2))" : "var(--bs-surface-2)",
+                      borderColor: configIdx === i ? "#00FF9D" : "var(--bs-border-subtle)",
                     }}>
-                    <span className="transform skew-x-12 font-black uppercase text-sm" style={{ color: configIdx === i ? "#f59e0b" : "var(--bs-text)" }}>{c.label}</span>
+                    <span className="transform skew-x-12 font-black uppercase text-sm" style={{ color: configIdx === i ? "#00FF9D" : "var(--bs-text)" }}>{c.label}</span>
                     <span className="transform skew-x-12 text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>{c.desc}</span>
                   </button>
                 ))}
@@ -249,7 +249,7 @@ export function MockTestPage() {
                 "Review all answers with explanations after submission",
               ].map((rule, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#f59e0b" }} />
+                  <CheckCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#00FF9D" }} />
                   <span className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>{rule}</span>
                 </div>
               ))}
@@ -259,9 +259,9 @@ export function MockTestPage() {
             <button onClick={startTest} disabled={loading}
               className="w-full relative group"
             >
-              <div className="absolute inset-0 transform -skew-x-12 translate-x-2 translate-y-2 opacity-30 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform" style={{ background: "#f59e0b" }} />
+              <div className="absolute inset-0 transform -skew-x-12 translate-x-2 translate-y-2 opacity-30 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform" style={{ background: "#00FF9D" }} />
               <div className="relative flex items-center justify-center gap-3 py-5 font-black uppercase tracking-widest text-xl transform -skew-x-12 transition-colors"
-                style={{ background: loading ? "rgba(245,158,11,0.5)" : "#f59e0b", color: "black" }}>
+                style={{ background: loading ? "rgba(245,158,11,0.5)" : "#00FF9D", color: "black" }}>
                 {loading ? (
                   <><div className="w-5 h-5 border-2 border-black border-t-transparent animate-spin rounded-full transform skew-x-12" /><span className="transform skew-x-12">Loading Questions…</span></>
                 ) : (
@@ -302,8 +302,8 @@ export function MockTestPage() {
           <div className="flex items-center gap-3">
             <div className={`flex items-center gap-2 border px-3 py-1.5 font-black text-sm tabular-nums`}
               style={{
-                borderColor: timerDanger ? "#ef4444" : timerWarn ? "#f59e0b" : "var(--bs-border-subtle)",
-                color: timerDanger ? "#ef4444" : timerWarn ? "#f59e0b" : "var(--bs-accent-hex)",
+                borderColor: timerDanger ? "#ef4444" : timerWarn ? "#00FF9D" : "var(--bs-border-subtle)",
+                color: timerDanger ? "#ef4444" : timerWarn ? "#00FF9D" : "var(--bs-accent-hex)",
                 background: timerDanger ? "rgba(239,68,68,0.1)" : "var(--bs-surface-2)",
               }}>
               <Clock className="w-4 h-4" />
@@ -333,16 +333,16 @@ export function MockTestPage() {
                     <span className="transform skew-x-12 inline-block">Q {current + 1} / {questions.length}</span>
                   </span>
                   <span className="text-xs font-mono uppercase border px-2 py-0.5" style={{
-                    color: q.difficulty === "hard" ? "#ef4444" : q.difficulty === "easy" ? "#00ffb3" : "#f59e0b",
-                    borderColor: q.difficulty === "hard" ? "#ef4444" : q.difficulty === "easy" ? "#00ffb3" : "#f59e0b",
+                    color: q.difficulty === "hard" ? "#ef4444" : q.difficulty === "easy" ? "#00FF9D" : "#00FF9D",
+                    borderColor: q.difficulty === "hard" ? "#ef4444" : q.difficulty === "easy" ? "#00FF9D" : "#00FF9D",
                   }}>{q.difficulty}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button onClick={toggleFlag}
                     className={`flex items-center gap-1.5 px-3 py-1.5 border text-xs font-black uppercase tracking-widest transition-all`}
                     style={{
-                      borderColor: isFlagged ? "#f59e0b" : "var(--bs-border-subtle)",
-                      color: isFlagged ? "#f59e0b" : "var(--bs-text-muted)",
+                      borderColor: isFlagged ? "#00FF9D" : "var(--bs-border-subtle)",
+                      color: isFlagged ? "#00FF9D" : "var(--bs-text-muted)",
                       background: isFlagged ? "rgba(245,158,11,0.1)" : "transparent",
                     }}>
                     <Flag className="w-3.5 h-3.5" />
@@ -426,7 +426,7 @@ export function MockTestPage() {
               </div>
               <div className="p-4 border-b space-y-2 text-xs font-mono" style={{ borderColor: "var(--bs-border-subtle)" }}>
                 <div className="flex items-center gap-2"><div className="w-4 h-4 border rounded-sm" style={{ background: "var(--bs-accent-hex)", borderColor: "var(--bs-accent-hex)" }} /> Answered ({answered})</div>
-                <div className="flex items-center gap-2"><div className="w-4 h-4 border rounded-sm" style={{ background: "rgba(245,158,11,0.3)", borderColor: "#f59e0b" }} /> Flagged ({flaggedCount})</div>
+                <div className="flex items-center gap-2"><div className="w-4 h-4 border rounded-sm" style={{ background: "rgba(245,158,11,0.3)", borderColor: "#00FF9D" }} /> Flagged ({flaggedCount})</div>
                 <div className="flex items-center gap-2"><div className="w-4 h-4 border rounded-sm" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }} /> Unanswered ({remaining})</div>
               </div>
               <div className="flex-1 p-4 overflow-y-auto">
@@ -440,7 +440,7 @@ export function MockTestPage() {
                         className="w-full aspect-square border text-xs font-black flex items-center justify-center transition-all hover:scale-105"
                         style={{
                           background: isCur ? "var(--bs-accent-hex)" : isFl ? "rgba(245,158,11,0.3)" : isAnswered ? "color-mix(in srgb, var(--bs-accent-hex) 20%, var(--bs-surface-2))" : "var(--bs-surface-2)",
-                          borderColor: isCur ? "var(--bs-accent-hex)" : isFl ? "#f59e0b" : isAnswered ? "var(--bs-accent-hex)" : "var(--bs-border-subtle)",
+                          borderColor: isCur ? "var(--bs-accent-hex)" : isFl ? "#00FF9D" : isAnswered ? "var(--bs-accent-hex)" : "var(--bs-border-subtle)",
                           color: isCur ? "black" : "var(--bs-text-muted)",
                         }}>
                         {i + 1}
@@ -468,7 +468,7 @@ export function MockTestPage() {
     const wrong = questions.filter((q, i) => answers[i] !== undefined && answers[i] !== q.correct).length;
     const skipped = questions.length - correct - wrong;
     const score = Math.round((correct / questions.length) * 100);
-    const scoreColor = score >= 75 ? "#00ffb3" : score >= 50 ? "#f59e0b" : "#ef4444";
+    const scoreColor = score >= 75 ? "#00FF9D" : score >= 50 ? "#00FF9D" : "#ef4444";
 
     return (
       <div className="min-h-screen font-['Space_Grotesk'] pt-0 relative" style={{ background: "var(--bs-bg)", color: "var(--bs-text)" }}>
@@ -484,7 +484,7 @@ export function MockTestPage() {
           <div className="flex items-center gap-4">
             <div className="text-2xl font-black" style={{ color: scoreColor }}>{score}%</div>
             <div className="text-xs font-mono flex gap-4" style={{ color: "var(--bs-text-muted)" }}>
-              <span style={{ color: "#00ffb3" }}>✓ {correct}</span>
+              <span style={{ color: "#00FF9D" }}>✓ {correct}</span>
               <span style={{ color: "#ef4444" }}>✗ {wrong}</span>
               <span>Skip {skipped}</span>
               <span>⏱ {formatTime(timeTaken)}</span>
@@ -513,7 +513,7 @@ export function MockTestPage() {
             const myAns = answers[i];
             const isCorrect = myAns === q.correct;
             const isSkipped = myAns === undefined;
-            const borderColor = isSkipped ? "var(--bs-border-subtle)" : isCorrect ? "#00ffb3" : "#ef4444";
+            const borderColor = isSkipped ? "var(--bs-border-subtle)" : isCorrect ? "#00FF9D" : "#ef4444";
 
             return (
               <div key={i} className="border overflow-hidden" style={{ background: "var(--bs-surface)", borderColor }}>
@@ -525,11 +525,11 @@ export function MockTestPage() {
                   {isSkipped
                     ? <AlertCircle className="w-4 h-4 shrink-0" style={{ color: "var(--bs-text-muted)" }} />
                     : isCorrect
-                    ? <CheckCircle className="w-4 h-4 shrink-0" style={{ color: "#00ffb3" }} />
+                    ? <CheckCircle className="w-4 h-4 shrink-0" style={{ color: "#00FF9D" }} />
                     : <XCircle className="w-4 h-4 shrink-0" style={{ color: "#ef4444" }} />}
                   <span className="text-xs font-mono truncate flex-1" style={{ color: "var(--bs-text-muted)" }}>{q.chapter}</span>
                   <span className="text-xs font-black shrink-0"
-                    style={{ color: isSkipped ? "var(--bs-text-muted)" : isCorrect ? "#00ffb3" : "#ef4444" }}>
+                    style={{ color: isSkipped ? "var(--bs-text-muted)" : isCorrect ? "#00FF9D" : "#ef4444" }}>
                     {isSkipped ? "Skipped" : isCorrect ? "Correct" : "Wrong"}
                   </span>
                 </div>
@@ -544,10 +544,10 @@ export function MockTestPage() {
                         <div key={opt} className="flex items-center gap-2 border px-3 py-2 text-xs"
                           style={{
                             background: isCorrectOpt ? "rgba(0,255,179,0.08)" : isMyOpt && !isCorrectOpt ? "rgba(239,68,68,0.08)" : "var(--bs-surface-2)",
-                            borderColor: isCorrectOpt ? "#00ffb3" : isMyOpt && !isCorrectOpt ? "#ef4444" : "var(--bs-border-subtle)",
+                            borderColor: isCorrectOpt ? "#00FF9D" : isMyOpt && !isCorrectOpt ? "#ef4444" : "var(--bs-border-subtle)",
                           }}>
-                          <span className="font-black shrink-0 w-4" style={{ color: isCorrectOpt ? "#00ffb3" : "var(--bs-text-muted)" }}>{label}</span>
-                          <span style={{ color: isCorrectOpt ? "#00ffb3" : "var(--bs-text-muted)" }}>{q[opt]}</span>
+                          <span className="font-black shrink-0 w-4" style={{ color: isCorrectOpt ? "#00FF9D" : "var(--bs-text-muted)" }}>{label}</span>
+                          <span style={{ color: isCorrectOpt ? "#00FF9D" : "var(--bs-text-muted)" }}>{q[opt]}</span>
                         </div>
                       );
                     })}

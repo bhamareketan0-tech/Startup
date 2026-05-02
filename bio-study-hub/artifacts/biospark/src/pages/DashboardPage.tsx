@@ -30,10 +30,10 @@ interface ChapterStat {
 }
 
 const QUICK_ACTIONS = [
-  { label: "Practice Now", desc: "Chapter-wise MCQs", icon: BookOpen, to: "/class-select", color: "#00ffb3" },
-  { label: "Mock Test", desc: "Full timed test", icon: Clock, to: "/mock-test", color: "#f59e0b" },
-  { label: "Leaderboard", desc: "See your rank", icon: Trophy, to: "/leaderboard", color: "#f43f5e" },
-  { label: "Community", desc: "Join discussions", icon: Users, to: "/community", color: "#c084fc" },
+  { label: "Practice Now", desc: "Chapter-wise MCQs", icon: BookOpen, to: "/class-select", color: "#00FF9D" },
+  { label: "Mock Test", desc: "Full timed test", icon: Clock, to: "/mock-test", color: "#00FF9D" },
+  { label: "Leaderboard", desc: "See your rank", icon: Trophy, to: "/leaderboard", color: "#ff4444" },
+  { label: "Community", desc: "Join discussions", icon: Users, to: "/community", color: "#00FF9D" },
 ];
 
 export function DashboardPage() {
@@ -114,7 +114,7 @@ export function DashboardPage() {
               <div className="flex flex-wrap items-center gap-3 text-xs font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
                 <span className="border px-2 py-0.5" style={{ borderColor: "var(--bs-border-subtle)" }}>Class {userClass}</span>
                 {isPro && (
-                  <span className="border px-2 py-0.5 font-black" style={{ borderColor: "#f59e0b", color: "#f59e0b", background: "color-mix(in srgb, #f59e0b 10%, transparent)" }}>⭐ Pro Pass</span>
+                  <span className="border px-2 py-0.5 font-black" style={{ borderColor: "#00FF9D", color: "#00FF9D", background: "color-mix(in srgb, #00FF9D 10%, transparent)" }}>⭐ Pro Pass</span>
                 )}
                 <span>Score: <strong style={{ color: "var(--bs-text)" }}>{userScore.toFixed(0)}</strong></span>
               </div>
@@ -137,10 +137,10 @@ export function DashboardPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "Total Questions", value: loading ? "…" : totalQ.toLocaleString() + "+", icon: BookOpen, color: "#00ffb3", sub: "In question bank" },
-            { label: "Your Score", value: userScore.toFixed(0), icon: Star, color: "#f59e0b", sub: "Cumulative points" },
-            { label: "Your Class", value: `Class ${userClass}`, icon: Brain, color: "#c084fc", sub: "Current level" },
-            { label: "Chapters", value: "38", icon: FlaskConical, color: "#60a5fa", sub: "Full syllabus" },
+            { label: "Total Questions", value: loading ? "…" : totalQ.toLocaleString() + "+", icon: BookOpen, color: "#00FF9D", sub: "In question bank" },
+            { label: "Your Score", value: userScore.toFixed(0), icon: Star, color: "#00FF9D", sub: "Cumulative points" },
+            { label: "Your Class", value: `Class ${userClass}`, icon: Brain, color: "#00FF9D", sub: "Current level" },
+            { label: "Chapters", value: "38", icon: FlaskConical, color: "#00FF9D", sub: "Full syllabus" },
           ].map((stat) => (
             <div key={stat.label} className="border p-6 relative group overflow-hidden transition-all hover:scale-[1.01]"
               style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
@@ -205,7 +205,7 @@ export function DashboardPage() {
               <div className="space-y-3">
                 {chapterStats.map((ch, i) => {
                   const pct = (ch.count / maxChapter) * 100;
-                  const colors = ["#00ffb3", "#f59e0b", "#f43f5e", "#c084fc", "#60a5fa", "#34d399"];
+                  const colors = ["#00FF9D", "#00FF9D", "#ff4444", "#00FF9D", "#00FF9D", "#00FF9D"];
                   const color = colors[i % colors.length];
                   return (
                     <div key={ch.name}>
@@ -249,10 +249,10 @@ export function DashboardPage() {
               <div className="space-y-2">
                 {recentQuestions.map((q, i) => {
                   const typeColors: Record<string, string> = {
-                    mcq: "#00ffb3", assertion: "#f43f5e", match: "#f59e0b",
-                    statements: "#fb923c", truefalse: "#34d399", fillblanks: "#c084fc",
+                    mcq: "#00FF9D", assertion: "#ff4444", match: "#00FF9D",
+                    statements: "#00FF9D", truefalse: "#00FF9D", fillblanks: "#00FF9D",
                   };
-                  const color = typeColors[q.type] ?? "#60a5fa";
+                  const color = typeColors[q.type] ?? "#00FF9D";
                   return (
                     <div key={q.id || i} className="flex items-center gap-3 border p-3 text-xs group transition-all hover:scale-[1.01] cursor-pointer"
                       style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}

@@ -17,13 +17,13 @@ import { AdminSubscriptions } from "./admin/AdminSubscriptions";
 import { AdminCommunity } from "./admin/AdminCommunity";
 import { AdminReports } from "./admin/AdminReports";
 import { AdminSettings } from "./admin/AdminSettings";
-import { AdminSupabaseConfig } from "./admin/AdminSupabaseConfig";
+import { AdminMongoStatus } from "./admin/AdminMongoStatus";
 import { AdminPDFImport } from "./admin/AdminPDFImport";
 import { AdminTextExtractor } from "./admin/AdminTextExtractor";
 import { AdminCredentials } from "./admin/AdminCredentials";
 import { api } from "@/lib/api";
 
-const ADMIN_EMAIL = "bhamareketan18@gmail.com";
+import { ADMIN_EMAIL } from "@/lib/constants";
 
 type Page =
   | "dashboard"
@@ -113,7 +113,7 @@ export function AdminPage() {
         {/* Logo */}
         <div className="px-5 py-5 border-b border-white/8">
           <div className="flex items-center gap-3 mb-0.5">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#00ffb3] to-[#00d4ff] rounded-lg flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 flex items-center justify-center shrink-0" style={{ background: "#00FF9D", borderRadius: "8px" }}>
               <Shield className="w-4 h-4 text-black" />
             </div>
             <div>
@@ -139,18 +139,18 @@ export function AdminPage() {
                       onClick={() => setPage(item.id)}
                       className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all mb-0.5 ${
                         active
-                          ? "bg-[#00ffb3]/10 text-[#00ffb3]"
+                          ? "bg-[#00FF9D]/10 text-[#00FF9D]"
                           : "text-white/50 hover:text-white hover:bg-white/5"
                       }`}
                     >
-                      <Icon className={`w-4 h-4 shrink-0 ${active ? "text-[#00ffb3]" : ""}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${active ? "text-[#00FF9D]" : ""}`} />
                       <span className="font-medium">{item.label}</span>
                       {item.badge && item.badge > 0 ? (
-                        <span className="ml-auto min-w-5 h-5 rounded-full bg-[#f43f5e] text-white text-[10px] font-bold flex items-center justify-center px-1.5">
+                        <span className="ml-auto min-w-5 h-5 rounded-full bg-[#ff4444] text-white text-[10px] font-bold flex items-center justify-center px-1.5">
                           {item.badge}
                         </span>
                       ) : active ? (
-                        <ChevronRight className="ml-auto w-3 h-3 text-[#00ffb3]/50" />
+                        <ChevronRight className="ml-auto w-3 h-3 text-[#00FF9D]/50" />
                       ) : null}
                     </button>
                   );
@@ -163,8 +163,8 @@ export function AdminPage() {
         {/* Admin User */}
         <div className="px-3 py-4 border-t border-white/8">
           <div className="flex items-center gap-3 px-3 py-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#a855f7]/20 flex items-center justify-center shrink-0">
-              <User className="w-4 h-4 text-[#a855f7]" />
+            <div className="w-8 h-8 rounded-full bg-[#00FF9D]/20 flex items-center justify-center shrink-0">
+              <User className="w-4 h-4 text-[#00FF9D]" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white text-xs font-semibold truncate">{profile?.name || "Admin"}</p>
@@ -200,7 +200,7 @@ export function AdminPage() {
             </button>
             <button
               onClick={handleAddQuestion}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#00ffb3] text-black text-sm font-bold hover:bg-[#00e5a0] transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-black text-sm font-bold transition-all" style={{ background: "#00FF9D" }}
             >
               <Plus className="w-4 h-4" />
               Add Question
@@ -221,7 +221,7 @@ export function AdminPage() {
           {page === "reports" && <AdminReports />}
           {page === "settings" && <AdminSettings />}
           {page === "credentials" && <AdminCredentials />}
-          {page === "mongodb" && <AdminSupabaseConfig />}
+          {page === "mongodb" && <AdminMongoStatus />}
           {page === "pdf_import" && <AdminPDFImport />}
           {page === "text_extractor" && <AdminTextExtractor />}
         </main>
