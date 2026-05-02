@@ -565,7 +565,7 @@ export function PracticePage() {
       if (user && !isStudyType) {
         try {
           const seenRes = await fetch(
-            `${API_BASE}/seen-questions?user_id=${user.id}&chapter=${chapterId}&subunit=${encodeURIComponent(decodedSubunit)}&class=${cls}&type=${typeId}`,
+            `${API_BASE}/seen-questions?chapter=${chapterId}&subunit=${encodeURIComponent(decodedSubunit)}&class=${cls}&type=${typeId}`,
             { credentials: "include" }
           );
           if (seenRes.ok) {
@@ -653,7 +653,7 @@ export function PracticePage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ user_id: user.id, chapter: chapterId, subunit: decodedSubunit, class: cls, type: selectedType, question_ids: questionIds }),
+          body: JSON.stringify({ chapter: chapterId, subunit: decodedSubunit, class: cls, type: selectedType, question_ids: questionIds }),
         }).catch(() => null);
       }
     }
