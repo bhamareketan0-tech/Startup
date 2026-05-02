@@ -8,6 +8,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      // Apply theme class immediately to prevent flash of invisible content
+      try {
+        var mode = localStorage.getItem('bs-mode') || 'dark';
+        var scheme = localStorage.getItem('bs-scheme') || 'neon-green';
+        document.documentElement.classList.add(mode);
+        document.documentElement.setAttribute('data-scheme', scheme);
+      } catch (e) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
