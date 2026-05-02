@@ -78,6 +78,19 @@ bio-study-hub/
 - **Study Streak Calendar** — Integrated in PerformancePage; GitHub-style activity grid
 - **Bookmark/Note toolbar** — Inline Bookmark + Add Note buttons in both mobile and desktop PracticePage views
 
+### Prompt 5 — Gamification (Task #14)
+
+- **XP Economy** — 7 levels: Beginner→Novice→Apprentice→Scholar→Expert→Master→Champion; XP awarded for correct answers, daily challenge, mock test completion
+- **18 Badges** — earned for milestones (streaks, correct counts, level-ups, mock tests, comeback); unlocked via badgeService evaluateBadges
+- **XP Popup** — animated +XP notification floating from bottom-right after XP is earned (PracticePage, RevisionPage, DailyChallenge, MockTest)
+- **Level-Up Modal** — canvas-confetti fireworks + modal when level threshold is crossed
+- **Badge Unlock Popup** — gold toast notification when a new badge is earned
+- **Dashboard XP Bar** — full XP/level progress bar widget on dashboard with level emoji
+- **Comeback Streak Bonus** — login detects last activity gap (1–3 days = +50 XP comeback, 7+ days = streak reset + +20 XP fresh start); ComebackBanner on dashboard
+- **Public Profile** (`/profile/:username`) — streak calendar, badge grid, strongest chapters, XP bar, share link; accessible without login
+- **Leaderboard** — sorted by XP descending with level emoji badges and profile links; `/profile/:username` links integrated
+- **Username** — auto-derived from email prefix on registration; used for public profile URLs
+
 ## API Routes (prefix: `/api`)
 
 | Method | Path | Description |

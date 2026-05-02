@@ -7,6 +7,17 @@ import {
   FlaskConical, Flame, TrendingUp, Users, Brain, ArrowRight,
   Star, Activity, Bookmark, FileText, Sliders, RotateCcw, BookMarked,
 } from "lucide-react";
+import { ComebackBanner } from "@/components/ComebackBanner";
+
+const LEVEL_EMOJIS: Record<string, string> = {
+  Beginner: "🌱", Novice: "📖", Apprentice: "🔬",
+  Scholar: "🧪", Expert: "⚡", Master: "🏆", Champion: "👑",
+};
+
+const LEVEL_THRESHOLDS: Record<string, [number, number]> = {
+  Beginner: [0, 100], Novice: [100, 300], Apprentice: [300, 600],
+  Scholar: [600, 1000], Expert: [1000, 1500], Master: [1500, 2500], Champion: [2500, 2500],
+};
 
 interface StatsData { totalQuestions: number; totalStudents: number; totalDiscussions: number }
 interface Question { id: string; chapter: string; type: string; difficulty: string; class: string }
@@ -67,6 +78,14 @@ export function DashboardPage() {
   const totalQ = stats?.totalQuestions ?? 0;
   const maxChapter = chapterStats[0]?.count || 1;
 
+  const xp = profile?.xp || 0;
+  const level = profile?.level || "Beginner";
+  const levelEmoji = LEVEL_EMOJIS[level] || "🌱";
+  const [lo, hi] = LEVEL_THRESHOLDS[level] || [0, 100];
+  const xpProgressPct = hi > lo ? Math.min(100, Math.round(((xp - lo) / (hi - lo)) * 100)) : 100;
+  const badgeCount = profile?.badges?.length || 0;
+  const username = profile?.username || user?.email?.split("@")[0] || "";
+
   const QUICK_ACTIONS = [
     { label: "Practice", desc: "Chapter-wise MCQs", icon: BookOpen, to: "/class-select", color: "#00FF9D" },
     { label: "Mock Test", desc: "Full timed test", icon: Clock, to: "/mock-test", color: "#00FF9D" },
@@ -80,6 +99,7 @@ export function DashboardPage() {
 
   return (
     <div className="min-h-screen font-['Space_Grotesk'] pt-24 pb-20 px-4 relative" style={{ background: "transparent", color: "var(--bs-text)" }}>
+      <ComebackBanner />
       <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
       <div className="relative z-10 max-w-6xl mx-auto space-y-8">
 
@@ -101,7 +121,9 @@ export function DashboardPage() {
                 {streak > 0 && (
                   <span className="border px-2 py-0.5 font-black" style={{ borderColor: "#ff444440", color: "#ff4444", background: "rgba(255,68,68,0.08)" }}>🔥 {streak} day streak</span>
                 )}
-                <span>Score: <strong style={{ color: "var(--bs-text)" }}>{userScore.toFixed(0)}</strong></span>
+                <span className="border px-2 py-0.5 font-black" style={{ borderColor: "color-mix(in srgb, var(--bs-accent-hex) 30%, transparent)", color: "var(--bs-accent-hex)" }}>
+                  {levelEmoji} {level}
+                </span>
               </div>
             </div>
             <div className="flex items-center gap-3 shrink-0 flex-wrap">
@@ -115,6 +137,49 @@ export function DashboardPage() {
                 style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>
                 <span className="transform skew-x-12 inline-flex items-center gap-2"><BarChart2 className="w-4 h-4" /> Stats</span>
               </Link>
+              {username && (
+                <Link to={`/profile/${username}`} className="flex items-center gap-2 px-5 py-3 border font-black uppercase tracking-widest text-sm transform -skew-x-12 transition-all"
+                  style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>
+                  <span className="transform skew-x-12 inline-flex items-center gap-2"><Users className="w-4 h-4" /> Profile</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* XP & Level Progress Card */}
+        <div className="border p-6 relative overflow-hidden" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
+          <div className="absolute top-0 left-0 w-full h-1" style={{ background: "linear-gradient(90deg, #00FF9D, #00ccff, transparent)" }} />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="text-4xl shrink-0">{levelEmoji}</div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-black uppercase tracking-tight text-lg" style={{ color: "var(--bs-text)" }}>{level}</span>
+                  <span className="border px-2 py-0.5 text-[10px] font-black uppercase" style={{ borderColor: "color-mix(in srgb, #00FF9D 30%, transparent)", color: "#00FF9D" }}>
+                    {xp.toLocaleString()} XP
+                  </span>
+                </div>
+                <div className="h-2.5 w-full overflow-hidden mb-1" style={{ background: "var(--bs-surface-2)", borderRadius: "2px" }}>
+                  <div
+                    className="h-full transition-all duration-1000"
+                    style={{ width: `${xpProgressPct}%`, background: "linear-gradient(90deg, #00FF9D, #00ccff)" }}
+                  />
+                </div>
+                <p className="text-[10px] font-mono" style={{ color: "var(--bs-text-muted)" }}>
+                  {hi > lo ? `${xpProgressPct}% to next level (${hi.toLocaleString()} XP)` : "Max level reached! 🎉"}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-6 shrink-0">
+              <div className="text-center">
+                <div className="text-2xl font-black" style={{ color: "#FFD700" }}>{badgeCount}</div>
+                <div className="text-[10px] font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Badges</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-black" style={{ color: "#00FF9D" }}>{userScore.toFixed(0)}</div>
+                <div className="text-[10px] font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Score</div>
+              </div>
             </div>
           </div>
         </div>
@@ -123,7 +188,7 @@ export function DashboardPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: "Total Questions", value: loading ? "…" : totalQ.toLocaleString() + "+", icon: BookOpen, color: "#00FF9D", sub: "In question bank" },
-            { label: "Your Score", value: userScore.toFixed(0), icon: Star, color: "#00FF9D", sub: "Cumulative points" },
+            { label: "Total XP", value: xp.toLocaleString(), icon: Star, color: "#00FF9D", sub: "Experience points" },
             { label: "Daily Streak", value: streak > 0 ? `${streak}🔥` : "0", icon: Flame, color: "#ff4444", sub: "Days in a row" },
             { label: "Bookmarks", value: bookmarkCount.toString(), icon: Bookmark, color: "#00FF9D", sub: "Saved questions" },
           ].map((stat) => (
@@ -182,7 +247,7 @@ export function DashboardPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                {chapterStats.map((ch, i) => {
+                {chapterStats.map((ch) => {
                   const pct = (ch.count / maxChapter) * 100;
                   return (
                     <div key={ch.name}>

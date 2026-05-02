@@ -19,6 +19,7 @@ const CommunityPage = lazy(() => import("@/pages/CommunityPage").then(m => ({ de
 const PlansPage = lazy(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
 const AdminPage = lazy(() => import("@/pages/AdminPage").then(m => ({ default: m.AdminPage })));
 const ProfilePage = lazy(() => import("@/pages/ProfilePage").then(m => ({ default: m.ProfilePage })));
+const PublicProfilePage = lazy(() => import("@/pages/PublicProfilePage").then(m => ({ default: m.PublicProfilePage })));
 const MockTestPage = lazy(() => import("@/pages/MockTestPage").then(m => ({ default: m.MockTestPage })));
 const LeaderboardPage = lazy(() => import("@/pages/LeaderboardPage").then(m => ({ default: m.LeaderboardPage })));
 const BookmarksPage = lazy(() => import("@/pages/BookmarksPage").then(m => ({ default: m.BookmarksPage })));
@@ -72,6 +73,7 @@ function AppRoutes() {
         <Route path="/plans" element={<><Navbar /><PlansPage /></>} />
         <Route path="/community" element={<><Navbar /><CommunityPage /></>} />
         <Route path="/leaderboard" element={<><Navbar /><LeaderboardPage /></>} />
+        <Route path="/profile/:username" element={<><Navbar /><PublicProfilePage /></>} />
         <Route path="/dashboard" element={<ProtectedRoute><Navbar /><DashboardPage /></ProtectedRoute>} />
         <Route path="/mock-test" element={<ProtectedRoute><Navbar /><MockTestPage /></ProtectedRoute>} />
         <Route path="/class-select" element={<ProtectedRoute><Navbar /><ClassSelectPage /></ProtectedRoute>} />

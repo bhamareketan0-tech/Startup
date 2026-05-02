@@ -8,6 +8,14 @@ import {
   AlertCircle, ArrowLeft, BookOpen, List, Play, Lightbulb,
   Trophy, RotateCcw, Target, Bookmark, BookmarkCheck, FileText, X as XIcon,
 } from "lucide-react";
+import { XPPopup, XPPopupManager } from "@/components/XPPopup";
+import { LevelUpModal } from "@/components/LevelUpModal";
+import { BadgeQueueManager } from "@/components/BadgeUnlockPopup";
+
+const LEVEL_EMOJIS: Record<string, string> = {
+  Beginner: "🌱", Novice: "📖", Apprentice: "🔬",
+  Scholar: "🧪", Expert: "⚡", Master: "🏆", Champion: "👑",
+};
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? "") + "/api";
 
@@ -233,7 +241,7 @@ function MCQRenderer({ q, currentIndex, answers, submitted, onAnswer, yearTag }:
           </span>
           {(q.meta?.exam as string) && (
             <span className="px-2 py-1 border text-xs font-mono uppercase" style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }}>
-              {q.meta.exam as string}
+              {q.meta?.exam as string}
             </span>
           )}
         </div>
@@ -532,7 +540,7 @@ function CompletionScreen({
 
 export function PracticePage() {
   const { cls, chapterId, subunit } = useParams<{ cls: string; chapterId: string; subunit: string }>();
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
 
   const [selectedType, setSelectedType] = useState("mcq");
@@ -551,6 +559,9 @@ export function PracticePage() {
   const [notePopupId, setNotePopupId] = useState<string | null>(null);
   const [noteDraft, setNoteDraft] = useState("");
   const [savedNotes, setSavedNotes] = useState<Record<string, string>>({});
+  const [xpEvents, setXpEvents] = useState<Array<{ id: string; amount: number }>>([]);
+  const [levelUpInfo, setLevelUpInfo] = useState<{ level: string; emoji: string; xp: number; totalXP: number } | null>(null);
+  const [badgeQueue, setBadgeQueue] = useState<Array<{ id: string; name: string; emoji: string; description: string }>>([]);
 
   const toggleBookmark = async (q: Question) => {
     if (!user) return;
@@ -699,6 +710,46 @@ export function PracticePage() {
           body: JSON.stringify({ chapter: chapterId, subunit: decodedSubunit, class: cls, type: selectedType, question_ids: questionIds }),
         }).catch(() => null);
       }
+      if (user) {
+        try {
+          type QAResult = { xpResult?: { xpAwarded: number; totalXP: number; leveledUp: boolean; newLevel: string }; newBadges?: Array<{ id: string; name: string; emoji: string; description: string }> };
+          const qaCalls = questions.map((q, i) => {
+            const isCorrect = answers[i] === q.correct;
+            return api.post("/question-attempts", {
+              question_id: q.id,
+              question_text: q.question,
+              chapter: q.chapter || chapterId,
+              subunit: q.subunit || decodedSubunit,
+              class: q.class || cls,
+              question_type: q.type,
+              difficulty: q.difficulty,
+              is_correct: isCorrect,
+              user_answer: answers[i] || "",
+              correct_answer: q.correct,
+            }).catch(() => null) as Promise<QAResult | null>;
+          });
+          const results = await Promise.all(qaCalls);
+          let totalEarned = 0;
+          let leveledUp = false;
+          let newLevel = "";
+          let latestTotalXP = 0;
+          const allNewBadges: Array<{ id: string; name: string; emoji: string; description: string }> = [];
+          for (const r of results) {
+            if (!r?.xpResult) continue;
+            totalEarned += r.xpResult.xpAwarded;
+            if (r.xpResult.leveledUp) { leveledUp = true; newLevel = r.xpResult.newLevel; latestTotalXP = r.xpResult.totalXP; }
+            if (r.newBadges?.length) allNewBadges.push(...r.newBadges);
+          }
+          if (totalEarned > 0) {
+            setXpEvents((prev) => [...prev, { id: Date.now().toString(), amount: totalEarned }]);
+            if (leveledUp) {
+              setLevelUpInfo({ level: newLevel, emoji: LEVEL_EMOJIS[newLevel] || "🌱", xp: totalEarned, totalXP: latestTotalXP });
+            }
+            refreshProfile().catch(() => {});
+          }
+          if (allNewBadges.length > 0) setBadgeQueue((prev) => [...prev, ...allNewBadges]);
+        } catch {}
+      }
     }
   }
 
@@ -756,6 +807,9 @@ export function PracticePage() {
 
   return (
     <div className="min-h-screen relative font-['Space_Grotesk']" style={{ background: "transparent" }}>
+      <XPPopupManager events={xpEvents} onRemove={(id) => setXpEvents((prev) => prev.filter((e) => e.id !== id))} />
+      {levelUpInfo && <LevelUpModal level={levelUpInfo.level} emoji={levelUpInfo.emoji} xp={levelUpInfo.xp} totalXP={levelUpInfo.totalXP} onClose={() => setLevelUpInfo(null)} />}
+      <BadgeQueueManager badges={badgeQueue} onRemove={(id) => setBadgeQueue((prev) => prev.filter((b) => b.id !== id))} />
       <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
 
       {/* ── MOBILE STEP 1: Type Selector ── */}

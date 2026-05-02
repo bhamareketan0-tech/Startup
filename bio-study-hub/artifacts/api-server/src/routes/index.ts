@@ -25,6 +25,7 @@ import memoryPalaceRouter from "./memoryPalace";
 import quotesRouter from "./quotes";
 import spacedRepetitionRouter from "./spacedRepetition";
 import samplePapersRouter from "./samplePapers";
+import xpRouter from "./xp";
 
 const router: IRouter = Router();
 
@@ -54,5 +55,6 @@ router.use(memoryPalaceRouter);
 router.use(quotesRouter);
 router.use(spacedRepetitionRouter);
 router.use(samplePapersRouter);
+router.use(xpRouter);
 
 export default router;

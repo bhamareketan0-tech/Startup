@@ -1,5 +1,8 @@
 import { Router, type Request, type Response } from "express";
 import { QuestionAttempt } from "../models/questionAttempt";
+import { awardXP } from "../services/xpService";
+import { evaluateBadges } from "../services/badgeService";
+import { XP_AWARDS } from "../lib/xpConfig";
 
 const router = Router();
 
@@ -20,8 +23,11 @@ router.post("/question-attempts", async (req: Request, res: Response) => {
 
     const existing = await QuestionAttempt.findOne({ user_id: userId, question_id });
     let consecutiveCorrect = 0;
+    let xpResult = null;
+    let newBadges: unknown[] = [];
 
     if (existing) {
+      const wasCorrect = existing.is_correct;
       consecutiveCorrect = is_correct ? (existing.consecutive_correct || 0) + 1 : 0;
       const mastered = consecutiveCorrect >= 3;
       existing.is_correct = is_correct as boolean;
@@ -30,7 +36,13 @@ router.post("/question-attempts", async (req: Request, res: Response) => {
       existing.consecutive_correct = consecutiveCorrect;
       existing.mastered = mastered;
       await existing.save();
-      return res.json({ data: existing.toJSON() });
+
+      if (is_correct) {
+        xpResult = await awardXP(userId, XP_AWARDS.CORRECT_ANSWER);
+        newBadges = await evaluateBadges(userId);
+      }
+
+      return res.json({ data: existing.toJSON(), xpResult, newBadges });
     }
 
     consecutiveCorrect = is_correct ? 1 : 0;
@@ -49,7 +61,13 @@ router.post("/question-attempts", async (req: Request, res: Response) => {
       consecutive_correct: consecutiveCorrect,
       mastered: consecutiveCorrect >= 3,
     });
-    res.json({ data: doc.toJSON() });
+
+    if (is_correct) {
+      xpResult = await awardXP(userId, XP_AWARDS.CORRECT_ANSWER);
+      newBadges = await evaluateBadges(userId);
+    }
+
+    res.json({ data: doc.toJSON(), xpResult, newBadges });
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }

@@ -10,6 +10,14 @@ import {
   Share2, Download, Trophy, Target, Timer, ArrowLeft,
   Shuffle, Layers, Star, TrendingUp, Home, RefreshCw,
 } from "lucide-react";
+import { XPPopupManager } from "@/components/XPPopup";
+import { LevelUpModal } from "@/components/LevelUpModal";
+import { BadgeQueueManager } from "@/components/BadgeUnlockPopup";
+
+const LEVEL_EMOJIS: Record<string, string> = {
+  Beginner: "🌱", Novice: "📖", Apprentice: "🔬",
+  Scholar: "🧪", Expert: "⚡", Master: "🏆", Champion: "👑",
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Question {
@@ -107,7 +115,7 @@ function BackBtn({ onClick }: { onClick: () => void }) {
 // ─── Main Component ───────────────────────────────────────────────────────────
 export function MockTestPage() {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { profile, refreshProfile } = useAuth();
 
   // Setup state
   const [phase, setPhase]             = useState<Phase>("cls");
@@ -130,6 +138,9 @@ export function MockTestPage() {
   const [timeTaken, setTimeTaken]     = useState(0);
   const [showNav, setShowNav]         = useState(false);
   const [autoSubmitCountdown, setAutoSubmitCountdown] = useState<number | null>(null);
+  const [xpEvents, setXpEvents]       = useState<Array<{ id: string; amount: number }>>([]);
+  const [levelUpInfo, setLevelUpInfo] = useState<{ level: string; emoji: string; xp: number; totalXP: number } | null>(null);
+  const [badgeQueue, setBadgeQueue]   = useState<Array<{ id: string; name: string; emoji: string; description: string }>>([]);
 
   const timerRef      = useRef<ReturnType<typeof setInterval> | null>(null);
   const autoSaveRef   = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -211,10 +222,27 @@ export function MockTestPage() {
     }, 1000);
   }
 
-  function finalSubmit() {
+  async function finalSubmit() {
     clearTimers();
     setTimeTaken(Math.floor((Date.now() - startTimeRef.current) / 1000));
     localStorage.removeItem("biospark_mock_save");
+    const correct = questions.filter((q, i) => answers[i] === q.correct).length;
+    try {
+      const xpRes = await api.post("/xp/award", { reason: "mock_test_done", correctCount: correct }) as { xpResult?: { xpAwarded: number; leveledUp: boolean; newLevel: string }; newBadges?: Array<{ id: string; name: string; emoji: string; description: string }> };
+      if (xpRes.xpResult && xpRes.xpResult.xpAwarded > 0) {
+        setXpEvents((prev) => [...prev, { id: Date.now().toString(), amount: xpRes.xpResult!.xpAwarded }]);
+        if (xpRes.xpResult.leveledUp) {
+          const lvl = xpRes.xpResult.newLevel;
+          const totalXP = (xpRes.xpResult as unknown as { totalXP: number }).totalXP || xpRes.xpResult.xpAwarded;
+          setLevelUpInfo({ level: lvl, emoji: LEVEL_EMOJIS[lvl] || "🌱", xp: xpRes.xpResult.xpAwarded, totalXP });
+        }
+        refreshProfile().catch(() => {});
+      }
+      if (xpRes.newBadges && xpRes.newBadges.length > 0) {
+        setBadgeQueue((prev) => [...prev, ...xpRes.newBadges!]);
+      }
+    } catch {}
+    void correct;
     setPhase("result");
   }
 
@@ -961,6 +989,9 @@ export function MockTestPage() {
     return (
       <div className="min-h-screen font-['Space_Grotesk'] pt-0 pb-16 relative"
         style={{ background: BG, color: TXT }}>
+        <XPPopupManager events={xpEvents} onRemove={(id) => setXpEvents((p) => p.filter((e) => e.id !== id))} />
+        {levelUpInfo && <LevelUpModal level={levelUpInfo.level} emoji={levelUpInfo.emoji} xp={levelUpInfo.xp} totalXP={levelUpInfo.totalXP} onClose={() => setLevelUpInfo(null)} />}
+        <BadgeQueueManager badges={badgeQueue} onRemove={(id) => setBadgeQueue((p) => p.filter((b) => b.id !== id))} />
         <div className="fixed inset-0 pointer-events-none" style={GRID_STYLE} />
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blur-[200px] opacity-8 pointer-events-none"
           style={{ background: scoreColor }} />

@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { api } from "@/lib/api";
 import type { Question } from "@/lib/types";
 import { Flame, Clock, CheckCircle, XCircle, ArrowLeft, Trophy, Calendar, Zap, Share2 } from "lucide-react";
+import { XPPopupManager } from "@/components/XPPopup";
+import { LevelUpModal } from "@/components/LevelUpModal";
+import { BadgeQueueManager } from "@/components/BadgeUnlockPopup";
+import { useAuth } from "@/lib/auth";
+
+const LEVEL_EMOJIS: Record<string, string> = {
+  Beginner: "🌱", Novice: "📖", Apprentice: "🔬",
+  Scholar: "🧪", Expert: "⚡", Master: "🏆", Champion: "👑",
+};
 
 interface DailyData {
   date: string;
@@ -29,6 +38,7 @@ function formatTime(s: number) {
 
 export function DailyChallengePage() {
   const navigate = useNavigate();
+  const { refreshProfile } = useAuth();
   const [screen, setScreen] = useState<Screen>("lobby");
   const [daily, setDaily] = useState<DailyData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,6 +50,9 @@ export function DailyChallengePage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const [streak, setStreak] = useState<{ current: number; best: number }>({ current: 0, best: 0 });
+  const [xpEvents, setXpEvents] = useState<Array<{ id: string; amount: number }>>([]);
+  const [levelUpInfo, setLevelUpInfo] = useState<{ level: string; emoji: string; xp: number; totalXP: number } | null>(null);
+  const [badgeQueue, setBadgeQueue] = useState<Array<{ id: string; name: string; emoji: string; description: string }>>([]);
 
   useEffect(() => {
     api.get("/daily-challenge/today").then((d: unknown) => {
@@ -72,10 +85,21 @@ export function DailyChallengePage() {
     setSubmitting(true);
     clearInterval(timerRef.current);
     try {
-      const r = await api.post("/daily-challenge/attempt", { answers }) as { score: number; correct: number; wrong: number; skipped: number; questions: Question[] };
+      const r = await api.post("/daily-challenge/attempt", { answers }) as { score: number; correct: number; wrong: number; skipped: number; questions: Question[]; xpResult?: { xpAwarded: number; leveledUp: boolean; newLevel: string }; newBadges?: Array<{ id: string; name: string; emoji: string; description: string }> };
       setResult(r);
       setScreen("result");
       api.get("/daily-challenge/streak").then((s: unknown) => setStreak(s as { current: number; best: number })).catch(() => {});
+      if (r.xpResult && r.xpResult.xpAwarded > 0) {
+        setXpEvents((prev) => [...prev, { id: Date.now().toString(), amount: r.xpResult!.xpAwarded }]);
+        if (r.xpResult.leveledUp) {
+          const lvl = r.xpResult.newLevel;
+          setLevelUpInfo({ level: lvl, emoji: LEVEL_EMOJIS[lvl] || "🌱", xp: r.xpResult.xpAwarded, totalXP: (r.xpResult as unknown as { totalXP: number }).totalXP || r.xpResult.xpAwarded });
+        }
+        refreshProfile().catch(() => {});
+      }
+      if (r.newBadges && r.newBadges.length > 0) {
+        setBadgeQueue((prev) => [...prev, ...r.newBadges!]);
+      }
     } catch (e: unknown) {
       const msg = (e as Error).message || "";
       if (msg.includes("Already attempted")) {
@@ -98,11 +122,20 @@ export function DailyChallengePage() {
     );
   }
 
+  const XPOverlays = () => (
+    <>
+      <XPPopupManager events={xpEvents} onRemove={(id) => setXpEvents((prev) => prev.filter((e) => e.id !== id))} />
+      {levelUpInfo && <LevelUpModal level={levelUpInfo.level} emoji={levelUpInfo.emoji} xp={levelUpInfo.xp} totalXP={levelUpInfo.totalXP} onClose={() => setLevelUpInfo(null)} />}
+      <BadgeQueueManager badges={badgeQueue} onRemove={(id) => setBadgeQueue((prev) => prev.filter((b) => b.id !== id))} />
+    </>
+  );
+
   // Lobby
   if (screen === "lobby") {
     const today = daily?.date || new Date().toISOString().split("T")[0];
     return (
       <div className="min-h-screen pt-24 pb-20 px-4 font-['Space_Grotesk']" style={{ background: "transparent", color: "var(--bs-text)" }}>
+        <XPOverlays />
         <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
         <div className="relative z-10 max-w-2xl mx-auto">
           <button onClick={() => navigate("/dashboard")} className="flex items-center gap-2 mb-8 font-mono uppercase text-sm" style={{ color: "var(--bs-text-muted)" }}>
@@ -194,6 +227,7 @@ export function DailyChallengePage() {
 
     return (
       <div className="min-h-screen font-['Space_Grotesk']" style={{ background: "var(--bs-bg)", color: "var(--bs-text)" }}>
+        <XPOverlays />
         <div className="sticky top-0 z-20 border-b px-4 py-3 flex items-center gap-4" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5" style={{ color: "#00FF9D" }} />
@@ -257,6 +291,7 @@ export function DailyChallengePage() {
 
     return (
       <div className="min-h-screen pt-24 pb-20 px-4 font-['Space_Grotesk']" style={{ background: "transparent", color: "var(--bs-text)" }}>
+        <XPOverlays />
         <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
         <div className="relative z-10 max-w-2xl mx-auto">
           <div className="border p-8 mb-6 relative overflow-hidden" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>

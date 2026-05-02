@@ -1,6 +1,10 @@
 import { Router, type Request, type Response } from "express";
 import { DailyChallenge, UserDailyChallenge } from "../models/dailyChallenge";
 import { Question } from "../models/question";
+import { awardXP } from "../services/xpService";
+import { evaluateBadges } from "../services/badgeService";
+import { User } from "../models/user";
+import { XP_AWARDS } from "../lib/xpConfig";
 
 const router = Router();
 
@@ -119,8 +123,32 @@ router.post("/daily-challenge/attempt", async (req: Request, res: Response) => {
       { upsert: true, new: true }
     );
 
+    const xpResult = await awardXP(userId, XP_AWARDS.DAILY_CHALLENGE_DONE);
+
+    const allCompleted = await UserDailyChallenge.find({ user_id: userId, completed: true }).sort({ date: -1 });
+    let streakCount = 0;
+    let checkDate = date;
+    for (let i = 0; i < 365; i++) {
+      const found = allCompleted.find((a) => a.date === checkDate);
+      if (found) {
+        streakCount++;
+      } else if (i > 0) {
+        break;
+      }
+      const d = new Date(checkDate);
+      d.setDate(d.getDate() - 1);
+      checkDate = d.toISOString().split("T")[0];
+    }
+
+    const updates: Record<string, unknown> = { streakCount, lastActivity: new Date() };
+    if (streakCount === 7) await awardXP(userId, XP_AWARDS.STREAK_7_DAY);
+    if (streakCount === 30) await awardXP(userId, XP_AWARDS.STREAK_30_DAY);
+    await User.findByIdAndUpdate(userId, updates);
+
+    const newBadges = await evaluateBadges(userId);
+
     const questionsWithAnswers = questions.map((q) => q.toJSON());
-    res.json({ attempt: attempt.toJSON(), score, correct, wrong, skipped, questions: questionsWithAnswers });
+    res.json({ attempt: attempt.toJSON(), score, correct, wrong, skipped, questions: questionsWithAnswers, xpResult, newBadges, streakCount });
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }

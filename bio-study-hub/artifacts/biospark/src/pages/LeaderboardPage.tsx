@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
-import { Trophy, Medal, Crown, Flame, Star, Users, ChevronRight, TrendingUp } from "lucide-react";
+import { Trophy, Medal, Crown, Flame, Star, Users, TrendingUp } from "lucide-react";
+
+const LEVEL_EMOJIS: Record<string, string> = {
+  Beginner: "🌱", Novice: "📖", Apprentice: "🔬",
+  Scholar: "🧪", Expert: "⚡", Master: "🏆", Champion: "👑",
+};
 
 interface LeaderUser {
   id: string;
@@ -10,6 +16,10 @@ interface LeaderUser {
   score: number;
   class: string;
   plan: string;
+  xp?: number;
+  level?: string;
+  username?: string;
+  xpSummary?: { xp: number; level: string; levelEmoji: string; progressPct: number };
   created_at?: string;
 }
 
@@ -27,6 +37,16 @@ function rankColor(rank: number) {
   return "var(--bs-text-muted)";
 }
 
+function getLevelDisplay(u: LeaderUser): { emoji: string; name: string } {
+  if (u.xpSummary?.levelEmoji) return { emoji: u.xpSummary.levelEmoji, name: u.xpSummary.level };
+  const name = u.level || "Beginner";
+  return { emoji: LEVEL_EMOJIS[name] || "🌱", name };
+}
+
+function getXP(u: LeaderUser): number {
+  return u.xpSummary?.xp ?? u.xp ?? 0;
+}
+
 export function LeaderboardPage() {
   const { user, profile } = useAuth();
   const [users, setUsers] = useState<LeaderUser[]>([]);
@@ -37,7 +57,7 @@ export function LeaderboardPage() {
     api.get("/users")
       .then((res) => {
         const all = (res as { users?: LeaderUser[] }).users || (res as LeaderUser[]) || [];
-        const sorted = [...(all as LeaderUser[])].sort((a, b) => (b.score || 0) - (a.score || 0));
+        const sorted = [...(all as LeaderUser[])].sort((a, b) => getXP(b) - getXP(a));
         setUsers(sorted);
       })
       .catch(() => setUsers([]))
@@ -77,7 +97,7 @@ export function LeaderboardPage() {
             Leader<span style={{ color: "#FFD700" }}>board</span>
           </h1>
           <p className="text-sm font-mono uppercase tracking-wide" style={{ color: "var(--bs-text-muted)" }}>
-            Top NEET Biology performers — updated live
+            Top NEET Biology performers — ranked by XP
           </p>
         </div>
 
@@ -94,13 +114,19 @@ export function LeaderboardPage() {
                 <div>
                   <p className="text-xs font-mono uppercase tracking-widest mb-0.5" style={{ color: "#FFD700" }}>Your Rank</p>
                   <p className="font-black uppercase text-lg" style={{ color: "var(--bs-text)" }}>
-                    {profile?.name?.split(" ")[0] || user.email?.split("@")[0]}
+                    {getLevelDisplay(myEntry).emoji} {profile?.name?.split(" ")[0] || user.email?.split("@")[0]}
                   </p>
+                  <p className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>{getLevelDisplay(myEntry).name}</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-xs font-mono uppercase tracking-widest mb-0.5" style={{ color: "var(--bs-text-muted)" }}>Score</p>
-                <p className="text-2xl font-black" style={{ color: "#FFD700" }}>{(myEntry.score || 0).toFixed(0)}</p>
+                <p className="text-xs font-mono uppercase tracking-widest mb-0.5" style={{ color: "var(--bs-text-muted)" }}>XP</p>
+                <p className="text-2xl font-black" style={{ color: "#FFD700" }}>{getXP(myEntry).toLocaleString()}</p>
+                {myEntry.username && (
+                  <Link to={`/profile/${myEntry.username}`} className="text-[10px] font-mono underline" style={{ color: "var(--bs-text-muted)" }}>
+                    View Profile
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -140,7 +166,7 @@ export function LeaderboardPage() {
           <div className="border p-16 text-center" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
             <Trophy className="w-12 h-12 mx-auto mb-4 opacity-30" style={{ color: "var(--bs-text-muted)" }} />
             <p className="font-black uppercase text-lg mb-2" style={{ color: "var(--bs-text)" }}>No students yet</p>
-            <p className="text-sm font-mono" style={{ color: "var(--bs-text-muted)" }}>Be the first to set a score!</p>
+            <p className="text-sm font-mono" style={{ color: "var(--bs-text-muted)" }}>Be the first to earn XP!</p>
           </div>
         ) : (
           <>
@@ -157,6 +183,7 @@ export function LeaderboardPage() {
                   const colors = ["#C0C0C0", "#FFD700", "#CD7F32"];
                   const color = colors[podiumIdx];
                   const isMe = u.id === user?.id;
+                  const { emoji: lvEmoji, name: lvName } = getLevelDisplay(u);
                   return (
                     <div
                       key={u.id}
@@ -169,17 +196,23 @@ export function LeaderboardPage() {
                     >
                       <div className="absolute top-0 left-0 w-full h-1" style={{ background: color }} />
                       <div className="text-3xl mb-2">{actualRank === 1 ? "👑" : actualRank === 2 ? "🥈" : "🥉"}</div>
-                      <div className="w-12 h-12 border-2 flex items-center justify-center font-black text-lg mx-auto mb-3 transform -skew-x-12"
+                      <div className="w-12 h-12 border-2 flex items-center justify-center font-black text-lg mx-auto mb-1 transform -skew-x-12"
                         style={{ borderColor: color, background: `color-mix(in srgb, ${color} 15%, transparent)`, color }}>
                         <span className="transform skew-x-12">{(u.name || u.email?.split("@")[0] || "?").charAt(0).toUpperCase()}</span>
                       </div>
+                      <div className="text-xs font-mono mb-1" style={{ color: "var(--bs-text-muted)" }}>{lvEmoji} {lvName}</div>
                       <div className="font-black uppercase text-sm mb-0.5 truncate" style={{ color: "var(--bs-text)" }}>
                         {u.name?.split(" ")[0] || u.email?.split("@")[0]}
                         {isMe && <span className="ml-1 text-[10px]" style={{ color: "var(--bs-accent-hex)" }}>(You)</span>}
                       </div>
-                      <div className="text-xs font-mono mb-3" style={{ color: "var(--bs-text-muted)" }}>Class {u.class || "–"}</div>
-                      <div className="text-2xl font-black" style={{ color }}>{(u.score || 0).toFixed(0)}</div>
-                      <div className="text-[10px] font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>points</div>
+                      <div className="text-xs font-mono mb-2" style={{ color: "var(--bs-text-muted)" }}>Class {u.class || "–"}</div>
+                      <div className="text-2xl font-black" style={{ color }}>{getXP(u).toLocaleString()}</div>
+                      <div className="text-[10px] font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>XP</div>
+                      {u.username && (
+                        <Link to={`/profile/${u.username}`} className="block mt-2 text-[10px] font-mono underline" style={{ color: "var(--bs-text-muted)" }}>
+                          Profile
+                        </Link>
+                      )}
                     </div>
                   );
                 })}
@@ -192,6 +225,7 @@ export function LeaderboardPage() {
                 {rest.map((u, idx) => {
                   const rank = idx + 4;
                   const isMe = u.id === user?.id;
+                  const { emoji: lvEmoji, name: lvName } = getLevelDisplay(u);
                   return (
                     <div
                       key={u.id}
@@ -210,19 +244,25 @@ export function LeaderboardPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-black uppercase text-sm truncate" style={{ color: "var(--bs-text)" }}>
-                          {u.name || u.email?.split("@")[0]}
+                          {lvEmoji} {u.name || u.email?.split("@")[0]}
                           {isMe && <span className="ml-2 text-[10px] font-mono" style={{ color: "var(--bs-accent-hex)" }}>← YOU</span>}
                         </div>
                         <div className="text-xs font-mono flex items-center gap-2" style={{ color: "var(--bs-text-muted)" }}>
-                          <span>Class {u.class || "–"}</span>
+                          <span>{lvName}</span>
+                          <span>· Class {u.class || "–"}</span>
                           {u.plan === "pro" && <span style={{ color: "#00FF9D" }}>⭐ Pro</span>}
                         </div>
                       </div>
                       <div className="text-right shrink-0">
                         <div className="font-black text-lg" style={{ color: isMe ? "var(--bs-accent-hex)" : "var(--bs-text)" }}>
-                          {(u.score || 0).toFixed(0)}
+                          {getXP(u).toLocaleString()}
                         </div>
-                        <div className="text-[10px] font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>pts</div>
+                        <div className="text-[10px] font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>XP</div>
+                        {u.username && (
+                          <Link to={`/profile/${u.username}`} className="text-[10px] font-mono underline" style={{ color: "var(--bs-text-muted)" }}>
+                            profile
+                          </Link>
+                        )}
                       </div>
                     </div>
                   );
@@ -238,7 +278,7 @@ export function LeaderboardPage() {
             <TrendingUp className="w-6 h-6 mx-auto mb-2" style={{ color: "var(--bs-accent-hex)" }} />
             <p className="font-black uppercase tracking-tight" style={{ color: "var(--bs-text)" }}>Climb the ranks</p>
             <p className="text-xs font-mono mt-1 mb-4" style={{ color: "var(--bs-text-muted)" }}>
-              Scores update as you practice. Every correct answer moves you up.
+              Earn XP with every correct answer, daily challenge, and mock test.
             </p>
             <a href="/class-select" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest border px-5 py-2.5 transition-all hover:opacity-80"
               style={{ background: "var(--bs-accent-hex)", color: "black", borderColor: "var(--bs-accent-hex)" }}>

@@ -187,7 +187,7 @@ export function AdminPage() {
         <main className="flex-1 p-8">
           {page === "dashboard" && <AdminDashboard />}
           {page === "analytics" && <AdminAnalytics />}
-          {page === "questions" && <AdminQuestions addQuestionRef={addQuestionRef} />}
+          {page === "questions" && <AdminQuestions onAddQuestion={(fn) => { addQuestionRef.current = fn; }} />}
           {page === "chapters" && <AdminChapters />}
           {page === "passages" && <AdminPassages />}
           {page === "pdf_import" && <AdminPDFImport />}

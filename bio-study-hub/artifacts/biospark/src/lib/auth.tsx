@@ -1,5 +1,13 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
+export type UserBadge = {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  unlockedAt?: string;
+};
+
 export type UserProfile = {
   id: string;
   name: string;
@@ -8,6 +16,11 @@ export type UserProfile = {
   score: number;
   plan: string;
   created_at: string;
+  xp: number;
+  level: string;
+  badges: UserBadge[];
+  username?: string;
+  streakCount?: number;
 };
 
 type AuthUser = { id: string; email: string; name?: string; avatar?: string; role?: string };
@@ -17,6 +30,8 @@ type AuthContextType = {
   session: { user: AuthUser } | null;
   profile: UserProfile | null;
   loading: boolean;
+  comebackMessage: { type: "none" | "comeback" | "fresh_start"; xpAwarded: number; message: string } | null;
+  clearComebackMessage: () => void;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string, name: string, cls: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -37,6 +52,11 @@ function profileFromUser(u: Record<string, unknown>): UserProfile {
     score: (u["score"] as number) || 0,
     plan: (u["plan"] as string) || "free",
     created_at: (u["created_at"] as string) || new Date().toISOString(),
+    xp: (u["xp"] as number) || 0,
+    level: (u["level"] as string) || "Beginner",
+    badges: (u["badges"] as UserBadge[]) || [],
+    username: (u["username"] as string) || undefined,
+    streakCount: (u["streakCount"] as number) || 0,
   };
 }
 
@@ -44,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [comebackMessage, setComebackMessage] = useState<AuthContextType["comebackMessage"]>(null);
 
   useEffect(() => {
     fetch(API + "/api/auth/me", { credentials: "include" })
@@ -72,6 +93,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const u = (data["user"] as Record<string, unknown>) || data;
       setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
       setProfile(profileFromUser(u));
+      const cb = data["comeback"] as { comebackType: "none" | "comeback" | "fresh_start"; xpAwarded: number; message: string } | undefined;
+      if (cb && cb.comebackType !== "none") {
+        setComebackMessage({ type: cb.comebackType, xpAwarded: cb.xpAwarded, message: cb.message });
+      }
       return { error: null };
     } catch {
       return { error: new Error("Network error. Please try again.") };
@@ -120,10 +145,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  function clearComebackMessage() {
+    setComebackMessage(null);
+  }
+
   const session = user ? { user } : null;
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signIn, signUp, signOut, signInWithGoogle, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, comebackMessage, clearComebackMessage, signIn, signUp, signOut, signInWithGoogle, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

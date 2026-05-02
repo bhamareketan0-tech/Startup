@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { User } from "../models/user";
 import { Attempt } from "../models/attempt";
+import { getXPSummary } from "../services/xpService";
 
 const router = Router();
 
@@ -18,6 +19,12 @@ function parsePaginationParams(query: Record<string, string>) {
   return { pageNum, limitNum, skip };
 }
 
+function enrichWithXP(u: Record<string, unknown>) {
+  const xp = (u.xp as number) || 0;
+  const summary = getXPSummary(xp);
+  return { ...u, xpSummary: summary };
+}
+
 router.get("/students", async (req, res) => {
   try {
     const { class: cls, plan } = req.query as Record<string, string>;
@@ -30,7 +37,7 @@ router.get("/students", async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNum);
-    res.json({ data: data.map((d) => d.toJSON()), total, page: pageNum, limit: limitNum });
+    res.json({ data: data.map((d) => enrichWithXP(d.toJSON() as Record<string, unknown>)), total, page: pageNum, limit: limitNum });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }
@@ -45,10 +52,10 @@ router.get("/users", async (req, res) => {
     if (plan) filter.plan = plan;
     const total = await User.countDocuments(filter);
     const data = await User.find(filter)
-      .sort({ createdAt: -1 })
+      .sort({ xp: -1, createdAt: -1 })
       .skip(skip)
       .limit(limitNum);
-    res.json({ data: data.map((d) => d.toJSON()), total, page: pageNum, limit: limitNum });
+    res.json({ users: data.map((d) => enrichWithXP(d.toJSON() as Record<string, unknown>)), total, page: pageNum, limit: limitNum });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }
@@ -72,7 +79,7 @@ router.put("/users/:id", async (req, res) => {
     if (["free", "pro", "elite"].includes(plan || "")) updates["plan"] = plan;
     const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
     if (!user) { res.status(404).json({ error: "User not found." }); return; }
-    res.json({ user: user.toJSON() });
+    res.json({ user: enrichWithXP(user.toJSON() as Record<string, unknown>) });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }

@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { api } from "@/lib/api";
 import type { Question } from "@/lib/types";
 import { ArrowLeft, RotateCcw, CheckCircle, XCircle, Filter, BookOpen, Target, Trophy } from "lucide-react";
+import { XPPopupManager } from "@/components/XPPopup";
+import { LevelUpModal } from "@/components/LevelUpModal";
+import { BadgeQueueManager } from "@/components/BadgeUnlockPopup";
+import { useAuth } from "@/lib/auth";
+
+const LEVEL_EMOJIS: Record<string, string> = {
+  Beginner: "🌱", Novice: "📖", Apprentice: "🔬",
+  Scholar: "🧪", Expert: "⚡", Master: "🏆", Champion: "👑",
+};
 
 interface WrongAttempt {
   question_id: string;
@@ -20,6 +29,7 @@ type Screen = "list" | "practice" | "done";
 
 export function RevisionPage() {
   const navigate = useNavigate();
+  const { refreshProfile } = useAuth();
   const [wrong, setWrong] = useState<WrongAttempt[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterChapter, setFilterChapter] = useState("all");
@@ -30,6 +40,9 @@ export function RevisionPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [sessionResults, setSessionResults] = useState<{ correct: number; total: number }>({ correct: 0, total: 0 });
+  const [xpEvents, setXpEvents] = useState<Array<{ id: string; amount: number }>>([]);
+  const [levelUpInfo, setLevelUpInfo] = useState<{ level: string; emoji: string; xp: number; totalXP: number } | null>(null);
+  const [badgeQueue, setBadgeQueue] = useState<Array<{ id: string; name: string; emoji: string; description: string }>>([]);
 
   useEffect(() => {
     api.get("/question-attempts/wrong").then((r: unknown) => {
@@ -84,18 +97,31 @@ export function RevisionPage() {
     setRevealed(true);
     const isCorrect = opt === q.correct;
     setSessionResults((prev) => ({ correct: prev.correct + (isCorrect ? 1 : 0), total: prev.total + 1 }));
-    await api.post("/question-attempts", {
-      question_id: q.id,
-      question_text: q.question,
-      chapter: q.chapter,
-      subunit: q.subunit,
-      class: q.class,
-      question_type: q.type,
-      difficulty: q.difficulty,
-      is_correct: isCorrect,
-      user_answer: opt,
-      correct_answer: q.correct,
-    }).catch(() => {});
+    try {
+      const res = await api.post("/question-attempts", {
+        question_id: q.id,
+        question_text: q.question,
+        chapter: q.chapter,
+        subunit: q.subunit,
+        class: q.class,
+        question_type: q.type,
+        difficulty: q.difficulty,
+        is_correct: isCorrect,
+        user_answer: opt,
+        correct_answer: q.correct,
+      }) as { xpResult?: { xpAwarded: number; totalXP: number; leveledUp: boolean; newLevel: string }; newBadges?: Array<{ id: string; name: string; emoji: string; description: string }> };
+      if (res.xpResult && res.xpResult.xpAwarded > 0) {
+        setXpEvents((prev) => [...prev, { id: Date.now().toString(), amount: res.xpResult!.xpAwarded }]);
+        if (res.xpResult.leveledUp) {
+          const lvl = res.xpResult.newLevel;
+          setLevelUpInfo({ level: lvl, emoji: LEVEL_EMOJIS[lvl] || "🌱", xp: res.xpResult.xpAwarded, totalXP: res.xpResult.totalXP });
+        }
+        refreshProfile().catch(() => {});
+      }
+      if (res.newBadges && res.newBadges.length > 0) {
+        setBadgeQueue((prev) => [...prev, ...res.newBadges!]);
+      }
+    } catch {}
   };
 
   const nextQuestion = () => {
@@ -108,9 +134,18 @@ export function RevisionPage() {
     }
   };
 
+  const XPOverlays = () => (
+    <>
+      <XPPopupManager events={xpEvents} onRemove={(id) => setXpEvents((prev) => prev.filter((e) => e.id !== id))} />
+      {levelUpInfo && <LevelUpModal level={levelUpInfo.level} emoji={levelUpInfo.emoji} xp={levelUpInfo.xp} totalXP={levelUpInfo.totalXP} onClose={() => setLevelUpInfo(null)} />}
+      <BadgeQueueManager badges={badgeQueue} onRemove={(id) => setBadgeQueue((prev) => prev.filter((b) => b.id !== id))} />
+    </>
+  );
+
   if (screen === "list") {
     return (
       <div className="min-h-screen pt-24 pb-20 px-4 font-['Space_Grotesk']" style={{ background: "transparent", color: "var(--bs-text)" }}>
+        <XPOverlays />
         <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
         <div className="relative z-10 max-w-4xl mx-auto">
           <button onClick={() => navigate("/dashboard")} className="flex items-center gap-2 mb-8 font-mono uppercase text-sm" style={{ color: "var(--bs-text-muted)" }}>
@@ -195,6 +230,7 @@ export function RevisionPage() {
 
     return (
       <div className="min-h-screen font-['Space_Grotesk']" style={{ background: "var(--bs-bg)", color: "var(--bs-text)" }}>
+        <XPOverlays />
         <div className="sticky top-0 z-20 border-b px-4 py-3 flex items-center gap-4" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
           <RotateCcw className="w-5 h-5" style={{ color: "#ff4444" }} />
           <span className="font-black uppercase text-sm">Revision Mode</span>
