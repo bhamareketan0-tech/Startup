@@ -6,6 +6,8 @@ import discussionsRouter from "./discussions";
 import usersRouter from "./users";
 import statsRouter from "./stats";
 import authLocalRouter from "./authLocal";
+import authGoogleRouter from "./auth";
+import passwordResetRouter from "./passwordReset";
 import passagesRouter from "./passages";
 import pdfExtractRouter from "./pdfExtract";
 import chaptersRouter from "./chapters";
@@ -30,6 +32,8 @@ import xpRouter from "./xp";
 const router: IRouter = Router();
 
 router.use(authLocalRouter);
+router.use(authGoogleRouter);
+router.use(passwordResetRouter);
 router.use(healthRouter);
 router.use(questionsRouter);
 router.use(attemptsRouter);
