@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { Navbar } from "@/components/Navbar";
 import { SpaceBackground } from "@/components/SpaceBackground";
+import { ThemePicker } from "@/components/ThemePicker";
 import { ADMIN_EMAIL } from "@/lib/constants";
 
 const LoginPage = lazy(() => import("@/pages/LoginPage").then(m => ({ default: m.LoginPage })));
@@ -96,6 +97,7 @@ function App() {
             <SpaceBackground />
           </div>
           <AppRoutes />
+          <ThemePicker />
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

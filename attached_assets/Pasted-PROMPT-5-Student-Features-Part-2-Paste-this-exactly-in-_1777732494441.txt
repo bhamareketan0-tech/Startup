@@ -1,0 +1,232 @@
+PROMPT 5 — Student Features Part 2
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend).
+GLOBAL UI/UX RULES — APPLY TO EVERY SINGLE THING YOU BUILD IN THIS PROMPT:
+
+Desktop layout: sidebar + main content, spacious, breathing room
+Tablet: collapsed sidebar, full content area
+Mobile (375px-428px): bottom navigation, stacked cards, no sidebar
+8px grid spacing system throughout
+Border radius: 8px on all cards, 6px on buttons
+No cramming — maximum 3-4 items per row on desktop, 1-2 on mobile
+Every feature hidden behind clean tabs, not all dumped on one screen
+Fonts: Inter or Poppins, consistent sizing
+Green theme: #00FF9D accent, #0A0A0A background, #111111 cards
+All buttons minimum 44px height for touch
+No horizontal scrolling ever
+Smooth transitions max 200ms — no heavy animations
+No phone heating, no lag, no janky scrolling
+Think Unacademy/PhysicsWallah level cleanliness
+
+
+STEP 1 — XP POINTS SYSTEM:
+Build a complete XP economy system stored in MongoDB:
+XP earned for:
+
+Correct answer in practice: +10 XP
+Correct answer in mock test: +15 XP
+Completing daily challenge: +50 XP
+Completing full chapter practice: +100 XP
+Completing mock test: +75 XP
+7 day streak: +200 XP bonus
+30 day streak: +1000 XP bonus
+Comeback streak bonus: +50 XP
+First attempt correct: +5 XP bonus
+Mastering a revision question: +20 XP
+
+XP lost for:
+
+Wrong answer in mock test: -5 XP (not in practice mode)
+
+XP shown on:
+
+Dashboard stats card
+Public profile
+Leaderboard
+After every question (small +10 XP popup animation — lightweight, 300ms only)
+
+
+STEP 2 — LEVEL SYSTEM:
+Based on total XP earned, student gets a level:
+
+0 - 500 XP → 🌱 Beginner
+501 - 2000 XP → 🔍 Explorer
+2001 - 5000 XP → 📖 Scholar
+5001 - 15000 XP → ⚔️ NEET Warrior
+15001+ XP → 🏆 Champion
+
+Level shown:
+
+Dashboard (large, prominent)
+Public profile
+Leaderboard next to name
+After leveling up → show celebration screen (lightweight confetti, 1 second only)
+
+Progress bar showing XP needed for next level always visible on dashboard.
+
+STEP 3 — BADGES & ACHIEVEMENTS:
+Build achievement system in MongoDB. Student earns badges automatically when conditions met:
+Study badges:
+
+🔥 First Blood — attempt first question
+⚡ Speed Demon — complete 10 questions under 5 minutes
+🎯 Sharp Shooter — 10 correct in a row
+💯 Perfect Score — 100% in any mock test
+📚 Chapter Master — complete all questions in any chapter
+🏅 Biology Beast — complete all Class 11 chapters
+👑 NEET Ready — complete all Class 11 and 12 chapters
+
+Streak badges:
+
+🌟 3 Day Streak
+🔥 7 Day Streak
+💎 30 Day Streak
+🚀 100 Day Streak
+
+Special badges:
+
+🌅 Early Bird — study before 7am
+🦉 Night Owl — study after 11pm
+⚔️ Warrior — complete 5 mock tests
+🏆 Champion — reach Champion level
+
+Each badge:
+
+Shows as icon on profile
+Locked badges shown as grey silhouette (mystery)
+Click any badge → shows name, description, how to earn
+New badge earned → popup notification (lightweight)
+Badge count shown on public profile
+
+
+STEP 4 — STUDENT PUBLIC PROFILE:
+Each student has a public profile page at /profile/username
+Shows:
+
+Display name (no real name unless student sets it)
+Avatar (generated from initials, no photo upload)
+Current level + level badge
+XP points
+Current streak 🔥
+All earned badges (locked ones shown as grey)
+Study streak calendar (GitHub style from Prompt 4)
+BioSpark platform rank this week
+Total questions attempted
+Overall accuracy %
+Member since date
+Top 3 strongest chapters
+
+Does NOT show:
+
+Real name
+Email
+Phone number
+Any personal details whatsoever
+Exact location
+
+Profile URL shareable — student can share their profile link.
+Profile page fully mobile responsive.
+
+STEP 5 — BATTLE MODE 1V1:
+Build a real-time 1v1 quiz battle system:
+How it works:
+
+Student goes to Battle Mode section
+Clicks "Find Opponent" → matched with another online student randomly
+OR clicks "Challenge Friend" → generates unique battle link → share via WhatsApp
+Friend opens link → joins battle
+Both students get SAME 10 questions simultaneously
+60 second timer per question
+Both see each other's progress live (answered/not answered — no peeking at answers)
+After all 10 questions → results shown side by side
+Winner gets +100 XP, loser gets +20 XP (participation)
+Battle history saved in MongoDB
+Win/loss record shown on profile
+
+Technical implementation:
+
+Use Socket.io for real-time connection (already likely in stack or add it)
+Battle room created in MongoDB with unique ID
+Both players connected to same room
+Questions synced — both get identical question set
+If opponent disconnects → show "Opponent left" → current student wins automatically
+Maximum wait time for opponent: 60 seconds → then show "No opponent found, try again"
+
+UI:
+
+Split screen on desktop (you vs opponent)
+Stacked on mobile (your score on top, opponent below)
+Live score updating every second
+Opponent name shown as username only (no personal details)
+
+
+STEP 6 — CHALLENGE A FRIEND:
+
+Separate from Battle Mode
+Student creates a custom challenge:
+
+Select chapter
+Select number of questions (10/20/30)
+Select time limit
+Select difficulty
+
+
+System generates unique challenge link
+Share via WhatsApp button (pre-filled message: "I challenge you on BioSpark! Beat my score: [score]. Click to accept: [link]")
+Friend opens link → attempts same questions
+After friend completes → both see comparison result
+Who scored more, who was faster, head to head breakdown
+Challenge expires after 48 hours
+Challenge history saved on profile
+
+
+STEP 7 — RAPID FIRE MODE:
+
+Separate section in main navigation
+10 questions, 10 seconds each
+No pause, no going back
+Auto-moves to next question when timer hits 0
+Unanswered = wrong
+Score shown at end: X correct out of 10 in Y total seconds
+Separate rapid fire leaderboard (top scores this week)
++30 XP for completing rapid fire
++50 XP bonus if all 10 correct
+Mobile friendly — big option buttons, easy to tap fast
+
+
+STEP 8 — COMEBACK STREAK BONUS:
+
+System tracks last activity date per student in MongoDB
+If student was on streak and missed 1-3 days:
+
+On return → show "Welcome back! You missed X days"
+Award +50 XP comeback bonus automatically
+Show motivational message
+
+
+If missed more than 7 days:
+
+Streak resets to 0
+Still show welcome back message
+Award +20 XP "fresh start" bonus
+Show: "Your streak reset but your XP and progress are safe!"
+
+
+Never punish student harshly — always encouraging tone
+
+
+PERFORMANCE REQUIREMENTS:
+
+Socket.io for battle mode must be lightweight — disconnect properly when not in battle
+XP animations: 300ms max, CSS only no heavy JS
+Badge unlock popup: 1 second, auto dismisses
+Level up confetti: 1 second only, canvas confetti (lightweight library)
+All lists paginated
+Profile page loads under 2 seconds
+Battle mode works on mobile data (3G minimum)
+No memory leaks from Socket.io connections
+Clean up all socket listeners on component unmount
+
+After completing give full report of what was built and any issues. 🔥
