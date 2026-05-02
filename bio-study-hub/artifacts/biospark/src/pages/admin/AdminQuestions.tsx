@@ -757,7 +757,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
     try {
       const params: Record<string, string> = {
         limit: String(PAGE_SIZE),
-        skip: String(page * PAGE_SIZE),
+        page: String(page + 1),
       };
       if (filterClass) params.class = filterClass;
       if (filterDifficulty) params.difficulty = filterDifficulty;
@@ -936,21 +936,24 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-white/30 text-xs">Showing {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} of {total}</p>
-          <div className="flex gap-2">
-            <button disabled={page === 0} onClick={() => setPage(page - 1)}
-              className="p-2 border border-white/10 rounded-lg text-white/50 hover:text-white hover:border-white/20 disabled:opacity-30 transition-colors">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}
-              className="p-2 border border-white/10 rounded-lg text-white/50 hover:text-white hover:border-white/20 disabled:opacity-30 transition-colors">
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+      <div className="flex items-center justify-between">
+        <p className="text-white/30 text-xs">
+          {total === 0
+            ? "No questions found"
+            : `Showing ${page * PAGE_SIZE + 1}–${Math.min((page + 1) * PAGE_SIZE, total)} of ${total.toLocaleString()} questions`}
+        </p>
+        <div className="flex items-center gap-2">
+          <span className="text-white/20 text-xs">Page {page + 1} of {Math.max(1, totalPages)}</span>
+          <button disabled={page === 0} onClick={() => setPage(page - 1)}
+            className="p-2 border border-white/10 rounded-lg text-white/50 hover:text-white hover:border-white/20 disabled:opacity-30 transition-colors">
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button disabled={page >= totalPages - 1} onClick={() => setPage(page + 1)}
+            className="p-2 border border-white/10 rounded-lg text-white/50 hover:text-white hover:border-white/20 disabled:opacity-30 transition-colors">
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
-      )}
+      </div>
 
       {/* Modal */}
       {showModal && editingQ && (

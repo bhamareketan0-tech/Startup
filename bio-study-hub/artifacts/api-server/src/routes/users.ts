@@ -4,18 +4,51 @@ import { Attempt } from "../models/attempt";
 
 const router = Router();
 
-router.get("/users", async (req, res) => {
+function parsePaginationParams(query: Record<string, string>) {
+  const limitNum = Math.max(1, Math.min(200, parseInt(query.limit, 10) || 50));
+  let skip: number;
+  let pageNum: number;
+  if (query.skip !== undefined) {
+    skip = Math.max(0, parseInt(query.skip, 10) || 0);
+    pageNum = Math.floor(skip / limitNum) + 1;
+  } else {
+    pageNum = Math.max(1, parseInt(query.page, 10) || 1);
+    skip = (pageNum - 1) * limitNum;
+  }
+  return { pageNum, limitNum, skip };
+}
+
+router.get("/students", async (req, res) => {
   try {
-    const { class: cls, plan, limit = "50", skip = "0" } = req.query as Record<string, string>;
+    const { class: cls, plan } = req.query as Record<string, string>;
+    const { pageNum, limitNum, skip } = parsePaginationParams(req.query as Record<string, string>);
     const filter: Record<string, unknown> = {};
     if (cls) filter.class = cls;
     if (plan) filter.plan = plan;
     const total = await User.countDocuments(filter);
     const data = await User.find(filter)
       .sort({ createdAt: -1 })
-      .skip(Number(skip))
-      .limit(Number(limit));
-    res.json({ data: data.map((d) => d.toJSON()), total });
+      .skip(skip)
+      .limit(limitNum);
+    res.json({ data: data.map((d) => d.toJSON()), total, page: pageNum, limit: limitNum });
+  } catch (err: unknown) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+router.get("/users", async (req, res) => {
+  try {
+    const { class: cls, plan } = req.query as Record<string, string>;
+    const { pageNum, limitNum, skip } = parsePaginationParams(req.query as Record<string, string>);
+    const filter: Record<string, unknown> = {};
+    if (cls) filter.class = cls;
+    if (plan) filter.plan = plan;
+    const total = await User.countDocuments(filter);
+    const data = await User.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum);
+    res.json({ data: data.map((d) => d.toJSON()), total, page: pageNum, limit: limitNum });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }

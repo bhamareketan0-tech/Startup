@@ -32,7 +32,18 @@ router.get("/questions/counts", async (req, res) => {
 
 router.get("/questions", async (req, res) => {
   try {
-    const { class: cls, subunit, type, is_active, chapter, limit = "50", skip = "0", search, exclude } = req.query as Record<string, string>;
+    const { class: cls, subunit, type, is_active, chapter, search, exclude } = req.query as Record<string, string>;
+    const q = req.query as Record<string, string>;
+    const limitNum = Math.max(1, Math.min(200, parseInt(q.limit, 10) || 50));
+    let skip: number;
+    let pageNum: number;
+    if (q.skip !== undefined) {
+      skip = Math.max(0, parseInt(q.skip, 10) || 0);
+      pageNum = Math.floor(skip / limitNum) + 1;
+    } else {
+      pageNum = Math.max(1, parseInt(q.page, 10) || 1);
+      skip = (pageNum - 1) * limitNum;
+    }
     const filter: Record<string, unknown> = {};
     if (cls) filter.class = cls;
     if (subunit) filter.subunit = subunit;
@@ -48,10 +59,10 @@ router.get("/questions", async (req, res) => {
     const total = await Question.countDocuments(filter);
     const data = await Question.find(filter)
       .sort({ createdAt: -1 })
-      .skip(Number(skip))
-      .limit(Number(limit));
+      .skip(skip)
+      .limit(limitNum);
 
-    res.json({ data: data.map((d) => d.toJSON()), total });
+    res.json({ data: data.map((d) => d.toJSON()), total, page: pageNum, limit: limitNum });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }
