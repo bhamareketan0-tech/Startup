@@ -11,77 +11,83 @@ function readAccentRgb() {
 type Runner = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => () => void;
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   COSMOS — 3-layer parallax star field with shooting stars
+   COSMOS — warp-speed hyperspace: stars fly outward from center as streaks
 ───────────────────────────────────────────────────────────────────────────── */
 const runCosmos: Runner = (canvas, ctx) => {
   let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
 
-  type Star = { x: number; y: number; r: number; op: number; speed: number; twinkle: number; phase: number; layer: number };
-  const stars: Star[] = Array.from({ length: 320 }, (_, i) => ({
-    x: Math.random() * W,
-    y: Math.random() * H,
-    r: i < 200 ? Math.random() * 0.8 + 0.1 : i < 270 ? Math.random() * 1.2 + 0.5 : Math.random() * 1.8 + 1,
-    op: i < 200 ? Math.random() * 0.4 + 0.1 : i < 270 ? Math.random() * 0.5 + 0.25 : Math.random() * 0.6 + 0.4,
-    speed: i < 200 ? Math.random() * 0.06 + 0.01 : i < 270 ? Math.random() * 0.15 + 0.06 : Math.random() * 0.3 + 0.15,
-    twinkle: Math.random() * 0.008 + 0.002,
-    phase: Math.random() * Math.PI * 2,
-    layer: i < 200 ? 0 : i < 270 ? 1 : 2,
-  }));
+  type WarpStar = { angle: number; dist: number; speed: number; maxDist: number; width: number; bright: number };
+  const N = 280;
+  const mkStar = (): WarpStar => ({
+    angle: Math.random() * Math.PI * 2,
+    dist: Math.random() * 60 + 2,
+    speed: Math.random() * 3.5 + 1.2,
+    maxDist: Math.random() * 0.45 + 0.4,
+    width: Math.random() * 1.5 + 0.4,
+    bright: Math.random() * 0.5 + 0.5,
+  });
+  const stars: WarpStar[] = Array.from({ length: N }, mkStar);
 
-  type Shooter = { x: number; y: number; vx: number; vy: number; len: number; alpha: number; active: boolean; timer: number };
-  const shooter: Shooter = { x: 0, y: 0, vx: 0, vy: 0, len: 0, alpha: 0, active: false, timer: 0 };
-
-  let t = 0, raf = 0;
+  let raf = 0;
   const resize = () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
-
-  const spawnShooter = () => {
-    const angle = (Math.random() * 40 + 20) * Math.PI / 180;
-    const speed = Math.random() * 8 + 10;
-    shooter.x = Math.random() * W * 0.7;
-    shooter.y = Math.random() * H * 0.4;
-    shooter.vx = Math.cos(angle) * speed;
-    shooter.vy = Math.sin(angle) * speed;
-    shooter.len = Math.random() * 120 + 80;
-    shooter.alpha = 1;
-    shooter.active = true;
-  };
 
   const draw = () => {
     const a = readAccentRgb();
-    ctx.clearRect(0, 0, W, H);
-    t++;
+    const cx = W / 2, cy = H / 2;
+    const maxR = Math.sqrt(cx * cx + cy * cy);
 
-    if (!shooter.active) {
-      shooter.timer++;
-      if (shooter.timer > 300 + Math.random() * 400) { shooter.timer = 0; spawnShooter(); }
-    }
-    if (shooter.active) {
-      const tx = shooter.x - shooter.vx * (shooter.len / Math.hypot(shooter.vx, shooter.vy));
-      const ty = shooter.y - shooter.vy * (shooter.len / Math.hypot(shooter.vx, shooter.vy));
-      const grad = ctx.createLinearGradient(tx, ty, shooter.x, shooter.y);
-      grad.addColorStop(0, `rgba(${a.r},${a.g},${a.b},0)`);
-      grad.addColorStop(1, `rgba(${a.r},${a.g},${a.b},${(shooter.alpha * 0.9).toFixed(2)})`);
-      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(shooter.x, shooter.y);
-      ctx.strokeStyle = grad; ctx.lineWidth = 1.5; ctx.stroke();
-      shooter.x += shooter.vx; shooter.y += shooter.vy;
-      shooter.alpha -= 0.018;
-      if (shooter.alpha <= 0 || shooter.x > W + 50 || shooter.y > H + 50) shooter.active = false;
-    }
+    ctx.fillStyle = "rgba(0,0,0,0.18)";
+    ctx.fillRect(0, 0, W, H);
 
     for (const s of stars) {
-      s.y += s.speed;
-      if (s.y > H + 2) { s.y = -2; s.x = Math.random() * W; }
-      const tw = Math.sin(t * s.twinkle + s.phase) * 0.3 + 0.7;
+      const prevDist = s.dist;
+      s.dist += s.speed * (s.dist / 80);
+      if (s.dist > maxR * s.maxDist + 10) {
+        Object.assign(s, mkStar());
+        continue;
+      }
+
+      const x1 = cx + Math.cos(s.angle) * prevDist;
+      const y1 = cy + Math.sin(s.angle) * prevDist;
+      const x2 = cx + Math.cos(s.angle) * s.dist;
+      const y2 = cy + Math.sin(s.angle) * s.dist;
+
+      const progress = s.dist / (maxR * s.maxDist);
+      const alpha = Math.min(1, progress * 2.5) * s.bright;
+      const lineW = s.width * (0.3 + progress * 1.8);
+
+      const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+      grad.addColorStop(0, `rgba(${a.r},${a.g},${a.b},0)`);
+      grad.addColorStop(1, `rgba(${a.r},${a.g},${a.b},${alpha.toFixed(2)})`);
+
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${a.r},${a.g},${a.b},${(s.op * tw).toFixed(3)})`;
-      ctx.fill();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = lineW;
+      ctx.stroke();
+
+      if (progress > 0.6) {
+        const glow = ctx.createRadialGradient(x2, y2, 0, x2, y2, lineW * 3);
+        glow.addColorStop(0, `rgba(${a.r},${a.g},${a.b},${(alpha * 0.6).toFixed(2)})`);
+        glow.addColorStop(1, `rgba(${a.r},${a.g},${a.b},0)`);
+        ctx.beginPath(); ctx.arc(x2, y2, lineW * 3, 0, Math.PI * 2);
+        ctx.fillStyle = glow; ctx.fill();
+      }
     }
+
+    const center = ctx.createRadialGradient(cx, cy, 0, cx, cy, 120);
+    center.addColorStop(0, `rgba(${a.r},${a.g},${a.b},0.06)`);
+    center.addColorStop(1, `rgba(${a.r},${a.g},${a.b},0)`);
+    ctx.fillStyle = center; ctx.beginPath(); ctx.arc(cx, cy, 120, 0, Math.PI * 2); ctx.fill();
 
     raf = requestAnimationFrame(draw);
   };
-  resize(); draw(); window.addEventListener("resize", resize);
+  resize();
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+  draw();
+  window.addEventListener("resize", resize);
   return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
 };
 
