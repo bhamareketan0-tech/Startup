@@ -44,14 +44,17 @@ export function ThemePicker() {
   const isDark = COLOR_OPTIONS.find(c => c.id === colorScheme)?.dark ?? true;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-3">
+    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9999, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
       {open && (
         <div
           ref={panelRef}
-          className="mb-1 w-72 rounded-none border shadow-2xl overflow-hidden"
           style={{
+            width: 288,
+            marginBottom: 4,
+            overflow: "hidden",
             background: isDark ? "#0d0d0d" : "#ffffff",
-            borderColor: `${accent}30`,
+            border: `1px solid ${accent}30`,
+            boxShadow: "0 25px 50px rgba(0,0,0,0.8)",
             animation: "picker-in 0.15s ease-out",
           }}
         >
@@ -158,15 +161,23 @@ export function ThemePicker() {
       <button
         ref={btnRef}
         onClick={() => setOpen(v => !v)}
-        className="w-14 h-14 flex items-center justify-center shadow-2xl transition-all duration-200"
+        aria-label="Theme settings"
         style={{
+          width: 56,
+          height: 56,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
           background: open ? accent : `${accent}22`,
           border: `2px solid ${accent}`,
           color: open ? (isDark ? "#000" : "#fff") : accent,
           boxShadow: open ? `0 0 28px ${accent}66, 0 4px 20px rgba(0,0,0,0.5)` : `0 0 16px ${accent}33, 0 4px 16px rgba(0,0,0,0.4)`,
           transform: open ? "rotate(45deg)" : "none",
+          transition: "all 0.2s ease",
+          outline: "none",
+          padding: 0,
         }}
-        aria-label="Theme settings"
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square">
           <circle cx="12" cy="12" r="3" />
