@@ -66,7 +66,7 @@ export function LoginPage() {
   }
 
   function handleGoogleSignIn() {
-    window.location.href = "https://startup-85w8.onrender.com/auth/google";
+    window.location.href = "/auth/google";
   }
 
   const inputStyle = {
