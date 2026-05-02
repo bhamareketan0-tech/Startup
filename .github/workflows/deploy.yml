@@ -38,6 +38,7 @@ jobs:
         run: cd bio-study-hub/artifacts/biospark && pnpm exec vite build --config vite.config.ts
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL || 'https://startup-85w8.onrender.com' }}
+          VITE_GOOGLE_CLIENT_ID: 11610222602-2hjboqcbn10qvv85j47dhi0raib6pd31.apps.googleusercontent.com
           BASE_URL: ${{ vars.BASE_URL || '/Startup/' }}
 
       - name: Copy 404.html for SPA routing
