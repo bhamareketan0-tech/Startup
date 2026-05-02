@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth";
 import {
   ChevronRight, ChevronLeft, Clock, CheckCircle, XCircle,
   AlertCircle, ArrowLeft, BookOpen, List, Play, Lightbulb,
-  Trophy, RotateCcw, Target,
+  Trophy, RotateCcw, Target, Bookmark, BookmarkCheck, FileText, X as XIcon,
 } from "lucide-react";
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? "") + "/api";
@@ -547,6 +547,49 @@ export function PracticePage() {
   const [completionStats, setCompletionStats] = useState({ correct: 0, wrong: 0, skipped: 0, total: 0, timeTaken: 0 });
   const autosaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+  const [notePopupId, setNotePopupId] = useState<string | null>(null);
+  const [noteDraft, setNoteDraft] = useState("");
+  const [savedNotes, setSavedNotes] = useState<Record<string, string>>({});
+
+  const toggleBookmark = async (q: Question) => {
+    if (!user) return;
+    const id = q.id;
+    setBookmarkedIds((prev) => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id); else n.add(id);
+      return n;
+    });
+    await api.post("/bookmarks", {
+      question_id: id,
+      question_text: q.question,
+      chapter: q.chapter || chapterId,
+      subunit: q.subunit || decodedSubunit,
+      class: q.class || cls,
+      question_type: q.type,
+      difficulty: q.difficulty,
+    }).catch(() => {});
+  };
+
+  const openNote = (q: Question) => {
+    setNotePopupId(q.id);
+    setNoteDraft(savedNotes[q.id] || "");
+  };
+
+  const saveNote = async (q: Question) => {
+    if (!user) return;
+    const text = noteDraft;
+    setSavedNotes((prev) => ({ ...prev, [q.id]: text }));
+    setNotePopupId(null);
+    await api.put(`/notes/${q.id}`, {
+      note_text: text,
+      question_text: q.question,
+      chapter: q.chapter || chapterId,
+      subunit: q.subunit || decodedSubunit,
+      class: q.class || cls,
+    }).catch(() => {});
+  };
+
   const decodedSubunit = subunit ? decodeURIComponent(subunit) : "";
   const currentTypeObj = QUESTION_TYPES.find((t) => t.id === selectedType);
   const isStudyType = currentTypeObj?.isStudy ?? false;
@@ -810,6 +853,27 @@ export function PracticePage() {
                       </span>
                     </div>
                   )}
+                  {user && !isStudyType && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <button onClick={() => toggleBookmark(currentQ)} className="flex items-center gap-1.5 px-3 py-1.5 border text-xs font-black uppercase min-h-[36px] transition-all" style={{ borderColor: bookmarkedIds.has(currentQ.id) ? "#00FF9D" : "var(--bs-border-subtle)", color: bookmarkedIds.has(currentQ.id) ? "#00FF9D" : "var(--bs-text-muted)", background: bookmarkedIds.has(currentQ.id) ? "rgba(0,255,157,0.08)" : "transparent" }}>
+                        {bookmarkedIds.has(currentQ.id) ? <BookmarkCheck className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}
+                        {bookmarkedIds.has(currentQ.id) ? "Saved" : "Bookmark"}
+                      </button>
+                      <button onClick={() => openNote(currentQ)} className="flex items-center gap-1.5 px-3 py-1.5 border text-xs font-black uppercase min-h-[36px] transition-all" style={{ borderColor: savedNotes[currentQ.id] ? "#00FF9D" : "var(--bs-border-subtle)", color: savedNotes[currentQ.id] ? "#00FF9D" : "var(--bs-text-muted)", background: savedNotes[currentQ.id] ? "rgba(0,255,157,0.08)" : "transparent" }}>
+                        <FileText className="w-3.5 h-3.5" />{savedNotes[currentQ.id] ? "Edit Note" : "Add Note"}
+                      </button>
+                    </div>
+                  )}
+                  {notePopupId === currentQ.id && (
+                    <div className="border mb-4 p-4" style={{ background: "var(--bs-surface-2)", borderColor: "#00FF9D44" }}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-black uppercase" style={{ color: "#00FF9D" }}>My Note</span>
+                        <button onClick={() => setNotePopupId(null)} className="p-1" style={{ color: "var(--bs-text-muted)" }}><XIcon className="w-3.5 h-3.5" /></button>
+                      </div>
+                      <textarea value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)} placeholder="Write your note here..." className="w-full border p-2 text-sm font-mono bg-transparent outline-none resize-none" style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text)", minHeight: "80px" }} autoFocus />
+                      <button onClick={() => saveNote(currentQ)} className="mt-2 px-4 py-1.5 text-xs font-black uppercase" style={{ background: "#00FF9D", color: "black" }}>Save Note</button>
+                    </div>
+                  )}
                   {renderQuestionContent()}
                   {!isStudyType && submitted && currentQ.explanation && (
                     <div className="border border-l-4 p-4 mt-4" style={{ background: `color-mix(in srgb, var(--bs-accent-hex) 5%, transparent)`, borderColor: `color-mix(in srgb, var(--bs-accent-hex) 20%, transparent)`, borderLeftColor: "var(--bs-accent-hex)" }}>
@@ -981,7 +1045,29 @@ export function PracticePage() {
                       {currentQ.difficulty}
                     </span>
                   )}
+                  {user && !isStudyType && (
+                    <div className="ml-auto flex items-center gap-2">
+                      <button onClick={() => toggleBookmark(currentQ)} className="flex items-center gap-1.5 px-3 py-1.5 border text-xs font-black uppercase min-h-[36px] transition-all" style={{ borderColor: bookmarkedIds.has(currentQ.id) ? "#00FF9D" : "var(--bs-border-subtle)", color: bookmarkedIds.has(currentQ.id) ? "#00FF9D" : "var(--bs-text-muted)", background: bookmarkedIds.has(currentQ.id) ? "rgba(0,255,157,0.08)" : "transparent" }} title={bookmarkedIds.has(currentQ.id) ? "Remove bookmark" : "Bookmark this question"}>
+                        {bookmarkedIds.has(currentQ.id) ? <BookmarkCheck className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}
+                        {bookmarkedIds.has(currentQ.id) ? "Saved" : "Save"}
+                      </button>
+                      <button onClick={() => openNote(currentQ)} className="flex items-center gap-1.5 px-3 py-1.5 border text-xs font-black uppercase min-h-[36px] transition-all" style={{ borderColor: savedNotes[currentQ.id] ? "#00FF9D" : "var(--bs-border-subtle)", color: savedNotes[currentQ.id] ? "#00FF9D" : "var(--bs-text-muted)", background: savedNotes[currentQ.id] ? "rgba(0,255,157,0.08)" : "transparent" }} title="Add/edit note">
+                        <FileText className="w-3.5 h-3.5" />{savedNotes[currentQ.id] ? "Note ✓" : "Note"}
+                      </button>
+                    </div>
+                  )}
                 </div>
+
+                {notePopupId === currentQ.id && (
+                  <div className="border mb-4 p-4" style={{ background: "var(--bs-surface-2)", borderColor: "#00FF9D44" }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-black uppercase" style={{ color: "#00FF9D" }}>My Note for this Question</span>
+                      <button onClick={() => setNotePopupId(null)} className="p-1" style={{ color: "var(--bs-text-muted)" }}><XIcon className="w-3.5 h-3.5" /></button>
+                    </div>
+                    <textarea value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)} placeholder="Write your revision note here..." className="w-full border p-2 text-sm font-mono bg-transparent outline-none resize-none" style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text)", minHeight: "80px" }} autoFocus />
+                    <button onClick={() => saveNote(currentQ)} className="mt-2 px-4 py-1.5 text-xs font-black uppercase" style={{ background: "#00FF9D", color: "black" }}>Save Note</button>
+                  </div>
+                )}
 
                 {renderQuestionContent()}
 

@@ -20,6 +20,13 @@ const AdminPage = lazy(() => import("@/pages/AdminPage").then(m => ({ default: m
 const ProfilePage = lazy(() => import("@/pages/ProfilePage").then(m => ({ default: m.ProfilePage })));
 const MockTestPage = lazy(() => import("@/pages/MockTestPage").then(m => ({ default: m.MockTestPage })));
 const LeaderboardPage = lazy(() => import("@/pages/LeaderboardPage").then(m => ({ default: m.LeaderboardPage })));
+const BookmarksPage = lazy(() => import("@/pages/BookmarksPage").then(m => ({ default: m.BookmarksPage })));
+const NotesPage = lazy(() => import("@/pages/NotesPage").then(m => ({ default: m.NotesPage })));
+const CustomQuizPage = lazy(() => import("@/pages/CustomQuizPage").then(m => ({ default: m.CustomQuizPage })));
+const RevisionPage = lazy(() => import("@/pages/RevisionPage").then(m => ({ default: m.RevisionPage })));
+const DailyChallengePage = lazy(() => import("@/pages/DailyChallengePage").then(m => ({ default: m.DailyChallengePage })));
+const PerformancePage = lazy(() => import("@/pages/PerformancePage").then(m => ({ default: m.PerformancePage })));
+const SyllabusPage = lazy(() => import("@/pages/SyllabusPage").then(m => ({ default: m.SyllabusPage })));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Spinner() {
@@ -66,6 +73,13 @@ function AppRoutes() {
         <Route path="/practice/:cls/:chapterId/:subunit" element={<ProtectedRoute><PracticePage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Navbar /><ProfilePage /></ProtectedRoute>} />
         <Route path="/score" element={<ProtectedRoute><ScorePage /></ProtectedRoute>} />
+        <Route path="/bookmarks" element={<ProtectedRoute><Navbar /><BookmarksPage /></ProtectedRoute>} />
+        <Route path="/notes" element={<ProtectedRoute><Navbar /><NotesPage /></ProtectedRoute>} />
+        <Route path="/custom-quiz" element={<ProtectedRoute><Navbar /><CustomQuizPage /></ProtectedRoute>} />
+        <Route path="/revision" element={<ProtectedRoute><Navbar /><RevisionPage /></ProtectedRoute>} />
+        <Route path="/daily-challenge" element={<ProtectedRoute><Navbar /><DailyChallengePage /></ProtectedRoute>} />
+        <Route path="/performance" element={<ProtectedRoute><Navbar /><PerformancePage /></ProtectedRoute>} />
+        <Route path="/syllabus" element={<ProtectedRoute><Navbar /><SyllabusPage /></ProtectedRoute>} />
         <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>

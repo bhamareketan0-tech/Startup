@@ -3,38 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { api } from "@/lib/api";
 import {
-  BookOpen, Target, Clock, Trophy, ChevronRight, Zap, BarChart2,
-  FlaskConical, Flame, TrendingUp, Users, Brain, ArrowRight, CheckCircle,
-  Star, Activity,
+  BookOpen, Target, Clock, Trophy, Zap, BarChart2,
+  FlaskConical, Flame, TrendingUp, Users, Brain, ArrowRight,
+  Star, Activity, Bookmark, FileText, Sliders, RotateCcw, BookMarked,
 } from "lucide-react";
 
-interface StatsData {
-  totalQuestions: number;
-  totalStudents: number;
-  totalDiscussions: number;
-}
-
-interface Question {
-  id: string;
-  chapter: string;
-  type: string;
-  difficulty: string;
-  class: string;
-  created_at?: string;
-}
-
-interface ChapterStat {
-  name: string;
-  count: number;
-  cls: string;
-}
-
-const QUICK_ACTIONS = [
-  { label: "Practice Now", desc: "Chapter-wise MCQs", icon: BookOpen, to: "/class-select", color: "#00FF9D" },
-  { label: "Mock Test", desc: "Full timed test", icon: Clock, to: "/mock-test", color: "#00FF9D" },
-  { label: "Leaderboard", desc: "See your rank", icon: Trophy, to: "/leaderboard", color: "#ff4444" },
-  { label: "Community", desc: "Join discussions", icon: Users, to: "/community", color: "#00FF9D" },
-];
+interface StatsData { totalQuestions: number; totalStudents: number; totalDiscussions: number }
+interface Question { id: string; chapter: string; type: string; difficulty: string; class: string }
+interface ChapterStat { name: string; count: number; cls: string }
 
 export function DashboardPage() {
   const { user, profile } = useAuth();
@@ -44,6 +20,8 @@ export function DashboardPage() {
   const [chapterStats, setChapterStats] = useState<ChapterStat[]>([]);
   const [loading, setLoading] = useState(true);
   const [greeting, setGreeting] = useState("Hello");
+  const [streak, setStreak] = useState(0);
+  const [bookmarkCount, setBookmarkCount] = useState(0);
 
   useEffect(() => {
     const h = new Date().getHours();
@@ -55,24 +33,23 @@ export function DashboardPage() {
   useEffect(() => {
     async function load() {
       try {
-        const [statsRes, questionsRes] = await Promise.all([
+        const [statsRes, questionsRes, streakRes, bookmarksRes] = await Promise.all([
           api.get("/stats"),
           api.get("/questions", { limit: 100, is_active: true }),
+          api.get("/daily-challenge/streak").catch(() => ({ current: 0 })),
+          api.get("/bookmarks").catch(() => ({ data: [] })),
         ]);
 
         setStats(statsRes as StatsData);
+        setStreak((streakRes as { current: number }).current || 0);
+        setBookmarkCount(((bookmarksRes as { data: unknown[] }).data || []).length);
 
         const qs = (questionsRes as { questions?: Question[] }).questions || (questionsRes as Question[]) || [];
         setRecentQuestions((qs as Question[]).slice(0, 6));
 
         const chMap: Record<string, number> = {};
-        (qs as Question[]).forEach((q) => {
-          chMap[q.chapter] = (chMap[q.chapter] || 0) + 1;
-        });
-        const sorted = Object.entries(chMap)
-          .map(([name, count]) => ({ name, count, cls: "11" }))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 6);
+        (qs as Question[]).forEach((q) => { chMap[q.chapter] = (chMap[q.chapter] || 0) + 1; });
+        const sorted = Object.entries(chMap).map(([name, count]) => ({ name, count, cls: "11" })).sort((a, b) => b.count - a.count).slice(0, 6);
         setChapterStats(sorted);
       } catch {
         // fail silently
@@ -90,15 +67,20 @@ export function DashboardPage() {
   const totalQ = stats?.totalQuestions ?? 0;
   const maxChapter = chapterStats[0]?.count || 1;
 
+  const QUICK_ACTIONS = [
+    { label: "Practice", desc: "Chapter-wise MCQs", icon: BookOpen, to: "/class-select", color: "#00FF9D" },
+    { label: "Mock Test", desc: "Full timed test", icon: Clock, to: "/mock-test", color: "#00FF9D" },
+    { label: "Daily Challenge", desc: `Streak: ${streak}🔥`, icon: Flame, to: "/daily-challenge", color: "#ff4444" },
+    { label: "Custom Quiz", desc: "Build your quiz", icon: Sliders, to: "/custom-quiz", color: "#00FF9D" },
+    { label: "Revision", desc: "Wrong questions", icon: RotateCcw, to: "/revision", color: "#facc15" },
+    { label: "Bookmarks", desc: `${bookmarkCount} saved`, icon: Bookmark, to: "/bookmarks", color: "#00FF9D" },
+    { label: "My Notes", desc: "Revision notes", icon: FileText, to: "/notes", color: "#00FF9D" },
+    { label: "Syllabus", desc: "Track progress", icon: BookMarked, to: "/syllabus", color: "#00FF9D" },
+  ];
+
   return (
     <div className="min-h-screen font-['Space_Grotesk'] pt-24 pb-20 px-4 relative" style={{ background: "transparent", color: "var(--bs-text)" }}>
-
-      {/* Grid bg */}
-      <div className="fixed inset-0 pointer-events-none" style={{
-        backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`,
-        backgroundSize: "40px 40px",
-      }} />
-
+      <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(var(--bs-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--bs-grid-color) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
       <div className="relative z-10 max-w-6xl mx-auto space-y-8">
 
         {/* Welcome Banner */}
@@ -116,19 +98,22 @@ export function DashboardPage() {
                 {isPro && (
                   <span className="border px-2 py-0.5 font-black" style={{ borderColor: "#00FF9D", color: "#00FF9D", background: "color-mix(in srgb, #00FF9D 10%, transparent)" }}>⭐ Pro Pass</span>
                 )}
+                {streak > 0 && (
+                  <span className="border px-2 py-0.5 font-black" style={{ borderColor: "#ff444440", color: "#ff4444", background: "rgba(255,68,68,0.08)" }}>🔥 {streak} day streak</span>
+                )}
                 <span>Score: <strong style={{ color: "var(--bs-text)" }}>{userScore.toFixed(0)}</strong></span>
               </div>
             </div>
-            <div className="flex items-center gap-4 shrink-0">
+            <div className="flex items-center gap-3 shrink-0 flex-wrap">
               <Link to="/class-select" className="group relative">
                 <div className="absolute inset-0 transform -skew-x-12 translate-x-1.5 translate-y-1.5 opacity-30 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform" style={{ background: "var(--bs-accent-hex)" }} />
                 <div className="relative flex items-center gap-2 px-6 py-3 font-black uppercase tracking-widest text-sm transform -skew-x-12" style={{ background: "var(--bs-accent-hex)", color: "black" }}>
                   <span className="transform skew-x-12 inline-flex items-center gap-2"><Zap className="w-4 h-4" /> Practice</span>
                 </div>
               </Link>
-              <Link to="/mock-test" className="flex items-center gap-2 px-6 py-3 border font-black uppercase tracking-widest text-sm transform -skew-x-12 transition-all"
+              <Link to="/performance" className="flex items-center gap-2 px-5 py-3 border font-black uppercase tracking-widest text-sm transform -skew-x-12 transition-all"
                 style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}>
-                <span className="transform skew-x-12 inline-flex items-center gap-2"><Clock className="w-4 h-4" /> Mock</span>
+                <span className="transform skew-x-12 inline-flex items-center gap-2"><BarChart2 className="w-4 h-4" /> Stats</span>
               </Link>
             </div>
           </div>
@@ -139,8 +124,8 @@ export function DashboardPage() {
           {[
             { label: "Total Questions", value: loading ? "…" : totalQ.toLocaleString() + "+", icon: BookOpen, color: "#00FF9D", sub: "In question bank" },
             { label: "Your Score", value: userScore.toFixed(0), icon: Star, color: "#00FF9D", sub: "Cumulative points" },
-            { label: "Your Class", value: `Class ${userClass}`, icon: Brain, color: "#00FF9D", sub: "Current level" },
-            { label: "Chapters", value: "38", icon: FlaskConical, color: "#00FF9D", sub: "Full syllabus" },
+            { label: "Daily Streak", value: streak > 0 ? `${streak}🔥` : "0", icon: Flame, color: "#ff4444", sub: "Days in a row" },
+            { label: "Bookmarks", value: bookmarkCount.toString(), icon: Bookmark, color: "#00FF9D", sub: "Saved questions" },
           ].map((stat) => (
             <div key={stat.label} className="border p-6 relative group overflow-hidden transition-all hover:scale-[1.01]"
               style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
@@ -158,15 +143,15 @@ export function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {QUICK_ACTIONS.map((action) => (
               <Link key={action.label} to={action.to}
-                className="border p-6 flex flex-col gap-4 group transition-all hover:scale-[1.02] hover:shadow-lg"
+                className="border p-5 flex flex-col gap-3 group transition-all hover:scale-[1.02] hover:shadow-lg relative overflow-hidden"
                 style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 border flex items-center justify-center transform -skew-x-12 transition-all"
+                <div className="absolute top-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500" style={{ background: action.color }} />
+                <div className="w-10 h-10 border flex items-center justify-center transform -skew-x-12 transition-all"
                   style={{ background: `color-mix(in srgb, ${action.color} 12%, transparent)`, borderColor: `color-mix(in srgb, ${action.color} 30%, transparent)` }}>
-                  <action.icon className="w-6 h-6 transform skew-x-12" style={{ color: action.color }} />
+                  <action.icon className="w-5 h-5 transform skew-x-12" style={{ color: action.color }} />
                 </div>
                 <div>
-                  <div className="font-black uppercase text-sm tracking-tight mb-1" style={{ color: "var(--bs-text)" }}>{action.label}</div>
+                  <div className="font-black uppercase text-sm tracking-tight mb-0.5" style={{ color: "var(--bs-text)" }}>{action.label}</div>
                   <div className="text-xs font-mono" style={{ color: "var(--bs-text-muted)" }}>{action.desc}</div>
                 </div>
                 <ArrowRight className="w-4 h-4 self-end opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: action.color }} />
@@ -177,25 +162,19 @@ export function DashboardPage() {
 
         {/* Content grid */}
         <div className="grid md:grid-cols-2 gap-6">
-
           {/* Chapter Distribution */}
           <div className="border p-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
                 <BarChart2 className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} />
-                <h3 className="font-black uppercase tracking-tight text-sm" style={{ color: "var(--bs-text)" }}>Top Chapters</h3>
+                <h3 className="font-black uppercase tracking-tight text-sm">Top Chapters</h3>
               </div>
-              <Link to="/class-select" className="text-xs font-mono uppercase tracking-wide flex items-center gap-1 transition-colors"
-                style={{ color: "var(--bs-accent-hex)" }}>
-                All Chapters <ArrowRight className="w-3 h-3" />
+              <Link to="/class-select" className="text-xs font-mono uppercase tracking-wide flex items-center gap-1" style={{ color: "var(--bs-accent-hex)" }}>
+                All <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             {loading ? (
-              <div className="space-y-3">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-8 animate-pulse rounded" style={{ background: "var(--bs-surface-2)" }} />
-                ))}
-              </div>
+              <div className="space-y-3">{[...Array(5)].map((_, i) => <div key={i} className="h-8 animate-pulse rounded" style={{ background: "var(--bs-surface-2)" }} />)}</div>
             ) : chapterStats.length === 0 ? (
               <div className="text-center py-8">
                 <Brain className="w-10 h-10 mx-auto mb-3 opacity-30" style={{ color: "var(--bs-text-muted)" }} />
@@ -205,16 +184,14 @@ export function DashboardPage() {
               <div className="space-y-3">
                 {chapterStats.map((ch, i) => {
                   const pct = (ch.count / maxChapter) * 100;
-                  const colors = ["#00FF9D", "#00FF9D", "#ff4444", "#00FF9D", "#00FF9D", "#00FF9D"];
-                  const color = colors[i % colors.length];
                   return (
                     <div key={ch.name}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-mono truncate max-w-[200px]" style={{ color: "var(--bs-text-muted)" }} title={ch.name}>{ch.name}</span>
-                        <span className="text-xs font-black ml-2 shrink-0" style={{ color }}>{ch.count}q</span>
+                        <span className="text-xs font-mono truncate max-w-[200px]" style={{ color: "var(--bs-text-muted)" }}>{ch.name}</span>
+                        <span className="text-xs font-black ml-2 shrink-0" style={{ color: "#00FF9D" }}>{ch.count}q</span>
                       </div>
                       <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
-                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${pct}%`, background: color }} />
+                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${pct}%`, background: "#00FF9D" }} />
                       </div>
                     </div>
                   );
@@ -223,23 +200,19 @@ export function DashboardPage() {
             )}
           </div>
 
-          {/* Recent Questions Preview */}
+          {/* Recent Questions */}
           <div className="border p-6" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
                 <Activity className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} />
-                <h3 className="font-black uppercase tracking-tight text-sm" style={{ color: "var(--bs-text)" }}>Recent Questions</h3>
+                <h3 className="font-black uppercase tracking-tight text-sm">Recent Questions</h3>
               </div>
               <Link to="/class-select" className="text-xs font-mono uppercase tracking-wide flex items-center gap-1" style={{ color: "var(--bs-accent-hex)" }}>
                 Practice <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             {loading ? (
-              <div className="space-y-3">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-12 animate-pulse rounded" style={{ background: "var(--bs-surface-2)" }} />
-                ))}
-              </div>
+              <div className="space-y-3">{[...Array(5)].map((_, i) => <div key={i} className="h-12 animate-pulse rounded" style={{ background: "var(--bs-surface-2)" }} />)}</div>
             ) : recentQuestions.length === 0 ? (
               <div className="text-center py-8">
                 <BookOpen className="w-10 h-10 mx-auto mb-3 opacity-30" style={{ color: "var(--bs-text-muted)" }} />
@@ -248,18 +221,13 @@ export function DashboardPage() {
             ) : (
               <div className="space-y-2">
                 {recentQuestions.map((q, i) => {
-                  const typeColors: Record<string, string> = {
-                    mcq: "#00FF9D", assertion: "#ff4444", match: "#00FF9D",
-                    statements: "#00FF9D", truefalse: "#00FF9D", fillblanks: "#00FF9D",
-                  };
+                  const typeColors: Record<string, string> = { mcq: "#00FF9D", assertion: "#ff4444", match: "#00FF9D", statements: "#00FF9D", truefalse: "#00FF9D", fillblanks: "#00FF9D" };
                   const color = typeColors[q.type] ?? "#00FF9D";
                   return (
                     <div key={q.id || i} className="flex items-center gap-3 border p-3 text-xs group transition-all hover:scale-[1.01] cursor-pointer"
                       style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}
                       onClick={() => navigate("/class-select")}>
-                      <span className="border px-2 py-0.5 font-black uppercase shrink-0" style={{ borderColor: `${color}40`, color, background: `color-mix(in srgb, ${color} 10%, transparent)` }}>
-                        {q.type || "MCQ"}
-                      </span>
+                      <span className="border px-2 py-0.5 font-black uppercase shrink-0" style={{ borderColor: `${color}40`, color, background: `color-mix(in srgb, ${color} 10%, transparent)` }}>{q.type || "MCQ"}</span>
                       <span className="font-mono truncate flex-1" style={{ color: "var(--bs-text-muted)" }}>{q.chapter}</span>
                       <span className="shrink-0 font-mono text-[10px] uppercase" style={{ color: "var(--bs-text-muted)" }}>Cl {q.class}</span>
                     </div>
@@ -270,19 +238,19 @@ export function DashboardPage() {
           </div>
         </div>
 
-        {/* Study Tips */}
+        {/* Study Strategy */}
         <div className="border p-8 relative overflow-hidden" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
           <div className="absolute top-0 right-0 w-64 h-64 opacity-5 -translate-y-1/2 translate-x-1/2">
             <FlaskConical className="w-full h-full" style={{ color: "var(--bs-accent-hex)" }} />
           </div>
-          <h3 className="font-black uppercase tracking-tight text-lg mb-6 flex items-center gap-2" style={{ color: "var(--bs-text)" }}>
+          <h3 className="font-black uppercase tracking-tight text-lg mb-6 flex items-center gap-2">
             <TrendingUp className="w-5 h-5" style={{ color: "var(--bs-accent-hex)" }} /> Study Strategy
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { icon: "🎯", tip: "Chapter Focus", desc: `Start with Class ${userClass} chapters you find hardest. Repeated practice builds confidence.` },
               { icon: "⏱️", tip: "Time Yourself", desc: "Take mock tests under timed conditions. NEET gives ~1 min per question. Train your speed." },
-              { icon: "📊", tip: "Analyse Weak Areas", desc: "After each test review wrong answers. Understanding mistakes is the fastest path to improvement." },
+              { icon: "📊", tip: "Analyse Weak Areas", desc: "Use the Revision Mode to target questions you got wrong. Check Performance Stats daily." },
             ].map((t) => (
               <div key={t.tip} className="flex gap-4">
                 <span className="text-2xl shrink-0">{t.icon}</span>

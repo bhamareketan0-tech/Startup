@@ -11,6 +11,13 @@ import pdfExtractRouter from "./pdfExtract";
 import chaptersRouter from "./chapters";
 import appSettingsRouter from "./appSettings";
 import seenQuestionsRouter from "./seenQuestions";
+import bookmarksRouter from "./bookmarks";
+import notesRouter from "./notes";
+import questionAttemptsRouter from "./questionAttempts";
+import dailyChallengeRouter from "./dailyChallenge";
+import performanceRouter from "./performance";
+import syllabusProgressRouter from "./syllabusProgress";
+import customQuizRouter from "./customQuiz";
 
 const router: IRouter = Router();
 
@@ -26,5 +33,12 @@ router.use(pdfExtractRouter);
 router.use(chaptersRouter);
 router.use(appSettingsRouter);
 router.use(seenQuestionsRouter);
+router.use(bookmarksRouter);
+router.use(notesRouter);
+router.use(questionAttemptsRouter);
+router.use(dailyChallengeRouter);
+router.use(performanceRouter);
+router.use(syllabusProgressRouter);
+router.use(customQuizRouter);
 
 export default router;

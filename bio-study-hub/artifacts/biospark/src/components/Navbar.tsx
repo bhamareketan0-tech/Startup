@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/ThemeContext";
-import { Sun, Moon, Menu, X, Zap, LogOut, User, Shield, Trophy, Clock, BarChart2, ChevronDown } from "lucide-react";
+import { Sun, Moon, Menu, X, Zap, LogOut, User, Shield, Trophy, Clock, BarChart2, Flame, Bookmark, FileText, Sliders, RotateCcw, BookOpen, ChevronDown } from "lucide-react";
 import { ADMIN_EMAIL } from "@/lib/constants";
 
 export function Navbar() {
   const { user, profile, signOut } = useAuth();
   const { mode, setMode } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const location = useLocation();
 
   const isAdmin = user?.email === ADMIN_EMAIL;
@@ -21,23 +22,32 @@ export function Navbar() {
     { to: "/plans", label: "PRO PASS" },
   ];
 
-  const authLinks = [
+  const primaryAuthLinks = [
     { to: "/dashboard", label: "DASHBOARD", icon: BarChart2 },
     { to: "/class-select", label: "PRACTICE", icon: null },
     { to: "/mock-test", label: "MOCK TEST", icon: Clock },
-    { to: "/community", label: "ARENA", icon: null },
-    { to: "/leaderboard", label: "RANKS", icon: Trophy },
+    { to: "/daily-challenge", label: "DAILY", icon: Flame },
+    { to: "/performance", label: "STATS", icon: BarChart2 },
   ];
 
-  const links = user ? authLinks : publicLinks;
+  const moreLinks = [
+    { to: "/custom-quiz", label: "Custom Quiz", icon: Sliders },
+    { to: "/revision", label: "Revision", icon: RotateCcw },
+    { to: "/bookmarks", label: "Bookmarks", icon: Bookmark },
+    { to: "/notes", label: "My Notes", icon: FileText },
+    { to: "/syllabus", label: "Syllabus", icon: BookOpen },
+    { to: "/leaderboard", label: "Ranks", icon: Trophy },
+    { to: "/community", label: "Arena", icon: null },
+  ];
+
+  const links = user ? primaryAuthLinks : publicLinks;
+
+  const isActive = (to: string) => location.pathname === to;
 
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 border-b uppercase font-black tracking-wider font-['Space_Grotesk'] transition-colors duration-300 backdrop-blur-md"
-      style={{
-        borderColor: "var(--bs-border-subtle)",
-        background: isDark ? "rgba(0,0,0,0.92)" : `color-mix(in srgb, var(--bs-bg) 92%, transparent)`,
-      }}
+      style={{ borderColor: "var(--bs-border-subtle)", background: isDark ? "rgba(0,0,0,0.92)" : `color-mix(in srgb, var(--bs-bg) 92%, transparent)` }}
     >
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -53,20 +63,41 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav links */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-5">
             {links.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
+              <Link key={link.to} to={link.to}
                 className="text-sm transition-all relative py-2 min-h-[44px] flex items-center"
-                style={{ color: location.pathname === link.to ? "#00FF9D" : "var(--bs-text-muted)" }}
-              >
+                style={{ color: isActive(link.to) ? "#00FF9D" : "var(--bs-text-muted)" }}>
                 {link.label}
-                {location.pathname === link.to && (
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 transform -skew-x-12" style={{ background: "#00FF9D" }} />
-                )}
+                {isActive(link.to) && <div className="absolute bottom-0 left-0 w-full h-0.5 transform -skew-x-12" style={{ background: "#00FF9D" }} />}
               </Link>
             ))}
+
+            {user && (
+              <div className="relative">
+                <button
+                  onClick={() => setMoreOpen((o) => !o)}
+                  className="text-sm flex items-center gap-1 py-2 min-h-[44px] transition-all"
+                  style={{ color: moreOpen ? "#00FF9D" : "var(--bs-text-muted)" }}
+                >
+                  MORE <ChevronDown className={`w-3 h-3 transition-transform ${moreOpen ? "rotate-180" : ""}`} />
+                </button>
+                {moreOpen && (
+                  <div className="absolute top-full right-0 w-48 border shadow-xl z-50" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}
+                    onMouseLeave={() => setMoreOpen(false)}>
+                    {moreLinks.map((l) => (
+                      <Link key={l.to} to={l.to} onClick={() => setMoreOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm font-black uppercase transition-all min-h-[44px]"
+                        style={{ color: isActive(l.to) ? "#00FF9D" : "var(--bs-text-muted)", background: isActive(l.to) ? "rgba(0,255,157,0.06)" : "transparent" }}>
+                        {l.icon && <l.icon className="w-4 h-4" />}
+                        {l.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {isAdmin && (
               <Link to="/admin" className="text-sm flex items-center gap-1 min-h-[44px]" style={{ color: "#00FF9D" }}>
                 <Shield className="w-4 h-4" /> ADMIN
@@ -97,7 +128,6 @@ export function Navbar() {
                   <span className="text-sm font-bold uppercase" style={{ color: "var(--bs-text-muted)" }}>
                     {profile?.name?.split(" ")[0] || user.email?.split("@")[0]}
                   </span>
-                  <ChevronDown className="w-3 h-3" style={{ color: "var(--bs-text-muted)" }} />
                 </Link>
                 <button
                   onClick={signOut}
@@ -134,18 +164,27 @@ export function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden border-b" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-          <div className="px-4 py-4 flex flex-col gap-2">
+          <div className="px-4 py-4 flex flex-col gap-1">
             {links.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMenuOpen(false)}
+              <Link key={link.to} to={link.to} onClick={() => setMenuOpen(false)}
                 className="text-base font-bold py-3 min-h-[44px] flex items-center"
-                style={{ color: location.pathname === link.to ? "#00FF9D" : "var(--bs-text-muted)" }}
-              >
+                style={{ color: isActive(link.to) ? "#00FF9D" : "var(--bs-text-muted)" }}>
                 {link.label}
               </Link>
             ))}
+            {user && (
+              <>
+                <div className="h-px my-1" style={{ background: "var(--bs-border-subtle)" }} />
+                {moreLinks.map((l) => (
+                  <Link key={l.to} to={l.to} onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-3 py-3 min-h-[44px] font-bold text-sm"
+                    style={{ color: isActive(l.to) ? "#00FF9D" : "var(--bs-text-muted)" }}>
+                    {l.icon && <l.icon className="w-4 h-4" />}
+                    {l.label}
+                  </Link>
+                ))}
+              </>
+            )}
             {isAdmin && (
               <Link to="/admin" onClick={() => setMenuOpen(false)} className="font-bold flex items-center gap-1 min-h-[44px] py-3" style={{ color: "#00FF9D" }}>
                 <Shield className="w-4 h-4" /> ADMIN
@@ -158,11 +197,7 @@ export function Navbar() {
                   <User className="w-4 h-4" style={{ color: "#00FF9D" }} />
                   {profile?.name?.split(" ")[0] || user.email?.split("@")[0]} — Profile
                 </Link>
-                <button
-                  onClick={() => { signOut(); setMenuOpen(false); }}
-                  className="text-left font-bold py-3 uppercase min-h-[44px] flex items-center"
-                  style={{ color: "#ff4444" }}
-                >
+                <button onClick={() => { signOut(); setMenuOpen(false); }} className="text-left font-bold py-3 uppercase min-h-[44px] flex items-center" style={{ color: "#ff4444" }}>
                   Sign Out
                 </button>
               </>

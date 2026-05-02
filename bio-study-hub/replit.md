@@ -53,7 +53,7 @@ bio-study-hub/
 
 ## Features
 
-- 38 chapters for Class 11 & 12 (loaded from MongoDB, falls back to static defaults)
+- 38 chapters for Class 11 & 12 seeded in MongoDB (15 + 16 chapters via `seed-chapters.ts`)
 - 10 question types: paragraph, pointer_notes, mcq, assertion, statements, truefalse, fillblanks, match, diagram, table_based
 - 30-minute countdown timer + scoring
 - Score page with breakdown + attempt logging to MongoDB
@@ -65,6 +65,18 @@ bio-study-hub/
   - Students panel
   - Settings panel (API keys, CORS, deployment config → MongoDB)
   - Passages manager
+
+### Prompt 4 — Student Features (8 features)
+
+- **Bookmarks** (`/bookmarks`) — Save/toggle questions from PracticePage; list with search + chapter filter; delete
+- **Notes** (`/notes`) — Per-question notes from PracticePage; list with search, edit, delete, chapter filter
+- **Custom Quiz** (`/custom-quiz`) — 5-step builder (class → chapter → type → difficulty → count/time); inline quiz + result screen
+- **Revision Mode** (`/revision`) — Re-attempts wrong questions (3 consecutive correct = mastered); progress ring
+- **Daily Challenge** (`/daily-challenge`) — Fixed 10-question set per IST day; timer; score/leaderboard; streak tracking
+- **Performance Dashboard** (`/performance`) — Accuracy/score/time charts (Recharts); per-chapter breakdown; weak chapter heatmap; streak calendar
+- **Syllabus Tracker** (`/syllabus`) — Toggle chapter completion (Class 11/12); progress bar per class; persisted to MongoDB
+- **Study Streak Calendar** — Integrated in PerformancePage; GitHub-style activity grid
+- **Bookmark/Note toolbar** — Inline Bookmark + Add Note buttons in both mobile and desktop PracticePage views
 
 ## API Routes (prefix: `/api`)
 

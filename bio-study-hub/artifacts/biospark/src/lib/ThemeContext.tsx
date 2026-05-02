@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect } from "react";
 
-export type ThemeMode = "dark";
+export type ThemeMode = "dark" | "light";
 export type BgAnimName = "cosmos";
 
 export interface ThemeContextValue {
