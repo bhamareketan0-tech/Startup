@@ -9,16 +9,19 @@ import {
 } from "lucide-react";
 
 const QUESTION_TYPES = [
-  { id: "paragraph", label: "Paragraph" },
-  { id: "pointer_notes", label: "Pointer Notes" },
-  { id: "mcq", label: "Standard MCQ" },
-  { id: "assertion", label: "Assertion Reason" },
-  { id: "statements", label: "No. of Correct Statements" },
-  { id: "truefalse", label: "True / False" },
-  { id: "fillblanks", label: "Fill in the Blanks" },
-  { id: "match", label: "Match the Column" },
-  { id: "diagram", label: "Diagram Based" },
-  { id: "table_based", label: "Table Based" },
+  { id: "video",        label: "Video",                     isStudy: true  },
+  { id: "paragraph",    label: "Paragraph",                 isStudy: true  },
+  { id: "pointer_notes",label: "Pointer Notes",             isStudy: true  },
+  { id: "tricks",       label: "Tricks & Mnemonics",        isStudy: true  },
+  { id: "mcq",          label: "Standard MCQ",              isStudy: false },
+  { id: "assertion",    label: "Assertion Reason",          isStudy: false },
+  { id: "statements",   label: "No. of Correct Statements", isStudy: false },
+  { id: "truefalse",    label: "True / False",              isStudy: false },
+  { id: "fillblanks",   label: "Fill in the Blanks",        isStudy: false },
+  { id: "match",        label: "Match the Column",          isStudy: false },
+  { id: "diagram",      label: "Diagram Based",             isStudy: false },
+  { id: "table_based",  label: "Table Based",               isStudy: false },
+  { id: "pyq",          label: "Prev Year Questions",       isStudy: false },
 ];
 
 const DIFFICULTIES = ["easy", "medium", "hard"];
@@ -613,18 +616,110 @@ function ImageMCQForm({ editingQ, setEditingQ, typeLabel }: { editingQ: Partial<
   );
 }
 
+function VideoForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; setEditingQ: (q: Partial<Question>) => void }) {
+  const meta = (editingQ.meta as Record<string, unknown>) || {};
+  const setMeta = (next: Record<string, unknown>) => setEditingQ({ ...editingQ, meta: next });
+  return (
+    <>
+      <div className="col-span-2">
+        <label className={labelCls}>Topic / Title *</label>
+        <input value={editingQ.question || ""} onChange={(e) => setEditingQ({ ...editingQ, question: e.target.value })}
+          placeholder="e.g. Mitosis — Stage-by-Stage Explanation" className={inputCls} />
+      </div>
+      <div className="col-span-2">
+        <label className={labelCls}>YouTube / Video URL *</label>
+        <input value={(meta.videoUrl as string) || ""} onChange={(e) => setMeta({ ...meta, videoUrl: e.target.value })}
+          placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..." className={inputCls} />
+        <p className="text-xs text-white/30 mt-1">Paste a YouTube link or direct embed URL. Supports youtu.be short links too.</p>
+      </div>
+      <div className="col-span-2">
+        <label className={labelCls}>Notes / Summary (shown below video)</label>
+        <textarea value={editingQ.explanation || ""} onChange={(e) => setEditingQ({ ...editingQ, explanation: e.target.value })}
+          rows={3} placeholder="Key points covered in this video..." className={textareaCls} />
+      </div>
+    </>
+  );
+}
+
+function TricksForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; setEditingQ: (q: Partial<Question>) => void }) {
+  const meta = (editingQ.meta as Record<string, unknown>) || {};
+  const tricks = (meta.tricks as string[]) || [];
+  const setMeta = (next: Record<string, unknown>) => setEditingQ({ ...editingQ, meta: next });
+  return (
+    <>
+      <div className="col-span-2">
+        <label className={labelCls}>Topic / What to Remember *</label>
+        <input value={editingQ.question || ""} onChange={(e) => setEditingQ({ ...editingQ, question: e.target.value })}
+          placeholder="e.g. Order of Mitosis Phases" className={inputCls} />
+      </div>
+      <div className="col-span-2">
+        <label className={labelCls}>Acronym / Short Form (optional)</label>
+        <input value={(meta.acronym as string) || ""} onChange={(e) => setMeta({ ...meta, acronym: e.target.value })}
+          placeholder="e.g. PMAT — Prophase, Metaphase, Anaphase, Telophase" className={inputCls} />
+      </div>
+      <DynamicList
+        label="Tricks / Mnemonics (each line = one trick)"
+        items={tricks}
+        onChange={(items) => setMeta({ ...meta, tricks: items })}
+        placeholder="e.g. 💡 Remember: Prophase looks like 'P for Prepare' — cell prepares to divide"
+        maxItems={10}
+      />
+    </>
+  );
+}
+
+function PYQForm({ editingQ, setEditingQ }: { editingQ: Partial<Question>; setEditingQ: (q: Partial<Question>) => void }) {
+  const meta = (editingQ.meta as Record<string, unknown>) || {};
+  const setMeta = (next: Record<string, unknown>) => setEditingQ({ ...editingQ, meta: next });
+  return (
+    <>
+      <div>
+        <label className={labelCls}>NEET Year *</label>
+        <input value={(meta.year as string) || ""} onChange={(e) => setMeta({ ...meta, year: e.target.value })}
+          placeholder="e.g. 2023" className={inputCls} />
+        <p className="text-xs text-white/30 mt-1">Displayed as a "NEET 2023" badge on the question.</p>
+      </div>
+      <div>
+        <label className={labelCls}>Exam (optional)</label>
+        <input value={(meta.exam as string) || ""} onChange={(e) => setMeta({ ...meta, exam: e.target.value })}
+          placeholder="e.g. NEET UG or AIIMS" className={inputCls} />
+      </div>
+      <div className="col-span-2">
+        <label className={labelCls}>Question *</label>
+        <textarea value={editingQ.question || ""} onChange={(e) => setEditingQ({ ...editingQ, question: e.target.value })}
+          rows={4} placeholder="Paste the original PYQ question text..." className={textareaCls} />
+      </div>
+      <div><label className={labelCls}>Option A *</label><input value={editingQ.option1 || ""} onChange={(e) => setEditingQ({ ...editingQ, option1: e.target.value })} className={inputCls} /></div>
+      <div><label className={labelCls}>Option B *</label><input value={editingQ.option2 || ""} onChange={(e) => setEditingQ({ ...editingQ, option2: e.target.value })} className={inputCls} /></div>
+      <div><label className={labelCls}>Option C *</label><input value={editingQ.option3 || ""} onChange={(e) => setEditingQ({ ...editingQ, option3: e.target.value })} className={inputCls} /></div>
+      <div><label className={labelCls}>Option D *</label><input value={editingQ.option4 || ""} onChange={(e) => setEditingQ({ ...editingQ, option4: e.target.value })} className={inputCls} /></div>
+      <div>
+        <label className={labelCls}>Correct Answer *</label>
+        <select value={editingQ.correct || "option1"} onChange={(e) => setEditingQ({ ...editingQ, correct: e.target.value })} className={selectCls}>
+          <option value="option1">Option A</option><option value="option2">Option B</option>
+          <option value="option3">Option C</option><option value="option4">Option D</option>
+        </select>
+      </div>
+      <div className="col-span-2"><label className={labelCls}>Explanation</label><textarea value={editingQ.explanation || ""} onChange={(e) => setEditingQ({ ...editingQ, explanation: e.target.value })} rows={3} className={textareaCls} placeholder="Official explanation or solution..." /></div>
+    </>
+  );
+}
+
 function QuestionFormFields({ editingQ, setEditingQ }: { editingQ: Partial<Question>; setEditingQ: (q: Partial<Question>) => void }) {
   switch (editingQ.type) {
-    case "paragraph": return <ParagraphForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "pointer_notes": return <PointerNotesForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "assertion": return <AssertionForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "statements": return <StatementsForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "truefalse": return <TrueFalseForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "fillblanks": return <FillBlanksForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "match": return <MatchForm editingQ={editingQ} setEditingQ={setEditingQ} />;
-    case "diagram": return <ImageMCQForm editingQ={editingQ} setEditingQ={setEditingQ} typeLabel="Diagram" />;
-    case "table_based": return <ImageMCQForm editingQ={editingQ} setEditingQ={setEditingQ} typeLabel="Table" />;
-    default: return <StandardMCQForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "video":        return <VideoForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "paragraph":    return <ParagraphForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "pointer_notes":return <PointerNotesForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "tricks":       return <TricksForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "assertion":    return <AssertionForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "statements":   return <StatementsForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "truefalse":    return <TrueFalseForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "fillblanks":   return <FillBlanksForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "match":        return <MatchForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    case "diagram":      return <ImageMCQForm editingQ={editingQ} setEditingQ={setEditingQ} typeLabel="Diagram" />;
+    case "table_based":  return <ImageMCQForm editingQ={editingQ} setEditingQ={setEditingQ} typeLabel="Table" />;
+    case "pyq":          return <PYQForm editingQ={editingQ} setEditingQ={setEditingQ} />;
+    default:             return <StandardMCQForm editingQ={editingQ} setEditingQ={setEditingQ} />;
   }
 }
 
@@ -755,6 +850,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
           <option value="">All Classes</option>
           <option value="11">Class 11</option>
           <option value="12">Class 12</option>
+          <option value="dropper">Dropper</option>
         </select>
         <select value={filterDifficulty} onChange={(e) => { setFilterDifficulty(e.target.value); setPage(0); }}
           className="bg-[#0d1b2a] border border-white/10 rounded-xl px-3 py-2 text-white/70 text-sm focus:outline-none focus:border-[#00ffb3]/50">
@@ -888,6 +984,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
                   <select value={editingQ.class || "11"} onChange={(e) => setEditingQ({ ...editingQ, class: e.target.value, chapter: "", subunit: "" })} className={selectCls}>
                     <option value="11">Class 11</option>
                     <option value="12">Class 12</option>
+                    <option value="dropper">Dropper</option>
                   </select>
                 </div>
                 <div>
@@ -901,7 +998,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
               </div>
 
               {(() => {
-                const chapterList = getChapters((editingQ.class as "11" | "12") || "11");
+                const chapterList = getChapters(editingQ.class || "11");
                 const selectedChapter = chapterList.find((c) => c.id === editingQ.chapter);
                 const subunitList = selectedChapter?.subunits ?? [];
                 return (

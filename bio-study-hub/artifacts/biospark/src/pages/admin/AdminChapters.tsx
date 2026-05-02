@@ -24,7 +24,7 @@ function slugifyNew(name: string, existing: Chapter[]): string {
 }
 
 export function AdminChapters() {
-  const [cls, setCls] = useState<"11" | "12">("11");
+  const [cls, setCls] = useState<string>("11");
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [isDirty, setIsDirty] = useState(false);
@@ -194,17 +194,17 @@ export function AdminChapters() {
 
       {/* Class switcher */}
       <div className="flex gap-2">
-        {(["11", "12"] as const).map((c) => (
+        {[{ id: "11", label: "Class 11" }, { id: "12", label: "Class 12" }, { id: "dropper", label: "Dropper" }].map((c) => (
           <button
-            key={c}
-            onClick={() => setCls(c)}
+            key={c.id}
+            onClick={() => setCls(c.id)}
             className={`px-5 py-2 text-sm font-black uppercase tracking-widest border transition-all ${
-              cls === c
+              cls === c.id
                 ? "bg-[#aaff00] text-black border-[#aaff00]"
                 : "bg-white/5 text-white/50 border-white/10 hover:text-white hover:border-white/20"
             }`}
           >
-            Class {c}
+            {c.label}
           </button>
         ))}
       </div>
