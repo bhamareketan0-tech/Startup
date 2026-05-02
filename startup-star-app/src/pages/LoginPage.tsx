@@ -17,7 +17,6 @@ export function LoginPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const googleUser = params.get("googleUser");
     const googleError = params.get("googleError");
 
     if (googleError) {
@@ -26,10 +25,8 @@ export function LoginPage() {
       return;
     }
 
-    if (googleUser) {
       try {
         const decoded = JSON.parse(
-          atob(googleUser.replace(/-/g, "+").replace(/_/g, "/"))
         ) as Record<string, unknown>;
         signInWithGoogle({
           id: (decoded["id"] || decoded["googleId"]) as string,

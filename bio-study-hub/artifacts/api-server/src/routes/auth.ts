@@ -84,7 +84,6 @@ router.get(
     (req.session as Record<string, unknown>).userId = user["id"];
     (req.session as Record<string, unknown>).user = user;
     const encoded = Buffer.from(JSON.stringify(user)).toString("base64url");
-    res.redirect(`${SUCCESS_REDIRECT}?googleUser=${encoded}`);
   }
 );
 

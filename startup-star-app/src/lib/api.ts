@@ -9,7 +9,7 @@ async function request(method: string, path: string, body?: unknown) {
   const res = await fetch(BASE + path, {
     method,
     headers,
-    credentials: "include",
+    ,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
   const json = await res.json().catch(() => ({}));

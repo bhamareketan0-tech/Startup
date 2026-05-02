@@ -620,7 +620,7 @@ export function PracticePage() {
         try {
           const seenRes = await fetch(
             `${API_BASE}/seen-questions?chapter=${chapterId}&subunit=${encodeURIComponent(decodedSubunit)}&class=${cls}&type=${typeId}`,
-            { credentials: "include" }
+            {  }
           );
           if (seenRes.ok) {
             const seenData = await seenRes.json() as { seen_ids: string[] };
@@ -706,7 +706,7 @@ export function PracticePage() {
         await fetch(`${API_BASE}/seen-questions/mark`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          ,
           body: JSON.stringify({ chapter: chapterId, subunit: decodedSubunit, class: cls, type: selectedType, question_ids: questionIds }),
         }).catch(() => null);
       }

@@ -497,6 +497,8 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
 
     const data = await res.json();
 
+localStorage.setItem("token", data.token);
+
     if (!data.text) {
       setParseError("AI failed");
       return;

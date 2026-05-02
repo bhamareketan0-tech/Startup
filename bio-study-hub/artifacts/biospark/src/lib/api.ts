@@ -3,7 +3,7 @@ const BASE = (import.meta.env.VITE_API_URL ?? "") + "/api";
 async function request(method: string, path: string, body?: unknown) {
   const res = await fetch(BASE + path, {
     method,
-    credentials: "include",
+    ,
     headers: body !== undefined ? { "Content-Type": "application/json" } : {},
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });

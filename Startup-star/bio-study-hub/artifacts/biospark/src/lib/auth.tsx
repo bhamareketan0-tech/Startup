@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/me", { credentials: "include" })
+    fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/me", {  })
       .then((r) => r.json())
       .then((data: { user?: Record<string, unknown> }) => {
         if (data.user) {
@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        ,
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json() as { user?: Record<string, unknown>; error?: string };
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        ,
         body: JSON.stringify({ email, password, name, class: cls }),
       });
       const data = await res.json() as { user?: Record<string, unknown>; error?: string };
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut(): Promise<void> {
-    await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
+    await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/logout", { method: "POST",  }).catch(() => {});
     setUser(null);
     setProfile(null);
   }
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function refreshProfile(): Promise<void> {
-    const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/me", { credentials: "include" }).catch(() => null);
+    const res = await fetch((import.meta.env.VITE_API_URL ?? "") + "/api/auth/me", {  }).catch(() => null);
     if (!res?.ok) return;
     const data = await res.json() as { user?: Record<string, unknown> };
     if (data.user) {
