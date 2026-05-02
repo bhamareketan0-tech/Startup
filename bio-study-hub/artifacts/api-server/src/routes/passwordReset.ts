@@ -17,7 +17,6 @@ router.post("/auth/forgot-password", async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) return res.json({ message: "If this email exists, a reset link has been sent." });
 
-  // Rate limit - check existing tokens for this email
   const existingEntries = [...resetTokens.entries()].filter(
     ([, v]) => v.email === email && v.expires > Date.now()
   );
@@ -26,11 +25,12 @@ router.post("/auth/forgot-password", async (req, res) => {
   }
 
   const token = crypto.randomBytes(32).toString("hex");
-  const expires = Date.now() + 15 * 60 * 1000; // 15 minutes
+  const expires = Date.now() + 15 * 60 * 1000;
 
   resetTokens.set(token, { email, expires, attempts: 0 });
 
-  const resetUrl = `${process.env.FRONTEND_URL || "https://earnest-squirrel-d0261e.netlify.app"}/reset-password?token=${token}`;
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5000";
+  const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
 
   await resend.emails.send({
     from: "BioSpark <onboarding@resend.dev>",

@@ -182,14 +182,15 @@ export function AdminSettings() {
         <div className="flex items-center gap-2 mb-1">
           <Globe className="w-4 h-4 text-[#00ffb3]" />
           <h3 className="text-white font-semibold">Connection Settings</h3>
-          <span className="text-xs text-white/30 ml-1">— For Netlify/Render deployment</span>
+          <span className="text-xs text-white/30 ml-1">— For GitHub Pages / Render deployment</span>
         </div>
 
         <div className="p-3 bg-[#00ffb3]/5 border border-[#00ffb3]/15 rounded-xl">
           <p className="text-[#00ffb3] text-xs font-bold mb-1">Deployment Instructions</p>
           <p className="text-white/50 text-xs leading-relaxed">
-            After deploying backend to Render, set <span className="text-white font-mono">VITE_API_URL</span> to your Render URL in Netlify environment variables.<br />
-            For CORS, set <span className="text-white font-mono">ALLOWED_ORIGINS</span> to your Netlify URL in Render environment variables.
+            Backend is deployed on Render. Frontend is deployed on GitHub Pages.<br />
+            Set <span className="text-white font-mono">VITE_API_URL</span> to your Render backend URL in GitHub Actions variables.<br />
+            For CORS, set <span className="text-white font-mono">ALLOWED_ORIGINS</span> to your GitHub Pages URL in Render environment variables.
           </p>
         </div>
 
@@ -198,10 +199,10 @@ export function AdminSettings() {
           <input
             value={settings.vite_api_url}
             onChange={(e) => set("vite_api_url", e.target.value)}
-            placeholder="https://biospark-api.onrender.com"
+            placeholder="https://startup-85w8.onrender.com"
             className={inputCls}
           />
-          <p className="text-white/25 text-xs mt-1">Set this as VITE_API_URL in your Netlify environment variables</p>
+          <p className="text-white/25 text-xs mt-1">Set this as VITE_API_URL in your GitHub Actions repository variables</p>
         </div>
 
         <div>
@@ -209,7 +210,7 @@ export function AdminSettings() {
           <input
             value={settings.allowed_origins}
             onChange={(e) => set("allowed_origins", e.target.value)}
-            placeholder="https://biospark.netlify.app,https://www.biospark.in"
+            placeholder="https://yourusername.github.io,https://www.biospark.in"
             className={inputCls}
           />
           <p className="text-white/25 text-xs mt-1">Set this as ALLOWED_ORIGINS in your Render environment variables</p>
@@ -316,7 +317,7 @@ export function AdminSettings() {
           {[
             { key: "MONGODB_URI", desc: "Your MongoDB Atlas connection string", required: true },
             { key: "SESSION_SECRET", desc: "Random secret string (min 32 chars)", required: true },
-            { key: "ALLOWED_ORIGINS", desc: "Your Netlify frontend URL(s)", required: true },
+            { key: "ALLOWED_ORIGINS", desc: "Your GitHub Pages frontend URL(s)", required: true },
             { key: "NODE_ENV", desc: "Set to: production", required: true },
             { key: "PORT", desc: "Set to: 8080 (Render uses this by default)", required: false },
             { key: "GOOGLE_CLIENT_ID", desc: "Google OAuth Client ID (if using Google login)", required: false },

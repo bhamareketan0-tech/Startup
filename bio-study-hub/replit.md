@@ -33,11 +33,12 @@ bio-study-hub/
 
 ## Deployment
 
-### Frontend → Netlify
+### Frontend → GitHub Pages
+- Deployed via `.github/workflows/deploy.yml` (GitHub Actions)
 - Root: `bio-study-hub/artifacts/biospark`
 - Build command: `npm run build`
 - Publish dir: `dist/public`
-- Env var: `VITE_API_URL=https://<your-render-url>`
+- Set `VITE_API_URL` as a GitHub Actions repository variable pointing to the Render backend URL
 
 ### Backend → Render
 - Root: `bio-study-hub/artifacts/api-server`
@@ -46,11 +47,9 @@ bio-study-hub/
 - Required env vars:
   - `MONGODB_URI` — MongoDB Atlas connection string
   - `SESSION_SECRET` — random string, min 32 chars
-  - `ALLOWED_ORIGINS` — Netlify frontend URL (comma-separated)
+  - `ALLOWED_ORIGINS` — GitHub Pages frontend URL (comma-separated)
   - `NODE_ENV=production`
   - `PORT=8080` (Render sets this automatically)
-
-### `netlify.toml` — already configured at repo root
 
 ## Features
 
@@ -108,7 +107,7 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 Production (set in Render dashboard):
 - `MONGODB_URI` — Atlas URI
 - `SESSION_SECRET` — strong secret
-- `ALLOWED_ORIGINS` — Netlify URL
+- `ALLOWED_ORIGINS` — GitHub Pages frontend URL(s)
 - `NODE_ENV=production`
 
 ## Key Files
@@ -118,4 +117,5 @@ Production (set in Render dashboard):
 - `bio-study-hub/artifacts/api-server/src/app.ts` — Express app, CORS, sessions
 - `bio-study-hub/artifacts/api-server/src/routes/appSettings.ts` — Settings CRUD
 - `bio-study-hub/artifacts/api-server/src/routes/chapters.ts` — Chapters CRUD
-- `netlify.toml` — Netlify build config (root repo)
+- `.github/workflows/deploy.yml` — GitHub Actions deploy to GitHub Pages
+- `render.yaml` — Render backend configuration (no secrets — set those in Render dashboard)

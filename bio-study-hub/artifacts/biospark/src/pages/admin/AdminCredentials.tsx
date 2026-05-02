@@ -55,7 +55,7 @@ const CREDENTIALS: CredDef[] = [
   {
     key: "cred_google_callback_url",
     label: "Google OAuth Callback URL",
-    placeholder: "https://your-backend.onrender.com/auth/google/callback",
+    placeholder: "https://startup-85w8.onrender.com/auth/google/callback",
     desc: "Must match the Authorized Redirect URI set in Google Cloud Console exactly.",
     secret: false,
     required: false,
@@ -63,15 +63,15 @@ const CREDENTIALS: CredDef[] = [
   {
     key: "cred_google_success_redirect",
     label: "Google Login Success Redirect",
-    placeholder: "https://your-frontend.netlify.app/login",
-    desc: "Where users land after a successful Google login. Usually your frontend /login page.",
+    placeholder: "https://yourusername.github.io/Startup/login",
+    desc: "Where users land after a successful Google login. Your GitHub Pages frontend /login page.",
     secret: false,
     required: false,
   },
   {
     key: "cred_allowed_origins",
     label: "Allowed CORS Origins",
-    placeholder: "https://biospark.netlify.app,https://www.biospark.in",
+    placeholder: "https://yourusername.github.io,https://www.biospark.in",
     desc: "Comma-separated list of frontend URLs the API will accept requests from. Leave blank to allow all origins (development mode).",
     secret: false,
     required: false,

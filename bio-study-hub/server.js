@@ -6,15 +6,26 @@ import cors from "cors";
 
 const app = express();
 
-app.use(cors({ origin: "https://biospark-frontend.netlify.app", credentials: true }));
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()).filter(Boolean)
+  : [];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.length === 0) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes("*")) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    return callback(null, false);
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || "")
   .then(() => console.log("MongoDB Connected ✅"))
-  .catch(err => console.log(err));
+  .catch(err => console.warn("MongoDB connection failed:", err.message));
 
-// User schema
 const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
@@ -26,10 +37,8 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// Root route
-app.get("/", (req, res) => { res.json({ status: "ok" }); });
+app.get("/", (_req, res) => { res.json({ status: "ok" }); });
 
-// SIGNUP
 app.post("/api/auth/register", async (req, res) => {
   try {
     const { name, email, password, cls } = req.body;
@@ -44,7 +53,6 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// LOGIN
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -59,7 +67,6 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// GET PROFILE
 app.get("/api/auth/profile", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
