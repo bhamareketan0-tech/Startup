@@ -200,7 +200,7 @@ export function AdminSettings() {
           <input
             value={settings.vite_api_url}
             onChange={(e) => set("vite_api_url", e.target.value)}
-            placeholder="https://startup-85w8.onrender.com"
+            placeholder="https://bio-study-hub.onrender.com"
             className={inputCls}
           />
           <p className="text-white/25 text-xs mt-1">Set this as VITE_API_URL in your GitHub Actions repository variables</p>

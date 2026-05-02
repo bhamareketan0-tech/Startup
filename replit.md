@@ -6,7 +6,7 @@ Full-stack NEET preparation platform with React/Vite frontend and Express/MongoD
 ## Architecture
 - **Frontend**: React + Vite + Tailwind at `bio-study-hub/artifacts/biospark/` (port 5000)
 - **API Server**: Express + MongoDB at `bio-study-hub/artifacts/api-server/` (port 8080)
-- **Deployment**: Frontend → GitHub Pages (https://bhamareketan0-tech.github.io/Startup/), API → Render (https://startup-85w8.onrender.com)
+- **Deployment**: Frontend → GitHub Pages (https://bhamareketan0-tech.github.io/Startup/), API → Render (https://bio-study-hub.onrender.com)
 - **Database**: MongoDB Atlas via `MONGODB_URI` secret
 
 ## Key Workflows

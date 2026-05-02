@@ -14,7 +14,7 @@ Branch: main
 Frontend path: bio-study-hub/artifacts/biospark
 Backend path: bio-study-hub/artifacts/api-server
 
-Render (Backend) — https://startup-85w8.onrender.com
+Render (Backend) — https://bio-study-hub.onrender.com
 Go to Render → your service → Environment and set ALL of these:
 
 Variable	Value / Where to get it
@@ -24,7 +24,7 @@ SESSION_SECRET	Any long random string (e.g. biospark-super-secret-2024-xyz)
 NODE_ENV	production
 GOOGLE_CLIENT_ID	Google Cloud Console → Credentials → OAuth 2.0 Client ID
 GOOGLE_CLIENT_SECRET	Google Cloud Console → same OAuth client
-GOOGLE_CALLBACK_URL	https://startup-85w8.onrender.com/auth/google/callback
+GOOGLE_CALLBACK_URL	https://bio-study-hub.onrender.com/auth/google/callback
 GOOGLE_SUCCESS_REDIRECT	https://sparkling-sable-f45381.netlify.app/login
 Render build settings:
 
