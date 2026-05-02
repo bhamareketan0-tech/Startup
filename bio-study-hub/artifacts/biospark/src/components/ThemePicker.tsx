@@ -11,14 +11,14 @@ const BG_OPTIONS: { id: BgAnimName; label: string; icon: string }[] = [
 ];
 
 const COLOR_OPTIONS: { id: ColorScheme; label: string; hex: string; dark: boolean }[] = [
-  { id: "neon-green",    label: "Neon",    hex: "#00FF9D", dark: true  },
-  { id: "cyber-blue",    label: "Cyber",   hex: "#00D4FF", dark: true  },
-  { id: "plasma-purple", label: "Plasma",  hex: "#C77DFF", dark: true  },
-  { id: "solar-orange",  label: "Solar",   hex: "#FF6B35", dark: true  },
-  { id: "arctic-light",  label: "Arctic",  hex: "#00A86B", dark: false },
-  { id: "sky-light",     label: "Sky",     hex: "#0066CC", dark: false },
-  { id: "rose-light",    label: "Rose",    hex: "#8B5CF6", dark: false },
-  { id: "amber-light",   label: "Amber",   hex: "#E25000", dark: false },
+  { id: "neon-green",    label: "Emerald", hex: "#00D97E", dark: true  },
+  { id: "cyber-blue",    label: "Electric",hex: "#3B82F6", dark: true  },
+  { id: "plasma-purple", label: "Violet",  hex: "#8B5CF6", dark: true  },
+  { id: "solar-orange",  label: "Amber",   hex: "#F59E0B", dark: true  },
+  { id: "arctic-light",  label: "Cloud",   hex: "#059669", dark: false },
+  { id: "sky-light",     label: "Ocean",   hex: "#4F46E5", dark: false },
+  { id: "rose-light",    label: "Orchid",  hex: "#9333EA", dark: false },
+  { id: "amber-light",   label: "Sand",    hex: "#B45309", dark: false },
 ];
 
 export function ThemePicker() {
