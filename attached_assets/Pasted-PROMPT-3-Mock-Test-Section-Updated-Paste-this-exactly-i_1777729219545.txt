@@ -1,0 +1,139 @@
+PROMPT 3 — Mock Test Section (Updated)
+
+Paste this exactly in Replit Agent:
+
+You are working on BioSpark, a NEET preparation platform built with React + Vite (frontend) and Express + MongoDB (backend). Foundation and Practice Section are done. Now completely rebuild the Mock Test section.
+STEP 1 — MOCK TEST SELECTION FLOW:
+Rebuild the entire mock test flow in this exact order:
+Screen 1 — Select Class:
+
+Class 11
+Class 12
+Dropper
+Same green theme cards as practice section. Consistent UI.
+
+Screen 2 — Select Chapter:
+Show these options in this exact order:
+
+🎲 Random (questions from any chapter randomly)
+📚 All Chapters (questions from all chapters mixed)
+Then list every individual chapter of selected class one by one
+Each chapter card shows total available questions count.
+
+Screen 3 — Select Test Type:
+
+Quick Test → 30 questions · 30 minutes
+Half Mock → 60 questions · 60 minutes
+Full NEET → 90 questions · 90 minutes
+PYQ Only → previous year questions only, student selects year range (e.g. 2015-2024)
+
+Each test type card shows: question count, time, marks (+4 correct, -1 wrong)
+Screen 4 — Rules:
+Display these rules clearly:
+
+Each correct answer: +4 marks
+Each wrong answer: -1 mark
+Unattempted: 0 marks
+Timer auto-submits when time runs out
+You can flag questions to revisit
+All questions are MCQ format
+Results shown immediately after submission
+
+Screen 5 — Start Test button (big green button)
+STEP 2 — TEST INTERFACE:
+During the test show:
+Left panel (desktop) / Top bar (mobile):
+
+Chapter name / Random
+Test type
+Timer countdown (large, visible, turns red at 5 minutes)
+Questions attempted / total
+Marks so far (live calculation)
+
+Question area:
+
+Question number and total
+PYQ tag with year if applicable
+Difficulty tag
+Question text
+4 options (A, B, C, D)
+Flag button (bookmark to revisit)
+← Previous | 🔄 Reattempt | Next →
+
+Bottom question palette (like real NEET exam):
+
+Grid of all question numbers
+Color coded: Green = attempted, Red = flagged, Grey = unattempted
+Click any number to jump to that question
+
+STEP 3 — QUESTION ROTATION IN MOCK TEST:
+Use the same rotation system from Prompt 2:
+
+Never repeat questions across tests until entire pool exhausted
+Per student per chapter tracking in MongoDB
+Always random order
+PYQ Only mode pulls exclusively from PYQ question bank
+Year range filter works properly for PYQ mode
+
+STEP 4 — AUTO SUBMIT & RESULT:
+When timer hits 0 OR student clicks Submit:
+
+Show confirmation popup (are you sure?)
+Auto submit if no response in 10 seconds
+Calculate score instantly: (+4 per correct, -1 per wrong, 0 unattempted)
+
+STEP 5 — RESULT SCREEN:
+Show immediately after submission:
+Score Card:
+
+Total marks scored / maximum marks
+Correct / Wrong / Unattempted count
+Accuracy percentage
+Time taken
+BioSpark Platform Rank only — "You are ranked #47 on BioSpark this week among all students" — NO real NEET rank prediction, NO college prediction, NO external comparison
+Chapter-wise performance breakdown
+Improvement vs last test
+
+Shareable Score Card:
+
+Generate a beautiful image card showing:
+
+BioSpark logo
+Student name
+Score
+Accuracy
+BioSpark platform rank
+Date
+
+
+Download as image button
+Share to WhatsApp button
+
+STEP 6 — POST TEST ACTIONS:
+After result screen show these buttons:
+
+📖 Review All Answers (with correct answer + explanation)
+🔄 Reattempt Same Test
+📊 Full Performance Analysis
+🏠 Go to Dashboard
+
+PERFORMANCE REQUIREMENTS:
+
+Test must load in under 2 seconds
+Timer must be 100% accurate, never drift
+No lag when clicking options
+Auto-save every 30 seconds (if phone dies, resume from last save)
+No phone heating
+Smooth transitions only (no heavy animations)
+Mobile fully compatible — entire test giveable on phone
+
+COLOR:
+
+Everything green theme only
+No orange anywhere
+Timer turns red only when under 5 minutes remaining
+Correct answer highlight: green
+Wrong answer highlight: red
+Flagged questions: yellow dot only (not full yellow)
+
+After completing give full report of what was built. 🔥
