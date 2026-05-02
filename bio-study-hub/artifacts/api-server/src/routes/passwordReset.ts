@@ -2,10 +2,8 @@ import { Router } from "express";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { User } from "../models/user";
-import { Resend } from "resend";
 
 const router = Router();
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const resetTokens = new Map<string, { email: string; expires: number; attempts: number }>();
 
@@ -26,28 +24,33 @@ router.post("/auth/forgot-password", async (req, res) => {
 
   const token = crypto.randomBytes(32).toString("hex");
   const expires = Date.now() + 15 * 60 * 1000;
-
   resetTokens.set(token, { email, expires, attempts: 0 });
 
-  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5000";
-  const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
-
-  await resend.emails.send({
-    from: "BioSpark <onboarding@resend.dev>",
-    to: email,
-    subject: "Reset your BioSpark password",
-    html: `
-      <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
-        <h2 style="color: #00ff88;">Reset Your Password</h2>
-        <p>You requested a password reset for your BioSpark account.</p>
-        <p>Click the button below to reset your password. This link expires in <strong>15 minutes</strong>.</p>
-        <a href="${resetUrl}" style="display: inline-block; background: #00ff88; color: black; padding: 12px 24px; text-decoration: none; font-weight: bold; margin: 16px 0;">
-          Reset Password
-        </a>
-        <p style="color: #999; font-size: 12px;">If you didn't request this, ignore this email. Your password won't change.</p>
-      </div>
-    `,
-  });
+  const resendKey = process.env.RESEND_API_KEY;
+  if (resendKey) {
+    try {
+      const { Resend } = await import("resend");
+      const resend = new Resend(resendKey);
+      const frontendUrl = process.env.FRONTEND_URL || "https://bhamareketan0-tech.github.io/Startup";
+      const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
+      await resend.emails.send({
+        from: "BioSpark <onboarding@resend.dev>",
+        to: email,
+        subject: "Reset your BioSpark password",
+        html: `
+          <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
+            <h2 style="color: #00ff88;">Reset Your Password</h2>
+            <p>You requested a password reset for your BioSpark account.</p>
+            <p>Click the button below to reset your password. This link expires in <strong>15 minutes</strong>.</p>
+            <a href="${resetUrl}" style="display: inline-block; background: #00ff88; color: black; padding: 12px 24px; text-decoration: none; font-weight: bold; margin: 16px 0;">
+              Reset Password
+            </a>
+            <p style="color: #999; font-size: 12px;">If you didn't request this, ignore this email.</p>
+          </div>
+        `,
+      });
+    } catch { /* email sending failed silently */ }
+  }
 
   res.json({ message: "If this email exists, a reset link has been sent." });
 });
@@ -79,7 +82,6 @@ router.post("/auth/reset-password", async (req, res) => {
   await user.save();
 
   resetTokens.delete(token);
-
   res.json({ message: "Password reset successfully!" });
 });
 
