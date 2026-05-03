@@ -1,7 +1,7 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-import { getChapters } from "@/lib/chaptersManager";
+import { getChapters, fetchChaptersFromAPI } from "@/lib/chaptersManager";
 import { parseNEETQuestionBank, parseGeneralNEET, ParsedQuestion } from "@/lib/pdfParser";
 import { api } from "@/lib/api";
 import {
@@ -487,8 +487,10 @@ function TextImporter({ chapter, subunit, cls, questionType }: { chapter: string
     setParsing(true);
     setParseError(null);
 
-    const res = await fetch("/format", {
+    const formatUrl = (import.meta.env.VITE_API_URL ?? "") + "/format";
+    const res = await fetch(formatUrl, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -654,6 +656,14 @@ export function AdminPDFImport() {
   const [subunit, setSubunit] = useState("");
   const [cls, setCls] = useState("11");
   const [questionType, setQuestionType] = useState("");
+  const [, setChaptersLoaded] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      fetchChaptersFromAPI("11").catch(() => {}),
+      fetchChaptersFromAPI("12").catch(() => {}),
+    ]).then(() => setChaptersLoaded(true));
+  }, []);
 
   const chapters11 = getChapters("11");
   const chapters12 = getChapters("12");

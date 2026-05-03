@@ -23,7 +23,7 @@ export function SubunitsPage() {
 
   useEffect(() => {
     if (!cls || !chapterId) return;
-    fetch(`${API_BASE}/questions/counts?class=${cls}&chapter=${chapterId}`)
+    fetch(`${API_BASE}/questions/counts?class=${cls}&chapter=${chapterId}`, { credentials: "include" })
       .then((r) => r.json())
       .then((data: CountsResult) => setCounts(data))
       .catch(() => {});
