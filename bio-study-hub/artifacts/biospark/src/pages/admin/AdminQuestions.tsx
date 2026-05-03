@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Question } from "@/lib/types";
-import { getChapters, fetchChaptersFromAPI } from "@/lib/chaptersManager";
+import { fetchChaptersFromAPI } from "@/lib/chaptersManager";
+import type { Chapter } from "@/lib/chaptersManager";
 import { api } from "@/lib/api";
 import {
   Plus, Edit, Trash2, Search, X, Check, AlertCircle,
@@ -741,7 +742,8 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [chaptersReady, setChaptersReady] = useState(false);
+  const [chapters11, setChapters11] = useState<Chapter[]>([]);
+  const [chapters12, setChapters12] = useState<Chapter[]>([]);
 
   useEffect(() => {
     fetchQuestions();
@@ -751,10 +753,8 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
     if (onAddQuestion) {
       onAddQuestion(() => startNew());
     }
-    Promise.all([
-      fetchChaptersFromAPI("11").catch(() => {}),
-      fetchChaptersFromAPI("12").catch(() => {}),
-    ]).then(() => setChaptersReady(true));
+    fetchChaptersFromAPI("11").then(setChapters11).catch(() => {});
+    fetchChaptersFromAPI("12").then(setChapters12).catch(() => {});
   }, []);
 
   async function fetchQuestions() {
@@ -1006,7 +1006,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
               </div>
 
               {(() => {
-                const chapterList = getChapters(editingQ.class || "11");
+                const chapterList = (editingQ.class || "11") === "11" ? chapters11 : chapters12;
                 const selectedChapter = chapterList.find((c) => c.id === editingQ.chapter);
                 const subunitList = selectedChapter?.subunits ?? [];
                 return (
