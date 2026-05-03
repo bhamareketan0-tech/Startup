@@ -50,7 +50,7 @@ export const animationData: ChapterAnim[] = [
     icon: "🫁",
     subunits: [
       {
-        subunit: "Introduction",
+        subunit: "Introduction to Breathing and Respiration",
         frames: [
           {
             title: "Why Do We Breathe?",
@@ -106,6 +106,36 @@ export const animationData: ChapterAnim[] = [
         ],
       },
       {
+        subunit: "Human Respiratory System",
+        frames: [
+          {
+            title: "Anatomy of the Human Respiratory System",
+            narration: "The human respiratory system is a sophisticated set of organs that facilitate the exchange of oxygen and carbon dioxide. Air enters through the nostrils, passes through the nasal cavity where it is filtered and warmed, then moves through the pharynx, larynx, and into the trachea. The trachea divides into two bronchi — one for each lung. These bronchi branch further into bronchioles and end in tiny air sacs called alveoli, where actual gas exchange occurs.",
+            keyPoints: [
+              "Pathway: Nostrils → Nasal cavity → Pharynx → Larynx → Trachea → Bronchi → Bronchioles → Alveoli",
+              "Trachea: held open by C-shaped cartilaginous rings (incomplete posteriorly)",
+              "Right lung: 3 lobes (superior, middle, inferior)",
+              "Left lung: 2 lobes (superior, inferior) — cardiac notch accommodates heart",
+              "Each lung: ~300 million alveoli → surface area ~80 m²",
+              "Pleural membranes surround each lung; pleural fluid reduces friction",
+            ],
+            visual: "lungs",
+          },
+          {
+            title: "Alveoli — The Site of Gas Exchange",
+            narration: "Alveoli are tiny balloon-like sacs at the end of bronchioles. Each alveolus is surrounded by a dense network of pulmonary capillaries. The walls of alveoli are extremely thin — just one cell thick — made of squamous epithelium, allowing rapid diffusion of gases. The total surface area provided by all alveoli in both lungs is approximately 80 square metres, equivalent to half a tennis court, enabling efficient gas exchange.",
+            keyPoints: [
+              "Alveoli = tiny air sacs at end of bronchioles",
+              "Wall: single squamous epithelial cell layer (extremely thin)",
+              "Surrounded by dense pulmonary capillary network",
+              "Surfactant (from Type II pneumocytes) prevents alveolar collapse",
+              "Total surface area ≈ 80 m² for efficient gas exchange",
+            ],
+            visual: "lungs",
+          },
+        ],
+      },
+      {
         subunit: "Mechanism of Breathing",
         frames: [
           {
@@ -142,6 +172,35 @@ export const animationData: ChapterAnim[] = [
               "Residual Volume (RV) = 1200 mL (cannot be exhaled)",
               "Vital Capacity = IRV + TV + ERV = 4600 mL",
               "Total Lung Capacity = VC + RV = 5800 mL",
+            ],
+            visual: "compare",
+          },
+        ],
+      },
+      {
+        subunit: "Pulmonary Volumes and Capacities",
+        frames: [
+          {
+            title: "Measuring Lung Volumes",
+            narration: "Pulmonary volumes are measured using a spirometer. Tidal Volume is the air inhaled or exhaled in one normal breath — about 500 mL. Inspiratory Reserve Volume is the extra air you can forcibly inhale after a normal breath — about 3000 mL. Expiratory Reserve Volume is the extra air you can forcibly exhale — about 1100 mL. Residual Volume is the air that always remains in the lungs even after maximum exhalation — about 1200 mL, preventing alveolar collapse.",
+            keyPoints: [
+              "Tidal Volume (TV) = 500 mL — normal quiet breathing",
+              "Inspiratory Reserve Volume (IRV) = 3000 mL",
+              "Expiratory Reserve Volume (ERV) = 1100 mL",
+              "Residual Volume (RV) = 1200 mL — cannot be expelled",
+              "Dead Space = ~150 mL (air in conducting zone, no exchange)",
+            ],
+            visual: "compare",
+          },
+          {
+            title: "Lung Capacities",
+            narration: "Lung capacities are calculated by combining two or more volumes. Inspiratory Capacity equals Tidal Volume plus Inspiratory Reserve Volume, totalling 3500 mL. Expiratory Capacity equals Tidal Volume plus Expiratory Reserve Volume, totalling 1600 mL. Functional Residual Capacity equals Expiratory Reserve Volume plus Residual Volume, totalling 2300 mL. Vital Capacity is the maximum air that can be exhaled after a maximum inhalation — IRV plus TV plus ERV, totalling 4600 mL. Total Lung Capacity is all volumes combined at 5800 mL.",
+            keyPoints: [
+              "Inspiratory Capacity (IC) = TV + IRV = 3500 mL",
+              "Functional Residual Capacity (FRC) = ERV + RV = 2300 mL",
+              "Vital Capacity (VC) = IRV + TV + ERV = 4600 mL",
+              "Total Lung Capacity (TLC) = VC + RV = 5800 mL",
+              "Forced Expiratory Volume (FEV₁) used in clinical diagnosis",
             ],
             visual: "compare",
           },
@@ -542,6 +601,31 @@ export function getChapterAnim(chapterId: string): ChapterAnim | undefined {
 export function getSubunitAnim(chapterId: string, subunit: string, chapterName?: string): SubunitAnim {
   const chapter = getChapterAnim(chapterId);
   if (!chapter) return genericSubunit(subunit, chapterName || chapterId);
-  const found = chapter.subunits.find(s => s.subunit === subunit);
-  return found || genericSubunit(subunit, chapterName || chapterId);
+
+  // 1. Exact match
+  const exact = chapter.subunits.find(s => s.subunit === subunit);
+  if (exact) return exact;
+
+  // 2. Case-insensitive match
+  const lower = subunit.toLowerCase();
+  const caseInsensitive = chapter.subunits.find(s => s.subunit.toLowerCase() === lower);
+  if (caseInsensitive) return caseInsensitive;
+
+  // 3. Fuzzy: check if either contains the other (handles "Introduction" matching "Introduction to Breathing and Respiration")
+  const fuzzy = chapter.subunits.find(s => {
+    const a = s.subunit.toLowerCase();
+    const b = lower;
+    return a.includes(b) || b.includes(a);
+  });
+  if (fuzzy) return fuzzy;
+
+  // 4. Keyword overlap: share at least 2 significant words
+  const words = lower.split(/\s+/).filter(w => w.length > 3);
+  const keyword = chapter.subunits.find(s => {
+    const sWords = s.subunit.toLowerCase().split(/\s+/);
+    return words.filter(w => sWords.includes(w)).length >= 2;
+  });
+  if (keyword) return keyword;
+
+  return genericSubunit(subunit, chapterName || chapterId);
 }
