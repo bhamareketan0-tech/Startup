@@ -1,0 +1,1152 @@
+=====================================
+Chapter 14 · Breathing & Exchange of Gases
+SUBTOPIC: 14.1 RESPIRATORY ORGANS
+All 13 Types | NEET Level
+=====================================
+
+-----------------------------------------
+TYPE 1 — PARAGRAPH STUDY
+-----------------------------------------
+
+Mechanisms of breathing vary among different groups of animals
+depending mainly on their habitats and levels of organisation.
+Lower invertebrates like sponges, coelenterates, flatworms, etc.,
+exchange O2 with CO2 by simple diffusion over their entire body
+surface. Earthworms use their moist cuticle and insects have a
+network of tubes (tracheal tubes) to transport atmospheric air
+within the body. Special vascularised structures called gills
+(branchial respiration) are used by most of the aquatic arthropods
+and molluscs whereas vascularised bags called lungs (pulmonary
+respiration) are used by the terrestrial forms for the exchange of
+gases. Among vertebrates, fishes use gills whereas amphibians,
+reptiles, birds and mammals respire through lungs. Amphibians
+like frogs can respire through their moist skin (cutaneous
+respiration) also.
+
+Larynx is a cartilaginous box which helps in sound production
+and hence called the sound box. During swallowing glottis can be
+covered by a thin elastic cartilaginous flap called epiglottis to
+prevent the entry of food into the larynx. Trachea divides at the
+level of 5th thoracic vertebra into right and left primary bronchi.
+Each terminal bronchiole gives rise to alveoli. Lungs are covered
+by a double layered pleura with pleural fluid between them.
+Conducting part = external nostrils to terminal bronchioles.
+Exchange part = alveoli and their ducts.
+
+-----------------------------------------
+TYPE 2 — POINTER NOTES STUDY
+-----------------------------------------
+
+ANIMAL RESPIRATION:
+- Lower invertebrates (sponges, coelenterates, flatworms)
+  = Simple diffusion over entire body surface
+- Earthworms = Moist cuticle
+- Insects = Tracheal tubes
+- Aquatic arthropods & molluscs = Gills (branchial respiration)
+- Terrestrial forms = Lungs (pulmonary respiration)
+- Fishes (vertebrates) = Gills
+- Amphibians, reptiles, birds, mammals = Lungs
+- Frogs = Also through moist skin (cutaneous respiration)
+
+HUMAN RESPIRATORY SYSTEM:
+- External nostrils → nasal chamber → pharynx → larynx
+  → trachea → bronchi → bronchioles → alveoli
+- Pharynx = common passage for food AND air
+- Larynx = cartilaginous box = SOUND BOX
+- Epiglottis = thin elastic cartilaginous flap
+  = prevents food entry into larynx during swallowing
+- Trachea divides at 5th thoracic vertebra
+  → right & left primary bronchi
+- Bronchi → secondary → tertiary → bronchioles
+  → terminal bronchioles
+- Trachea, bronchi, initial bronchioles
+  = supported by INCOMPLETE cartilaginous rings
+- Terminal bronchioles → alveoli
+  (thin, irregular-walled, vascularised)
+- Two lungs covered by DOUBLE-LAYERED PLEURA
+- Pleural fluid = reduces friction on lung surface
+- Conducting part = external nostrils to terminal bronchioles
+- Exchange part = alveoli and their ducts
+- Thoracic chamber = airtight
+- Boundaries: dorsal = vertebral column,
+  ventral = sternum, lateral = ribs,
+  lower = dome-shaped diaphragm
+
+STEPS OF RESPIRATION:
+(i) Breathing / pulmonary ventilation
+(ii) Diffusion of gases across alveolar membrane
+(iii) Transport of gases by blood
+(iv) Diffusion of O2 & CO2 between blood and tissues
+(v) Utilisation of O2 by cells = cellular respiration
+
+-----------------------------------------
+TYPE 3 — TRICKS & MNEMONICS
+-----------------------------------------
+
+Mnemonic for animal respiration:
+"Some Earth Insects Go To Live And Fly Carefully"
+S - Sponges/coelenterates/flatworms = Simple diffusion
+E - Earthworms = moist cuticle
+I - Insects = tracheal tubes
+G - Gills = aquatic arthropods & molluscs
+T - Terrestrial forms = Lungs
+L - Lungs = amphibians, reptiles, birds, mammals
+A - Amphibians (frogs) = also cutaneous
+F - Fishes = gills
+C - Combination = frogs use both skin + lungs
+
+Mnemonic for human airway:
+"Never Put Lemon Toffee Between Both Alveoli"
+N - Nostrils
+P - Pharynx
+L - Larynx
+T - Trachea
+B - Bronchi (primary → secondary → tertiary)
+B - Bronchioles → terminal bronchioles
+A - Alveoli
+
+-----------------------------------------
+TYPE 4 — STANDARD MCQ
+-----------------------------------------
+
+Q1. Lower invertebrates like sponges and flatworms exchange
+gases by:
+A) Gills
+B) Lungs
+C) Tracheal tubes
+D) Simple diffusion over entire body surface
+Ans: D
+
+---
+
+Q2. Earthworms use which structure for respiration?
+A) Gills
+B) Lungs
+C) Moist cuticle
+D) Tracheal tubes
+Ans: C
+
+---
+
+Q3. Insects transport atmospheric air within the body using:
+A) Gills
+B) Lungs
+C) Moist cuticle
+D) Tracheal tubes
+Ans: D
+
+---
+
+Q4. Branchial respiration is associated with which structures?
+A) Lungs
+B) Gills
+C) Tracheal tubes
+D) Moist cuticle
+Ans: B
+
+---
+
+Q5. Pulmonary respiration refers to respiration through:
+A) Gills
+B) Skin
+C) Tracheal tubes
+D) Lungs
+Ans: D
+
+---
+
+Q6. Among vertebrates, fishes use ________ for respiration:
+A) Lungs
+B) Skin
+C) Tracheal tubes
+D) Gills
+Ans: D
+
+---
+
+Q7. Which animal can respire through moist skin?
+A) Reptiles
+B) Birds
+C) Frogs
+D) Fishes
+Ans: C
+
+---
+
+Q8. Cutaneous respiration means respiration through:
+A) Lungs
+B) Gills
+C) Moist skin
+D) Tracheal tubes
+Ans: C
+
+---
+
+Q9. Pharynx is described in NCERT as:
+A) Site of gas exchange
+B) Common passage for food and air
+C) Cartilaginous sound box
+D) Site of bronchi formation
+Ans: B
+
+---
+
+Q10. Larynx is called the sound box because:
+A) It is hollow and resonates sound
+B) It is a cartilaginous box that helps in sound production
+C) It connects trachea to bronchi
+D) It filters incoming air
+Ans: B
+
+---
+
+Q11. Which structure prevents entry of food into larynx during
+swallowing?
+A) Glottis
+B) Pharynx
+C) Epiglottis
+D) Uvula
+Ans: C
+
+---
+
+Q12. Epiglottis is described as:
+A) Bony rigid flap
+B) Muscular valve
+C) Thin elastic cartilaginous flap
+D) Mucous membrane fold
+Ans: C
+
+---
+
+Q13. Trachea divides into right and left primary bronchi at the
+level of:
+A) 3rd thoracic vertebra
+B) 4th thoracic vertebra
+C) 5th thoracic vertebra
+D) 7th thoracic vertebra
+Ans: C
+
+---
+
+Q14. The correct order of airway from outside to inside is:
+A) Nostrils → Larynx → Pharynx → Trachea → Bronchi
+B) Nostrils → Pharynx → Larynx → Trachea → Bronchi
+C) Nostrils → Trachea → Pharynx → Larynx → Bronchi
+D) Nostrils → Bronchi → Trachea → Larynx → Pharynx
+Ans: B
+
+---
+
+Q15. Alveoli are described in NCERT as:
+A) Thick-walled, non-vascularised sacs
+B) Thin, irregular-walled, vascularised bag-like structures
+C) Cartilaginous rings supporting bronchi
+D) Tubes that transport air to bronchioles
+Ans: B
+
+---
+
+Q16. Which structures are supported by incomplete cartilaginous
+rings?
+A) Alveoli and bronchioles only
+B) Trachea, primary, secondary, tertiary bronchi and
+   initial bronchioles
+C) Only trachea
+D) Only bronchi
+Ans: B
+
+---
+
+Q17. Lungs are covered by:
+A) Single-layered pleura with no fluid
+B) Double-layered pleura with pleural fluid between them
+C) Pericardium
+D) Peritoneum
+Ans: B
+
+---
+
+Q18. Function of pleural fluid is to:
+A) Supply nutrients to lungs
+B) Carry oxygen to alveoli
+C) Reduce friction on lung surface
+D) Regulate breathing rate
+Ans: C
+
+---
+
+Q19. Conducting part of respiratory system extends from:
+A) Alveoli to terminal bronchioles
+B) Pharynx to bronchi only
+C) External nostrils to terminal bronchioles
+D) Trachea to alveoli
+Ans: C
+
+---
+
+Q20. Exchange part or respiratory part consists of:
+A) Nostrils and pharynx
+B) Trachea and bronchi
+C) Alveoli and their ducts
+D) Terminal bronchioles and trachea
+Ans: C
+
+---
+
+Q21. Which of the following is NOT a function of the conducting
+part?
+A) Transports atmospheric air to alveoli
+B) Clears air from foreign particles
+C) Humidifies the air
+D) Actual diffusion of O2 and CO2
+Ans: D
+
+---
+
+Q22. Thoracic chamber is bounded laterally by:
+A) Sternum
+B) Vertebral column
+C) Ribs
+D) Diaphragm
+Ans: C
+
+---
+
+Q23. Diaphragm forms which boundary of thoracic chamber?
+A) Dorsal
+B) Ventral
+C) Lateral
+D) Lower dome-shaped
+Ans: D
+
+---
+
+Q24. Which group uses BOTH lungs and moist skin for respiration?
+A) Reptiles
+B) Mammals
+C) Amphibians
+D) Fishes
+Ans: C
+
+---
+
+Q25. Which of the following correctly matches organism with
+respiratory organ?
+A) Earthworm — Tracheal tubes
+B) Insects — Moist cuticle
+C) Aquatic molluscs — Gills
+D) Frogs — Only lungs
+Ans: C
+
+---
+
+Q26. Terminal bronchioles give rise to:
+A) Secondary bronchi
+B) Trachea
+C) Alveoli
+D) Primary bronchi
+Ans: C
+
+---
+
+Q27. Which is the correct sequence of airway branching?
+A) Primary bronchi → tertiary bronchi → secondary bronchi
+   → bronchioles → terminal bronchioles
+B) Primary bronchi → secondary bronchi → tertiary bronchi
+   → bronchioles → terminal bronchioles
+C) Trachea → bronchioles → bronchi → alveoli
+D) Trachea → alveoli → bronchi → bronchioles
+Ans: B
+
+---
+
+Q28. Sternum forms which boundary of thoracic chamber?
+A) Dorsal
+B) Ventral
+C) Lateral
+D) Lower
+Ans: B
+
+---
+
+Q29. Which of the following steps of respiration involves
+pulmonary ventilation?
+A) Diffusion of gases across alveolar membrane
+B) Transport of gases by blood
+C) Breathing — drawing in atmospheric air and releasing
+   alveolar air
+D) Utilisation of O2 by cells
+Ans: C
+
+---
+
+Q30. The vertebral column forms which wall of thoracic chamber?
+A) Ventral
+B) Lateral
+C) Dorsal
+D) Lower
+Ans: C
+
+-----------------------------------------
+TYPE 5 — ASSERTION REASON
+-----------------------------------------
+
+Directions:
+A) Both A & R true — R is correct explanation of A
+B) Both A & R true — R is NOT correct explanation of A
+C) A true, R false
+D) A false, R true
+
+---
+
+Q1.
+Assertion: Sponges exchange gases by simple diffusion.
+Reason: Sponges are lower invertebrates with no specialised
+respiratory organs.
+Ans: A
+
+---
+
+Q2.
+Assertion: Earthworms use tracheal tubes for respiration.
+Reason: Tracheal tubes are found in insects not earthworms.
+Ans: D
+
+---
+
+Q3.
+Assertion: Epiglottis prevents food from entering the larynx.
+Reason: Epiglottis is a thin elastic cartilaginous flap that covers
+glottis during swallowing.
+Ans: A
+
+---
+
+Q4.
+Assertion: Larynx is called the sound box.
+Reason: Larynx is a cartilaginous box that helps in sound
+production.
+Ans: A
+
+---
+
+Q5.
+Assertion: Trachea divides at the level of 5th thoracic vertebra.
+Reason: This division forms the right and left primary bronchi.
+Ans: A
+
+---
+
+Q6.
+Assertion: Alveoli are the actual sites of gas exchange.
+Reason: Alveoli are thin-walled and vascularised structures ideal
+for diffusion.
+Ans: A
+
+---
+
+Q7.
+Assertion: The conducting part extends from external nostrils
+to alveoli.
+Reason: Alveoli and their ducts form the exchange part not
+conducting part.
+Ans: D
+
+---
+
+Q8.
+Assertion: Pleural fluid reduces friction on the lung surface.
+Reason: Lungs are covered by double-layered pleura with fluid
+between the layers.
+Ans: A
+
+---
+
+Q9.
+Assertion: Frogs can respire through their moist skin.
+Reason: This is called pulmonary respiration.
+Ans: C
+(Skin respiration = cutaneous, not pulmonary)
+
+---
+
+Q10.
+Assertion: Incomplete cartilaginous rings support trachea and
+bronchi.
+Reason: These rings provide flexibility while maintaining open
+airway.
+Ans: A
+
+---
+
+Q11.
+Assertion: Thoracic chamber is an airtight chamber.
+Reason: Any change in thoracic volume directly affects pulmonary
+volume.
+Ans: A
+
+---
+
+Q12.
+Assertion: Pharynx is a common passage for food and air.
+Reason: Both digestive and respiratory tracts pass through
+pharynx.
+Ans: A
+
+---
+
+Q13.
+Assertion: Aquatic arthropods use lungs for branchial
+respiration.
+Reason: Gills are used by aquatic arthropods and molluscs for
+gas exchange.
+Ans: D
+
+---
+
+Q14.
+Assertion: Terminal bronchioles give rise to alveoli.
+Reason: Alveoli are the sites of actual gas exchange.
+Ans: B
+
+---
+
+Q15.
+Assertion: Birds respire through lungs.
+Reason: Birds are vertebrates and all vertebrates use lungs.
+Ans: C
+(Fishes are vertebrates but use gills, not lungs)
+
+-----------------------------------------
+TYPE 6 — NO. OF CORRECT STATEMENTS
+-----------------------------------------
+
+Q1. How many are CORRECT?
+(i) Earthworms use moist cuticle for respiration
+(ii) Insects use gills for respiration
+(iii) Aquatic molluscs use gills for respiration
+(iv) Frogs can respire through moist skin
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q2. How many are CORRECT?
+(i) Pharynx is a common passage for food and air
+(ii) Larynx is called the sound box
+(iii) Epiglottis is a bony flap
+(iv) Trachea divides at 5th thoracic vertebra
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iv)
+
+---
+
+Q3. How many are CORRECT?
+(i) Alveoli are thin-walled and vascularised
+(ii) Lungs are covered by single-layered pleura
+(iii) Pleural fluid reduces friction
+(iv) Conducting part ends at terminal bronchioles
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q4. How many are CORRECT?
+(i) Exchange part = alveoli and their ducts
+(ii) Conducting part = actual site of diffusion
+(iii) Thoracic chamber is airtight
+(iv) Vertebral column forms dorsal wall of thoracic chamber
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q5. How many are CORRECT?
+(i) Fishes use gills among vertebrates
+(ii) Amphibians respire only through lungs
+(iii) Birds respire through lungs
+(iv) Reptiles respire through lungs
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q6. How many are CORRECT?
+(i) Trachea, bronchi and initial bronchioles have incomplete
+    cartilaginous rings
+(ii) Terminal bronchioles give rise to alveoli
+(iii) Alveoli are thick-walled non-vascularised structures
+(iv) Bronchi undergo repeated divisions
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iv)
+
+---
+
+Q7. How many are CORRECT?
+(i) Sternum forms ventral wall of thoracic chamber
+(ii) Diaphragm is dome-shaped and forms lower boundary
+(iii) Ribs form lateral walls of thoracic chamber
+(iv) Vertebral column forms ventral wall
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iii)
+
+---
+
+Q8. How many are CORRECT?
+(i) Conducting part transports air to alveoli
+(ii) Conducting part humidifies the air
+(iii) Actual diffusion of gases occurs in conducting part
+(iv) Conducting part clears foreign particles from air
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iv)
+
+-----------------------------------------
+TYPE 7 — TRUE / FALSE
+-----------------------------------------
+
+Q1.
+(i) Sponges exchange gases by simple diffusion
+(ii) Earthworms use tracheal tubes for respiration
+(iii) Frogs can respire through moist skin
+(iv) Insects use gills for respiration
+
+A) i-T, ii-T, iii-T, iv-F
+B) i-T, ii-F, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-T
+Ans: B
+
+---
+
+Q2.
+(i) Larynx is called the sound box
+(ii) Pharynx is a common passage for food and air
+(iii) Epiglottis is a bony flap
+(iv) Trachea divides at 5th thoracic vertebra
+
+A) i-T, ii-T, iii-T, iv-T
+B) i-T, ii-T, iii-F, iv-T
+C) i-F, ii-T, iii-T, iv-F
+D) i-T, ii-F, iii-T, iv-T
+Ans: B
+
+---
+
+Q3.
+(i) Alveoli are thin-walled and vascularised
+(ii) Lungs are covered by single-layered pleura
+(iii) Pleural fluid reduces friction on lung surface
+(iv) Conducting part ends at terminal bronchioles
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-T, ii-T, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-F
+Ans: A
+
+---
+
+Q4.
+(i) Exchange part = alveoli and their ducts
+(ii) Conducting part is actual site of gas diffusion
+(iii) Thoracic chamber is anatomically airtight
+(iv) Ribs form lateral walls of thoracic chamber
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-T, ii-T, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-F
+Ans: A
+
+---
+
+Q5.
+(i) Fishes use lungs for respiration
+(ii) Amphibians can use both lungs and moist skin
+(iii) Birds respire through lungs
+(iv) Aquatic molluscs use tracheal tubes
+
+A) i-T, ii-T, iii-T, iv-F
+B) i-F, ii-T, iii-T, iv-F
+C) i-T, ii-F, iii-T, iv-T
+D) i-F, ii-F, iii-F, iv-T
+Ans: B
+
+---
+
+Q6.
+(i) Primary bronchi form secondary and tertiary bronchi
+(ii) Terminal bronchioles give rise to alveoli
+(iii) Incomplete cartilaginous rings support alveoli
+(iv) Trachea is a straight tube
+
+A) i-T, ii-T, iii-F, iv-T
+B) i-T, ii-F, iii-T, iv-T
+C) i-F, ii-T, iii-T, iv-F
+D) i-T, ii-T, iii-T, iv-T
+Ans: A
+
+---
+
+Q7.
+(i) Sternum forms ventral boundary of thoracic chamber
+(ii) Diaphragm is dome-shaped
+(iii) Vertebral column forms lateral boundary
+(iv) Thoracic chamber is airtight
+
+A) i-T, ii-T, iii-F, iv-T
+B) i-T, ii-F, iii-T, iv-T
+C) i-F, ii-T, iii-T, iv-F
+D) i-T, ii-T, iii-T, iv-T
+Ans: A
+
+-----------------------------------------
+TYPE 8 — FILL IN THE BLANKS
+-----------------------------------------
+
+Q1. Lower invertebrates like sponges exchange gases by ________
+over their entire body surface.
+A) Gills
+B) Lungs
+C) Simple diffusion
+D) Tracheal tubes
+Ans: C
+
+---
+
+Q2. Earthworms use their moist ________ for respiration.
+A) Skin only
+B) Cuticle
+C) Gills
+D) Lungs
+Ans: B
+
+---
+
+Q3. Insects use a network of ________ to transport atmospheric
+air within the body.
+A) Gills
+B) Alveoli
+C) Tracheal tubes
+D) Bronchioles
+Ans: C
+
+---
+
+Q4. Respiration through gills is called ________ respiration.
+A) Pulmonary
+B) Cutaneous
+C) Tracheal
+D) Branchial
+Ans: D
+
+---
+
+Q5. Respiration through lungs is called ________ respiration.
+A) Branchial
+B) Cutaneous
+C) Pulmonary
+D) Tracheal
+Ans: C
+
+---
+
+Q6. Respiration through moist skin is called ________ respiration.
+A) Pulmonary
+B) Branchial
+C) Tracheal
+D) Cutaneous
+Ans: D
+
+---
+
+Q7. Larynx is also known as the ________.
+A) Food pipe
+B) Sound box
+C) Wind pipe
+D) Voice canal
+Ans: B
+
+---
+
+Q8. ________ is a thin elastic cartilaginous flap that prevents
+food from entering larynx.
+A) Glottis
+B) Uvula
+C) Epiglottis
+D) Pharynx
+Ans: C
+
+---
+
+Q9. Trachea divides at the level of ________ thoracic vertebra.
+A) 3rd
+B) 4th
+C) 5th
+D) 7th
+Ans: C
+
+---
+
+Q10. Terminal bronchioles give rise to ________.
+A) Secondary bronchi
+B) Primary bronchi
+C) Trachea
+D) Alveoli
+Ans: D
+
+---
+
+Q11. Lungs are covered by ________ layered pleura.
+A) Single
+B) Double
+C) Triple
+D) Quadruple
+Ans: B
+
+---
+
+Q12. Pleural fluid helps to ________ on the lung surface.
+A) Increase friction
+B) Supply nutrients
+C) Reduce friction
+D) Regulate temperature
+Ans: C
+
+---
+
+Q13. The conducting part of respiratory system ends at ________.
+A) Alveoli
+B) Primary bronchi
+C) Terminal bronchioles
+D) Trachea
+Ans: C
+
+---
+
+Q14. The exchange part of respiratory system consists of alveoli
+and their ________.
+A) Bronchi
+B) Ducts
+C) Walls
+D) Capillaries
+Ans: B
+
+---
+
+Q15. The thoracic chamber is bounded on the lower side by the
+dome-shaped ________.
+A) Sternum
+B) Diaphragm
+C) Vertebral column
+D) Ribs
+Ans: B
+
+-----------------------------------------
+TYPE 9 — MATCH THE COLUMN
+-----------------------------------------
+
+Q1. Match organism with respiratory organ:
+
+Column A                    Column B
+1. Earthworm                P. Gills
+2. Insects                  Q. Moist cuticle
+3. Aquatic molluscs         R. Lungs
+4. Frogs                    S. Tracheal tubes
+
+A) 1-Q, 2-S, 3-P, 4-R
+B) 1-P, 2-Q, 3-S, 4-R
+C) 1-S, 2-P, 3-R, 4-Q
+D) 1-Q, 2-P, 3-S, 4-R
+Ans: A
+
+---
+
+Q2. Match type of respiration with organism:
+
+Column A                    Column B
+1. Branchial respiration    P. Frogs (skin)
+2. Pulmonary respiration    Q. Insects
+3. Cutaneous respiration    R. Aquatic arthropods
+4. Tracheal respiration     S. Mammals
+
+A) 1-R, 2-S, 3-P, 4-Q
+B) 1-P, 2-R, 3-Q, 4-S
+C) 1-S, 2-P, 3-R, 4-Q
+D) 1-Q, 2-S, 3-P, 4-R
+Ans: A
+
+---
+
+Q3. Match parts of human respiratory system:
+
+Column A                    Column B
+1. Pharynx                  P. Site of actual gas exchange
+2. Larynx                   Q. Common passage for food and air
+3. Epiglottis               R. Prevents food entry into larynx
+4. Alveoli                  S. Sound box
+
+A) 1-Q, 2-S, 3-R, 4-P
+B) 1-S, 2-Q, 3-P, 4-R
+C) 1-P, 2-R, 3-S, 4-Q
+D) 1-R, 2-P, 3-Q, 4-S
+Ans: A
+
+---
+
+Q4. Match boundaries of thoracic chamber:
+
+Column A                    Column B
+1. Vertebral column         P. Ventral boundary
+2. Sternum                  Q. Lateral boundary
+3. Ribs                     R. Lower boundary
+4. Diaphragm                S. Dorsal boundary
+
+A) 1-S, 2-P, 3-Q, 4-R
+B) 1-P, 2-S, 3-R, 4-Q
+C) 1-Q, 2-R, 3-S, 4-P
+D) 1-R, 2-Q, 3-P, 4-S
+Ans: A
+
+---
+
+Q5. Match conducting vs exchange parts:
+
+Column A                    Column B
+1. External nostrils        P. Exchange part
+2. Terminal bronchioles     Q. Last part of conducting part
+3. Alveoli                  R. Start of conducting part
+4. Alveolar ducts           S. Part of exchange part
+
+A) 1-R, 2-Q, 3-P, 4-S
+B) 1-P, 2-S, 3-R, 4-Q
+C) 1-Q, 2-P, 3-S, 4-R
+D) 1-S, 2-R, 3-Q, 4-P
+Ans: A
+
+-----------------------------------------
+TYPE 10 — DIAGRAM BASED
+-----------------------------------------
+
+DIAGRAM: Figure 14.1 — Diagrammatic view of human respiratory
+system (sectional view of left lung also shown)
+Labels: Epiglottis, Larynx, Trachea, Bronchus, Lung, Heart,
+Diaphragm, Cut end of rib, Pleural membranes, Alveoli,
+Pleural fluid, Bronchiole
+
+---
+
+Q1. In Figure 14.1, the structure labelled between larynx and
+bronchi is:
+A) Pharynx
+B) Trachea
+C) Alveoli
+D) Bronchioles
+Ans: B
+
+---
+
+Q2. In Figure 14.1, pleural fluid is shown between:
+A) Two lungs
+B) Lung and heart
+C) Two layers of pleural membrane
+D) Alveoli and bronchioles
+Ans: C
+
+---
+
+Q3. In Figure 14.1, which structure is dome-shaped at the base
+of the thoracic cavity?
+A) Sternum
+B) Ribs
+C) Diaphragm
+D) Pleura
+Ans: C
+
+---
+
+Q4. In Figure 14.1, alveoli are shown at the end of which
+structures?
+A) Trachea
+B) Primary bronchi
+C) Bronchioles
+D) Pharynx
+Ans: C
+
+---
+
+Q5. In Figure 14.1, the heart is shown positioned:
+A) Above the lungs
+B) Between the two lungs
+C) Below the diaphragm
+D) Outside the thoracic cavity
+Ans: B
+
+-----------------------------------------
+TYPE 11 — TABLE BASED
+-----------------------------------------
+
+TABLE: Organisms and their Respiratory Organs/Mechanisms
+
+Organism              | Respiratory structure
+Sponges/flatworms     | Simple diffusion
+Earthworms            | Moist cuticle
+Insects               | Tracheal tubes
+Aquatic arthropods    | Gills
+Terrestrial forms     | Lungs
+Frogs                 | Lungs + moist skin
+
+---
+
+Q1. Which entry in the table above is INCORRECTLY matched?
+A) Earthworms — Moist cuticle
+B) Insects — Tracheal tubes
+C) Aquatic arthropods — Lungs
+D) Frogs — Lungs + moist skin
+Ans: C
+(Aquatic arthropods use Gills, not Lungs)
+
+---
+
+Q2. According to the table, which organism uses MORE THAN ONE
+respiratory structure?
+A) Earthworms
+B) Insects
+C) Frogs
+D) Aquatic arthropods
+Ans: C
+
+---
+
+Q3. Which of the following is correctly matched based on the
+table?
+A) Sponges — Tracheal tubes
+B) Earthworms — Gills
+C) Insects — Tracheal tubes
+D) Frogs — Only lungs
+Ans: C
+
+-----------------------------------------
+TYPE 12 — PREV YEAR QUESTIONS
+-----------------------------------------
+
+Q1. [NEET 2016]
+Which of the following is the correct sequence of airway in
+human respiratory system?
+A) Nostrils → Larynx → Pharynx → Trachea → Bronchi
+B) Nostrils → Pharynx → Larynx → Trachea → Bronchi
+C) Nostrils → Trachea → Pharynx → Larynx → Bronchi
+D) Nostrils → Pharynx → Trachea → Larynx → Bronchi
+Ans: B
+
+---
+
+Q2. [NEET 2015]
+Epiglottis is:
+A) A bony structure that helps in sound production
+B) A muscular flap that covers glottis during swallowing
+C) A thin elastic cartilaginous flap covering glottis
+   during swallowing
+D) A rigid cartilaginous ring supporting trachea
+Ans: C
+
+---
+
+Q3. [NEET 2018 type]
+Trachea of human beings divides into right and left primary
+bronchi at the level of:
+A) 3rd thoracic vertebra
+B) 4th thoracic vertebra
+C) 5th thoracic vertebra
+D) 6th thoracic vertebra
+Ans: C
+
+---
+
+Q4. [NEET 2019 type]
+Which of the following correctly matches organism with its
+respiratory organ?
+A) Earthworm — Tracheal tubes
+B) Prawn — Lungs
+C) Frog — Gills only
+D) Insects — Tracheal tubes
+Ans: D
+
+---
+
+Q5. [NEET 2020 type]
+The conducting zone of human respiratory system includes all
+of the following EXCEPT:
+A) Trachea
+B) Bronchi
+C) Alveoli
+D) Terminal bronchioles
+Ans: C
+
+---
+
+Q6. [NEET 2021 type]
+Pleural fluid in human lungs helps to:
+A) Exchange gases between blood and alveoli
+B) Transport oxygen to tissues
+C) Reduce friction between lung surface and thoracic wall
+D) Regulate respiratory rate
+Ans: C
+
+---
+
+Q7. [NEET concept]
+Which of the following statements about alveoli is CORRECT?
+A) They are thick-walled and non-vascularised
+B) They are the actual sites of gas exchange
+C) They form the conducting part of respiratory system
+D) They are supported by complete cartilaginous rings
+Ans: B
+
+---
+
+Q8. [NEET concept]
+Cutaneous respiration is seen in which of the following?
+A) Birds
+B) Reptiles
+C) Fishes
+D) Frogs
+Ans: D
+
+=====================================
+14.1 RESPIRATORY ORGANS — ALL 13 TYPES DONE!
+Say NEXT for 14.2 Mechanism of Breathing
+=====================================

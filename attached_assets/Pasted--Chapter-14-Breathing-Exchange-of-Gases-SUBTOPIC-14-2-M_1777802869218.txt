@@ -1,0 +1,1084 @@
+=====================================
+Chapter 14 · Breathing & Exchange of Gases
+SUBTOPIC: 14.2 MECHANISM OF BREATHING
+All 13 Types | NEET Level
+=====================================
+
+-----------------------------------------
+TYPE 1 — PARAGRAPH STUDY
+-----------------------------------------
+
+Breathing involves two stages: inspiration during which
+atmospheric air is drawn in and expiration by which the alveolar
+air is released out. The movement of air into and out of the lungs
+is carried out by creating a pressure gradient between the lungs
+and the atmosphere.
+
+Inspiration can occur if the pressure within the lungs
+(intra-pulmonary pressure) is less than the atmospheric pressure.
+Expiration takes place when the intra-pulmonary pressure is
+higher than the atmospheric pressure.
+
+The diaphragm and a specialised set of muscles — external and
+internal intercostals between the ribs, help in generation of such
+gradients.
+
+Inspiration is initiated by the contraction of diaphragm which
+increases the volume of thoracic chamber in the antero-posterior
+axis. The contraction of external inter-costal muscles lifts up the
+ribs and the sternum causing an increase in the volume of the
+thoracic chamber in the dorso-ventral axis. The overall increase
+in thoracic volume causes a similar increase in pulmonary volume.
+An increase in pulmonary volume decreases the intra-pulmonary
+pressure to less than atmospheric pressure which forces air from
+outside to move into the lungs — inspiration.
+
+Relaxation of the diaphragm and inter-costal muscles returns
+them to normal positions and reduces thoracic volume and thereby
+pulmonary volume. This leads to increase in intra-pulmonary
+pressure to slightly above atmospheric pressure causing expulsion
+of air from lungs — expiration.
+
+On an average, a healthy human breathes 12-16 times/minute.
+Volume of air involved in breathing can be estimated by a
+spirometer which helps in clinical assessment of pulmonary
+functions.
+
+-----------------------------------------
+TYPE 2 — POINTER NOTES STUDY
+-----------------------------------------
+
+MECHANISM:
+- Breathing = two stages: INSPIRATION and EXPIRATION
+- Inspiration = atmospheric air drawn IN
+- Expiration = alveolar air released OUT
+- Movement of air = by creating PRESSURE GRADIENT between
+  lungs and atmosphere
+
+INSPIRATION:
+- Intra-pulmonary pressure < Atmospheric pressure
+- Diaphragm CONTRACTS → thoracic volume increases
+  (antero-posterior axis)
+- External intercostal muscles CONTRACT → ribs and sternum
+  lift up → thoracic volume increases (dorso-ventral axis)
+- Overall thoracic volume increases → pulmonary volume increases
+- Intra-pulmonary pressure decreases below atmospheric pressure
+- Air moves IN from outside = INSPIRATION
+
+EXPIRATION:
+- Intra-pulmonary pressure > Atmospheric pressure
+- Diaphragm and intercostal muscles RELAX
+- Thoracic volume decreases → pulmonary volume decreases
+- Intra-pulmonary pressure increases above atmospheric pressure
+- Air expelled OUT = EXPIRATION
+
+KEY FACTS:
+- Additional abdominal muscles help increase strength of
+  inspiration and expiration
+- Healthy human breathes 12-16 times/minute
+- Spirometer = estimates volume of air in breathing movements
+- Spirometer used for clinical assessment of pulmonary functions
+
+RESPIRATORY VOLUMES:
+- Tidal Volume (TV) = volume inspired or expired in normal
+  respiration = approx 500 mL
+- Healthy man can inspire/expire 6000-8000 mL per minute
+- IRV (Inspiratory Reserve Volume) = extra air inspired by
+  forcible inspiration = 2500-3000 mL
+- ERV (Expiratory Reserve Volume) = extra air expired by
+  forcible expiration = 1000-1100 mL
+- RV (Residual Volume) = air remaining after forcible expiration
+  = 1100-1200 mL
+
+PULMONARY CAPACITIES:
+- IC (Inspiratory Capacity) = TV + IRV
+- EC (Expiratory Capacity) = TV + ERV
+- FRC (Functional Residual Capacity) = ERV + RV
+- VC (Vital Capacity) = ERV + TV + IRV
+- TLC (Total Lung Capacity) = RV + ERV + TV + IRV
+  = VC + RV
+
+-----------------------------------------
+TYPE 3 — TRICKS & MNEMONICS
+-----------------------------------------
+
+Mnemonic for Respiratory Volumes:
+"Tall Indians Earn Respect"
+T - Tidal Volume (TV) = 500 mL
+I - IRV = 2500-3000 mL
+E - ERV = 1000-1100 mL
+R - RV = 1100-1200 mL
+
+Mnemonic for Pulmonary Capacities:
+"I Eat Fresh Vegetables Today"
+I - IC = TV + IRV
+E - EC = TV + ERV
+F - FRC = ERV + RV
+V - VC = ERV + TV + IRV
+T - TLC = RV + ERV + TV + IRV
+
+Trick for Inspiration vs Expiration:
+INSPIRATION = Contract → Volume UP → Pressure DOWN → Air IN
+EXPIRATION = Relax → Volume DOWN → Pressure UP → Air OUT
+
+-----------------------------------------
+TYPE 4 — STANDARD MCQ
+-----------------------------------------
+
+Q1. Breathing involves how many stages?
+A) One
+B) Two
+C) Three
+D) Four
+Ans: B
+
+---
+
+Q2. Inspiration is the stage during which:
+A) Alveolar air is released out
+B) Atmospheric air is drawn in
+C) CO2 is exchanged at alveoli
+D) Diaphragm relaxes
+Ans: B
+
+---
+
+Q3. Expiration is the stage during which:
+A) Atmospheric air is drawn in
+B) O2 enters the blood
+C) Alveolar air is released out
+D) Diaphragm contracts
+Ans: C
+
+---
+
+Q4. Movement of air into and out of lungs is carried out by
+creating:
+A) Temperature gradient
+B) Concentration gradient
+C) Pressure gradient between lungs and atmosphere
+D) Osmotic gradient
+Ans: C
+
+---
+
+Q5. Inspiration occurs when intra-pulmonary pressure is:
+A) Equal to atmospheric pressure
+B) Higher than atmospheric pressure
+C) Less than atmospheric pressure
+D) Zero
+Ans: C
+
+---
+
+Q6. Expiration occurs when intra-pulmonary pressure is:
+A) Less than atmospheric pressure
+B) Equal to atmospheric pressure
+C) Higher than atmospheric pressure
+D) Negative
+Ans: C
+
+---
+
+Q7. Which muscles help in generation of pressure gradients
+during breathing?
+A) Diaphragm and abdominal muscles only
+B) Diaphragm and external and internal intercostal muscles
+C) Only intercostal muscles
+D) Only diaphragm
+Ans: B
+
+---
+
+Q8. Inspiration is initiated by the contraction of:
+A) Internal intercostal muscles
+B) Abdominal muscles
+C) Diaphragm
+D) Sternum
+Ans: C
+
+---
+
+Q9. Contraction of diaphragm increases the volume of thoracic
+chamber in which axis?
+A) Dorso-ventral axis
+B) Lateral axis
+C) Antero-posterior axis
+D) Transverse axis
+Ans: C
+
+---
+
+Q10. Contraction of external intercostal muscles causes:
+A) Ribs and sternum to move downward
+B) Ribs and sternum to lift up
+C) Diaphragm to relax
+D) Pulmonary volume to decrease
+Ans: B
+
+---
+
+Q11. Lifting of ribs and sternum increases thoracic volume in
+which axis?
+A) Antero-posterior axis
+B) Lateral axis
+C) Dorso-ventral axis
+D) Transverse axis
+Ans: C
+
+---
+
+Q12. During inspiration, intra-pulmonary pressure:
+A) Increases above atmospheric pressure
+B) Decreases below atmospheric pressure
+C) Remains equal to atmospheric pressure
+D) Becomes zero
+Ans: B
+
+---
+
+Q13. During expiration, what happens to diaphragm and
+intercostal muscles?
+A) They contract further
+B) They relax and return to normal positions
+C) They remain in contracted state
+D) Only diaphragm relaxes
+Ans: B
+
+---
+
+Q14. Relaxation of diaphragm and intercostal muscles leads to:
+A) Increase in thoracic volume
+B) Decrease in intra-pulmonary pressure
+C) Decrease in thoracic and pulmonary volume
+D) Air moving into lungs
+Ans: C
+
+---
+
+Q15. During expiration, intra-pulmonary pressure rises to:
+A) Below atmospheric pressure
+B) Equal to atmospheric pressure
+C) Slightly above atmospheric pressure
+D) Twice the atmospheric pressure
+Ans: C
+
+---
+
+Q16. A healthy human breathes how many times per minute on
+average?
+A) 6-10 times
+B) 12-16 times
+C) 18-22 times
+D) 25-30 times
+Ans: B
+
+---
+
+Q17. Which instrument is used to estimate volume of air involved
+in breathing movements?
+A) Sphygmomanometer
+B) Stethoscope
+C) Spirometer
+D) Barometer
+Ans: C
+
+---
+
+Q18. Spirometer is used for:
+A) Measuring blood pressure
+B) Measuring heart rate
+C) Clinical assessment of pulmonary functions
+D) Measuring oxygen saturation in blood
+Ans: C
+
+---
+
+Q19. Tidal Volume is approximately:
+A) 200 mL
+B) 350 mL
+C) 500 mL
+D) 1000 mL
+Ans: C
+
+---
+
+Q20. A healthy man can inspire or expire approximately how much
+air per minute?
+A) 2000-4000 mL
+B) 4000-6000 mL
+C) 6000-8000 mL
+D) 8000-10000 mL
+Ans: C
+
+---
+
+Q21. Inspiratory Reserve Volume averages:
+A) 500-1000 mL
+B) 1000-1500 mL
+C) 2500-3000 mL
+D) 3500-4000 mL
+Ans: C
+
+---
+
+Q22. Expiratory Reserve Volume averages:
+A) 500-800 mL
+B) 1000-1100 mL
+C) 1500-2000 mL
+D) 2500-3000 mL
+Ans: B
+
+---
+
+Q23. Residual Volume averages:
+A) 500-800 mL
+B) 800-1000 mL
+C) 1100-1200 mL
+D) 1500-2000 mL
+Ans: C
+
+---
+
+Q24. Inspiratory Capacity (IC) is equal to:
+A) TV + ERV
+B) TV + IRV
+C) ERV + RV
+D) IRV + RV
+Ans: B
+
+---
+
+Q25. Expiratory Capacity (EC) is equal to:
+A) TV + IRV
+B) IRV + RV
+C) TV + ERV
+D) ERV + RV
+Ans: C
+
+---
+
+Q26. Functional Residual Capacity (FRC) is equal to:
+A) TV + IRV
+B) TV + ERV
+C) IRV + RV
+D) ERV + RV
+Ans: D
+
+---
+
+Q27. Vital Capacity (VC) includes:
+A) RV + TV + IRV
+B) ERV + TV + IRV
+C) ERV + RV + TV
+D) IRV + RV only
+Ans: B
+
+---
+
+Q28. Total Lung Capacity (TLC) is equal to:
+A) VC + TV
+B) VC + IRV
+C) VC + RV
+D) VC + ERV
+Ans: C
+
+---
+
+Q29. Residual Volume is the air remaining in lungs even after:
+A) Normal inspiration
+B) Normal expiration
+C) Forcible expiration
+D) Forcible inspiration
+Ans: C
+
+---
+
+Q30. Vital Capacity is the maximum volume of air a person can
+breathe in after:
+A) Normal inspiration
+B) Normal expiration
+C) Forced expiration
+D) Tidal breathing
+Ans: C
+
+-----------------------------------------
+TYPE 5 — ASSERTION REASON
+-----------------------------------------
+
+Directions:
+A) Both A & R true — R is correct explanation of A
+B) Both A & R true — R is NOT correct explanation of A
+C) A true, R false
+D) A false, R true
+
+---
+
+Q1.
+Assertion: Inspiration occurs when intra-pulmonary pressure
+is less than atmospheric pressure.
+Reason: This pressure difference forces air from outside into
+the lungs.
+Ans: A
+
+---
+
+Q2.
+Assertion: Contraction of diaphragm initiates inspiration.
+Reason: Contraction of diaphragm increases thoracic volume
+in antero-posterior axis.
+Ans: A
+
+---
+
+Q3.
+Assertion: Contraction of external intercostal muscles causes
+expiration.
+Reason: External intercostal muscles lift up ribs and sternum
+increasing thoracic volume.
+Ans: D
+
+---
+
+Q4.
+Assertion: During expiration, intra-pulmonary pressure rises
+above atmospheric pressure.
+Reason: Relaxation of diaphragm and intercostal muscles
+decreases thoracic and pulmonary volume.
+Ans: A
+
+---
+
+Q5.
+Assertion: Residual Volume cannot be expelled even by
+forcible expiration.
+Reason: Residual Volume averages 1100-1200 mL and always
+remains in lungs.
+Ans: A
+
+---
+
+Q6.
+Assertion: Vital Capacity includes Tidal Volume.
+Reason: Vital Capacity = ERV + TV + IRV.
+Ans: A
+
+---
+
+Q7.
+Assertion: Total Lung Capacity equals Vital Capacity plus
+Residual Volume.
+Reason: Residual Volume is the only volume that cannot be
+measured by spirometer directly.
+Ans: B
+
+---
+
+Q8.
+Assertion: Spirometer is used to measure blood pressure.
+Reason: Spirometer helps in clinical assessment of pulmonary
+functions.
+Ans: D
+
+---
+
+Q9.
+Assertion: A healthy human breathes 12-16 times per minute.
+Reason: Each breath involves both inspiration and expiration.
+Ans: B
+
+---
+
+Q10.
+Assertion: Tidal Volume is approximately 500 mL.
+Reason: A healthy man can inspire or expire 6000-8000 mL
+of air per minute.
+Ans: B
+
+---
+
+Q11.
+Assertion: During inspiration, thoracic volume increases in
+both antero-posterior and dorso-ventral axes.
+Reason: Both diaphragm contraction and external intercostal
+muscle contraction contribute to this increase.
+Ans: A
+
+---
+
+Q12.
+Assertion: FRC is the volume of air remaining after normal
+expiration.
+Reason: FRC = ERV + RV.
+Ans: A
+
+-----------------------------------------
+TYPE 6 — NO. OF CORRECT STATEMENTS
+-----------------------------------------
+
+Q1. How many are CORRECT?
+(i) Inspiration = atmospheric air drawn in
+(ii) Expiration = atmospheric air drawn in
+(iii) Diaphragm contracts during inspiration
+(iv) Intra-pulmonary pressure is less than atmospheric
+     pressure during inspiration
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q2. How many are CORRECT?
+(i) Tidal Volume = approx 500 mL
+(ii) IRV = 2500-3000 mL
+(iii) ERV = 500-600 mL
+(iv) RV = 1100-1200 mL
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iv)
+
+---
+
+Q3. How many are CORRECT?
+(i) IC = TV + IRV
+(ii) EC = TV + ERV
+(iii) FRC = IRV + RV
+(iv) VC = ERV + TV + IRV
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iv)
+
+---
+
+Q4. How many are CORRECT?
+(i) TLC = VC + RV
+(ii) Spirometer measures pulmonary functions
+(iii) Healthy human breathes 12-16 times per minute
+(iv) Residual Volume can be expelled by forcible expiration
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iii)
+
+---
+
+Q5. How many are CORRECT?
+(i) External intercostal muscles lift ribs and sternum
+(ii) Diaphragm contraction increases thoracic volume
+(iii) Relaxation of muscles leads to expiration
+(iv) During expiration intra-pulmonary pressure decreases
+     below atmospheric
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iii)
+
+---
+
+Q6. How many are CORRECT?
+(i) Vital Capacity = ERV + TV + IRV
+(ii) FRC = ERV + RV
+(iii) IC = TV + RV
+(iv) TLC = VC + RV
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iv)
+
+-----------------------------------------
+TYPE 7 — TRUE / FALSE
+-----------------------------------------
+
+Q1.
+(i) Inspiration = atmospheric air drawn in
+(ii) Diaphragm relaxes during inspiration
+(iii) Intra-pulmonary pressure < atmospheric pressure
+     during inspiration
+(iv) External intercostal muscles lift ribs during inspiration
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-T, ii-T, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-T
+Ans: A
+
+---
+
+Q2.
+(i) Tidal Volume = approx 500 mL
+(ii) IRV = 1000-1100 mL
+(iii) ERV = 1000-1100 mL
+(iv) RV = 1100-1200 mL
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-T, ii-T, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-T
+Ans: A
+
+---
+
+Q3.
+(i) IC = TV + IRV
+(ii) EC = TV + RV
+(iii) FRC = ERV + RV
+(iv) TLC = VC + RV
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-T, ii-T, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-T
+Ans: A
+
+---
+
+Q4.
+(i) Spirometer measures blood pressure
+(ii) Healthy human breathes 12-16 times per minute
+(iii) Vital Capacity = ERV + TV + IRV
+(iv) Residual Volume remains even after forcible expiration
+
+A) i-T, ii-T, iii-T, iv-F
+B) i-F, ii-T, iii-T, iv-T
+C) i-T, ii-F, iii-T, iv-T
+D) i-F, ii-F, iii-F, iv-T
+Ans: B
+
+---
+
+Q5.
+(i) During expiration diaphragm relaxes
+(ii) During expiration intra-pulmonary pressure rises above
+    atmospheric pressure
+(iii) Expiration leads to air being expelled from lungs
+(iv) During expiration thoracic volume increases
+
+A) i-T, ii-T, iii-T, iv-F
+B) i-T, ii-F, iii-T, iv-T
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-T, iii-F, iv-T
+Ans: A
+
+-----------------------------------------
+TYPE 8 — FILL IN THE BLANKS
+-----------------------------------------
+
+Q1. Breathing involves two stages: ________ and expiration.
+A) Diffusion
+B) Inspiration
+C) Circulation
+D) Transpiration
+Ans: B
+
+---
+
+Q2. Movement of air into and out of lungs is by creating a
+________ between lungs and atmosphere.
+A) Temperature gradient
+B) Concentration gradient
+C) Pressure gradient
+D) Osmotic gradient
+Ans: C
+
+---
+
+Q3. Inspiration occurs when intra-pulmonary pressure is
+________ than atmospheric pressure.
+A) Higher
+B) Equal
+C) Less
+D) Double
+Ans: C
+
+---
+
+Q4. Inspiration is initiated by the ________ of diaphragm.
+A) Relaxation
+B) Contraction
+C) Elongation
+D) Compression
+Ans: B
+
+---
+
+Q5. Contraction of external intercostal muscles lifts up the
+ribs and ________.
+A) Diaphragm
+B) Vertebral column
+C) Sternum
+D) Pleura
+Ans: C
+
+---
+
+Q6. A healthy human breathes ________ times per minute on
+average.
+A) 6-10
+B) 12-16
+C) 18-22
+D) 25-30
+Ans: B
+
+---
+
+Q7. ________ is used to estimate volume of air in breathing
+movements.
+A) Sphygmomanometer
+B) Stethoscope
+C) Spirometer
+D) Barometer
+Ans: C
+
+---
+
+Q8. Tidal Volume is approximately ________ mL.
+A) 200
+B) 350
+C) 500
+D) 1000
+Ans: C
+
+---
+
+Q9. IRV averages ________ mL.
+A) 500-1000
+B) 1000-1500
+C) 2500-3000
+D) 3500-4000
+Ans: C
+
+---
+
+Q10. Residual Volume is the air remaining in lungs even after
+forcible ________.
+A) Inspiration
+B) Expiration
+C) Tidal breathing
+D) Exercise
+Ans: B
+
+---
+
+Q11. Vital Capacity = ERV + TV + ________.
+A) RV
+B) FRC
+C) IRV
+D) TLC
+Ans: C
+
+---
+
+Q12. Total Lung Capacity = Vital Capacity + ________.
+A) TV
+B) IRV
+C) ERV
+D) RV
+Ans: D
+
+-----------------------------------------
+TYPE 9 — MATCH THE COLUMN
+-----------------------------------------
+
+Q1. Match respiratory volumes with values:
+
+Column A          Column B
+1. TV             P. 1100-1200 mL
+2. IRV            Q. 500 mL
+3. ERV            R. 2500-3000 mL
+4. RV             S. 1000-1100 mL
+
+A) 1-Q, 2-R, 3-S, 4-P
+B) 1-P, 2-Q, 3-R, 4-S
+C) 1-R, 2-S, 3-P, 4-Q
+D) 1-S, 2-P, 3-Q, 4-R
+Ans: A
+
+---
+
+Q2. Match pulmonary capacities with formulae:
+
+Column A          Column B
+1. IC             P. ERV + RV
+2. EC             Q. TV + IRV
+3. FRC            R. VC + RV
+4. TLC            S. TV + ERV
+
+A) 1-Q, 2-S, 3-P, 4-R
+B) 1-S, 2-Q, 3-R, 4-P
+C) 1-P, 2-R, 3-Q, 4-S
+D) 1-R, 2-P, 3-S, 4-Q
+Ans: A
+
+---
+
+Q3. Match events of inspiration:
+
+Column A                           Column B
+1. Diaphragm contracts             P. Thoracic volume increases
+                                      in dorso-ventral axis
+2. External intercostal            Q. Thoracic volume increases
+   muscles contract                   in antero-posterior axis
+3. Pulmonary volume increases      R. Air moves into lungs
+4. Intra-pulmonary pressure        S. Decreases below
+   change                             atmospheric pressure
+
+A) 1-Q, 2-P, 3-R, 4-S
+B) 1-P, 2-Q, 3-S, 4-R
+C) 1-R, 2-S, 3-P, 4-Q
+D) 1-S, 2-R, 3-Q, 4-P
+Ans: A
+
+---
+
+Q4. Match volumes/capacities with definitions:
+
+Column A               Column B
+1. Tidal Volume        P. Air remaining after forcible
+                          expiration
+2. Residual Volume     Q. Max air breathed in after forced
+                          expiration
+3. Vital Capacity      R. Air inspired or expired in normal
+                          respiration
+4. IRV                 S. Extra air inspired by forcible
+                          inspiration
+
+A) 1-R, 2-P, 3-Q, 4-S
+B) 1-P, 2-R, 3-S, 4-Q
+C) 1-Q, 2-S, 3-P, 4-R
+D) 1-S, 2-Q, 3-R, 4-P
+Ans: A
+
+-----------------------------------------
+TYPE 10 — DIAGRAM BASED
+-----------------------------------------
+
+DIAGRAM: Figure 14.2 — Mechanism of breathing showing
+(a) Inspiration (b) Expiration
+Labels in (a): Air entering lungs, Ribs and sternum raised,
+Volume of thorax increased, Rib cage, Diaphragm contracted
+Labels in (b): Air expelled from lungs, Ribs and sternum
+returned to original position, Volume of thorax decreased,
+Diaphragm relaxed and arched upwards
+
+---
+
+Q1. In Figure 14.2(a), diaphragm is shown as:
+A) Relaxed and arched upwards
+B) Contracted and flattened downwards
+C) Absent
+D) Pushed upwards by lungs
+Ans: B
+
+---
+
+Q2. In Figure 14.2(a), what happens to volume of thorax?
+A) Decreases
+B) Remains same
+C) Increases
+D) Becomes zero
+Ans: C
+
+---
+
+Q3. In Figure 14.2(b), ribs and sternum are shown:
+A) Raised upward
+B) Returned to original position
+C) Contracted
+D) Pushed outward
+Ans: B
+
+---
+
+Q4. In Figure 14.2(b), diaphragm is shown as:
+A) Contracted and flat
+B) Relaxed and arched upwards
+C) Pushed downward
+D) Absent
+Ans: B
+
+---
+
+Q5. Which figure (14.2a or 14.2b) shows air entering the lungs?
+A) 14.2b — Expiration
+B) 14.2a — Inspiration
+C) Both equally
+D) Neither
+Ans: B
+
+-----------------------------------------
+TYPE 11 — TABLE BASED
+-----------------------------------------
+
+TABLE: Respiratory Volumes and Capacities
+
+Volume/Capacity  | Formula/Value
+TV               | ~500 mL
+IRV              | 2500-3000 mL
+ERV              | 1000-1100 mL
+RV               | 1100-1200 mL
+IC               | TV + IRV
+EC               | TV + ERV
+FRC              | ERV + RV
+VC               | ERV + TV + IRV
+TLC              | RV + ERV + TV + IRV = VC + RV
+
+---
+
+Q1. According to the table, which volume has the highest value?
+A) TV
+B) ERV
+C) IRV
+D) RV
+Ans: C
+
+---
+
+Q2. According to the table, FRC is:
+A) TV + IRV
+B) TV + ERV
+C) ERV + RV
+D) VC + RV
+Ans: C
+
+---
+
+Q3. A person has TV = 500 mL, IRV = 3000 mL, ERV = 1100 mL,
+RV = 1200 mL. What is their Vital Capacity?
+A) 3600 mL
+B) 4600 mL
+C) 5800 mL
+D) 4100 mL
+Ans: B
+(VC = ERV + TV + IRV = 1100 + 500 + 3000 = 4600 mL)
+
+---
+
+Q4. Using the same values above, what is TLC?
+A) 4600 mL
+B) 5600 mL
+C) 5800 mL
+D) 6800 mL
+Ans: C
+(TLC = VC + RV = 4600 + 1200 = 5800 mL)
+
+---
+
+Q5. Which of the following entries in the table is INCORRECT?
+A) TV = ~500 mL
+B) IC = TV + IRV
+C) FRC = ERV + RV
+D) VC = ERV + RV only
+Ans: D
+(VC = ERV + TV + IRV, not just ERV + RV)
+
+-----------------------------------------
+TYPE 12 — PREV YEAR QUESTIONS
+-----------------------------------------
+
+Q1. [NEET 2016]
+At the end of normal expiration, the volume of air remaining
+in lungs is:
+A) Residual Volume only
+B) Functional Residual Capacity = ERV + RV
+C) Vital Capacity
+D) Tidal Volume
+Ans: B
+
+---
+
+Q2. [NEET 2017]
+Which of the following statements is correct about Tidal
+Volume?
+A) It is the volume of air that remains in lungs after forcible
+   expiration
+B) It is the volume of air inspired or expired during normal
+   respiration = 500 mL
+C) It is the maximum volume of air a person can breathe in
+D) It is the extra volume inspired by forcible inspiration
+Ans: B
+
+---
+
+Q3. [NEET 2018]
+Vital Capacity of lungs is:
+A) TV + IRV
+B) TV + ERV
+C) ERV + TV + IRV
+D) RV + ERV + TV + IRV
+Ans: C
+
+---
+
+Q4. [NEET 2019]
+Total Lung Capacity is equal to:
+A) VC + TV
+B) VC + IRV
+C) VC + RV
+D) VC + ERV
+Ans: C
+
+---
+
+Q5. [NEET 2020 type]
+During inspiration, which of the following correctly describes
+the changes?
+A) Diaphragm relaxes, thoracic volume decreases,
+   intra-pulmonary pressure increases
+B) Diaphragm contracts, thoracic volume increases,
+   intra-pulmonary pressure decreases
+C) Diaphragm contracts, thoracic volume decreases,
+   intra-pulmonary pressure increases
+D) Diaphragm relaxes, thoracic volume increases,
+   intra-pulmonary pressure decreases
+Ans: B
+
+---
+
+Q6. [NEET 2021 type]
+IRV + TV + ERV is equal to:
+A) TLC
+B) FRC
+C) IC
+D) VC
+Ans: D
+
+---
+
+Q7. [NEET concept]
+The instrument used for clinical assessment of pulmonary
+functions is:
+A) Sphygmomanometer
+B) Spirometer
+C) Stethoscope
+D) ECG
+Ans: B
+
+---
+
+Q8. [NEET concept]
+Residual Volume averages:
+A) 500 mL
+B) 1000-1100 mL
+C) 1100-1200 mL
+D) 2500-3000 mL
+Ans: C
+
+=====================================
+14.2 MECHANISM OF BREATHING — ALL 13 TYPES DONE!
+Say NEXT for 14.3 Exchange of Gases
+=====================================
