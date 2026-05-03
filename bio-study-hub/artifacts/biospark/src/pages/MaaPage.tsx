@@ -74,9 +74,9 @@ const EXERCISES: Exercise[] = [
 
 const NEET_QUOTES = [
   { text: "Every expert was once a beginner. Keep going.", author: "NEET Wisdom" },
-  { text: "Your hard work today is your rank tomorrow.", author: "BioSpark" },
+  { text: "Your hard work today is your rank tomorrow.", author: "NEETAspire" },
   { text: "Consistency beats intensity every time.", author: "Study Science" },
-  { text: "One more question, one step closer to MBBS.", author: "BioSpark" },
+  { text: "One more question, one step closer to MBBS.", author: "NEETAspire" },
   { text: "Breathe. You've got this. The exam rewards the prepared.", author: "NEET Mentor" },
 ];
 

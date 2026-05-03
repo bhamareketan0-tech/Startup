@@ -20,7 +20,7 @@ interface AppSettings {
 }
 
 const DEFAULTS: AppSettings = {
-  site_name: "BioSpark",
+  site_name: "NEETAspire",
   contact_email: ADMIN_EMAIL,
   maintenance_mode: false,
   accent_color: "#00FF9D",

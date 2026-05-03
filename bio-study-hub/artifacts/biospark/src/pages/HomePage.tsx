@@ -60,7 +60,7 @@ function CounterCard({ value, suffix, label, icon: Icon, delay }: {
 }
 
 const TESTIMONIALS = [
-  { name: "Riya Sharma", score: "660/720", text: "BioSpark's adaptive MCQs helped me identify my weak topics. Cleared NEET on first attempt!", class: "Class 12" },
+  { name: "Riya Sharma", score: "660/720", text: "NEETAspire's adaptive MCQs helped me identify my weak topics. Cleared NEET on first attempt!", class: "Class 12" },
   { name: "Arjun Patel", score: "647/720", text: "The assertion-reason and match the column practice sets are exactly like the real exam. Game changer!", class: "Class 12" },
   { name: "Priya Nair", score: "638/720", text: "The AI extractor and 10,000+ question bank made my revision incredibly efficient.", class: "Class 11" },
 ];
@@ -311,7 +311,7 @@ export function HomePage() {
               Ready to <span style={{ color: "var(--bs-accent-hex)" }}>Dominate?</span>
             </h2>
             <p className="font-mono mb-10 tracking-wide text-sm max-w-md mx-auto" style={{ color: "var(--bs-text-muted)" }}>
-              Join 50,000+ students already using BioSpark to ace NEET Biology.
+              Join 50,000+ students already using NEETAspire to ace NEET Biology.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {user ? (

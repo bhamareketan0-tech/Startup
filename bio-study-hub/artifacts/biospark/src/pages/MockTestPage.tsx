@@ -397,7 +397,7 @@ export function MockTestPage() {
   }
 
   function shareToWhatsApp() {
-    const text = `🧬 *BioSpark NEET Score*\n\n✅ Score: ${finalScore}/${finalMax}\n🎯 Accuracy: ${accuracy}%\n🏆 BioSpark Rank: #${mockRank}\n⏱ Time: ${formatTime(timeTaken)}\n\nStudy smarter with BioSpark! 🚀`;
+    const text = `🧬 *NEETAspire NEET Score*\n\n✅ Score: ${finalScore}/${finalMax}\n🎯 Accuracy: ${accuracy}%\n🏆 NEETAspire Rank: #${mockRank}\n⏱ Time: ${formatTime(timeTaken)}\n\nStudy smarter with NEETAspire! 🚀`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
   }
 
@@ -1010,7 +1010,7 @@ export function MockTestPage() {
                   <Zap className="w-4 h-4 transform skew-x-12" style={{ color: "black" }} />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest" style={{ color: ACCENT }}>BioSpark</p>
+                  <p className="text-xs font-black uppercase tracking-widest" style={{ color: ACCENT }}>NEETAspire</p>
                   <p className="text-xs font-mono" style={{ color: MUTED }}>
                     {cls === "dropper" ? "Dropper" : `Class ${cls}`} · {cfg.label} · {new Date().toLocaleDateString()}
                   </p>
@@ -1042,7 +1042,7 @@ export function MockTestPage() {
               <div className="px-5 py-4 border-r flex items-center gap-3" style={{ borderColor: BORDER }}>
                 <Trophy className="w-5 h-5 shrink-0" style={{ color: ACCENT }} />
                 <div>
-                  <p className="text-sm font-black" style={{ color: TXT }}>BioSpark Rank #{mockRank}</p>
+                  <p className="text-sm font-black" style={{ color: TXT }}>NEETAspire Rank #{mockRank}</p>
                   <p className="text-xs font-mono" style={{ color: MUTED }}>among all students this week</p>
                 </div>
               </div>

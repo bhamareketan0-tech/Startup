@@ -106,7 +106,7 @@ export function AdminDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-white/40 text-sm mt-1">Overview of your BioSpark platform</p>
+        <p className="text-white/40 text-sm mt-1">Overview of your NEETAspire platform</p>
       </div>
 
       {/* Stat Cards */}

@@ -116,7 +116,7 @@ export function AdminPage() {
               <Shield className="w-4 h-4 text-black" />
             </div>
             <div>
-              <p className="font-bold text-white text-sm leading-tight">BioSpark</p>
+              <p className="font-bold text-white text-sm leading-tight">NEETAspire</p>
               <p className="text-[10px] text-white/40 leading-tight">Admin Panel</p>
             </div>
           </div>
@@ -172,7 +172,7 @@ export function AdminPage() {
             <h1 className="text-base font-bold text-white leading-tight">
               {NAV_ITEMS.find((i) => i.id === page)?.label ?? "Admin"}
             </h1>
-            <p className="text-xs text-white/30">BioSpark Admin · {new Date().toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
+            <p className="text-xs text-white/30">NEETAspire Admin · {new Date().toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all">

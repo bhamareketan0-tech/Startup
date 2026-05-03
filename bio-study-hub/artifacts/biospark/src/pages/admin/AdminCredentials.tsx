@@ -71,7 +71,7 @@ const CREDENTIALS: CredDef[] = [
   {
     key: "cred_allowed_origins",
     label: "Allowed CORS Origins",
-    placeholder: "https://yourusername.github.io,https://www.biospark.in",
+    placeholder: "https://yourusername.github.io,https://www.neetaspire.in",
     desc: "Comma-separated list of frontend URLs the API will accept requests from. Leave blank to allow all origins (development mode).",
     secret: false,
     required: false,
