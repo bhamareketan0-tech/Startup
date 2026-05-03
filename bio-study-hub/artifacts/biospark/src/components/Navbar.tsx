@@ -5,7 +5,7 @@ import { useTheme } from "@/lib/ThemeContext";
 import {
   Sun, Moon, Menu, X, Zap, LogOut, User, Shield, Trophy, Clock,
   BarChart2, Flame, Bookmark, FileText, Sliders, RotateCcw, BookOpen,
-  ChevronDown, Sparkles, Layers, GitCompareArrows, Award, FileQuestion
+  ChevronDown, Sparkles, Layers, GitCompareArrows, Award, FileQuestion, Swords
 } from "lucide-react";
 import { ADMIN_EMAIL } from "@/lib/constants";
 
@@ -31,6 +31,7 @@ export function Navbar() {
     { to: "/class-select", label: "PRACTICE", icon: null },
     { to: "/mock-test", label: "MOCK TEST", icon: Clock },
     { to: "/daily-challenge", label: "DAILY", icon: Flame },
+    { to: "/battle", label: "1v1", icon: Swords },
     { to: "/maa", label: "MAA", icon: Sparkles },
   ];
 
