@@ -2,7 +2,9 @@ export type AnimFrame = {
   title: string;
   narration: string;
   keyPoints: string[];
-  visual: "lungs" | "cell" | "flow" | "cycle" | "dna" | "brain" | "heart" | "generic" | "molecules" | "compare";
+  visual: "lungs" | "cell" | "flow" | "cycle" | "dna" | "brain" | "heart" | "generic" | "molecules" | "compare"
+    | "breathing-in" | "breathing-out" | "alveolus" | "lung-volumes" | "partial-pressure"
+    | "haemoglobin" | "co2-transport" | "regulation" | "disorders" | "respiratory-organs" | "lung-anatomy";
 };
 
 export type SubunitAnim = {
@@ -61,7 +63,7 @@ export const animationData: ChapterAnim[] = [
               "Breathing ≠ Respiration — breathing is the mechanical exchange of gases",
               "O₂ indirectly participates in ATP synthesis",
             ],
-            visual: "lungs",
+            visual: "breathing-in",
           },
           {
             title: "Breathing vs Respiration",
@@ -72,7 +74,7 @@ export const animationData: ChapterAnim[] = [
               "Breathing involves exchange of O₂ from atmosphere with CO₂ from cells",
               "Organisms use different organs for breathing (gills, lungs, skin, tracheae)",
             ],
-            visual: "flow",
+            visual: "partial-pressure",
           },
         ],
       },
@@ -89,7 +91,7 @@ export const animationData: ChapterAnim[] = [
               "Amphibians → Skin + Lungs (bimodal breathing)",
               "Reptiles, Birds, Mammals → Only Lungs",
             ],
-            visual: "compare",
+            visual: "respiratory-organs",
           },
           {
             title: "Human Respiratory System",
@@ -101,7 +103,7 @@ export const animationData: ChapterAnim[] = [
               "Alveoli are the actual sites of gas exchange",
               "Pleural fluid reduces friction during breathing",
             ],
-            visual: "lungs",
+            visual: "lung-anatomy",
           },
         ],
       },
@@ -119,7 +121,7 @@ export const animationData: ChapterAnim[] = [
               "Each lung: ~300 million alveoli → surface area ~80 m²",
               "Pleural membranes surround each lung; pleural fluid reduces friction",
             ],
-            visual: "lungs",
+            visual: "lung-anatomy",
           },
           {
             title: "Alveoli — The Site of Gas Exchange",
@@ -131,7 +133,7 @@ export const animationData: ChapterAnim[] = [
               "Surfactant (from Type II pneumocytes) prevents alveolar collapse",
               "Total surface area ≈ 80 m² for efficient gas exchange",
             ],
-            visual: "lungs",
+            visual: "alveolus",
           },
         ],
       },
@@ -148,7 +150,7 @@ export const animationData: ChapterAnim[] = [
               "Air flows IN (high → low pressure)",
               "Inspiration is an ACTIVE process requiring muscle energy",
             ],
-            visual: "lungs",
+            visual: "breathing-in",
           },
           {
             title: "Expiration (Breathing Out)",
@@ -160,7 +162,7 @@ export const animationData: ChapterAnim[] = [
               "Air flows OUT (high → low pressure)",
               "Normal expiration is PASSIVE; Forced expiration is active",
             ],
-            visual: "lungs",
+            visual: "breathing-out",
           },
           {
             title: "Pulmonary Volumes and Capacities",
@@ -173,7 +175,7 @@ export const animationData: ChapterAnim[] = [
               "Vital Capacity = IRV + TV + ERV = 4600 mL",
               "Total Lung Capacity = VC + RV = 5800 mL",
             ],
-            visual: "compare",
+            visual: "lung-volumes",
           },
         ],
       },
@@ -190,7 +192,7 @@ export const animationData: ChapterAnim[] = [
               "Residual Volume (RV) = 1200 mL — cannot be expelled",
               "Dead Space = ~150 mL (air in conducting zone, no exchange)",
             ],
-            visual: "compare",
+            visual: "lung-volumes",
           },
           {
             title: "Lung Capacities",
@@ -202,7 +204,7 @@ export const animationData: ChapterAnim[] = [
               "Total Lung Capacity (TLC) = VC + RV = 5800 mL",
               "Forced Expiratory Volume (FEV₁) used in clinical diagnosis",
             ],
-            visual: "compare",
+            visual: "lung-volumes",
           },
         ],
       },
@@ -219,7 +221,7 @@ export const animationData: ChapterAnim[] = [
               "Solubility of CO₂ in blood is 20-25 times more than O₂",
               "Despite lower pressure gradient, CO₂ diffuses rapidly",
             ],
-            visual: "flow",
+            visual: "alveolus",
           },
           {
             title: "Partial Pressures of Gases",
@@ -230,7 +232,7 @@ export const animationData: ChapterAnim[] = [
               "pO₂: Arterial blood 95 > Tissue cells 40 → O₂ enters cells",
               "pCO₂: Cells 45 > Venous blood 40 → CO₂ enters blood",
             ],
-            visual: "molecules",
+            visual: "partial-pressure",
           },
         ],
       },
@@ -247,7 +249,7 @@ export const animationData: ChapterAnim[] = [
               "High pO₂ → Hb binds O₂ (in lungs)",
               "Low pO₂ + High pCO₂ → Hb releases O₂ (in tissues)",
             ],
-            visual: "flow",
+            visual: "haemoglobin",
           },
           {
             title: "Carbon Dioxide Transport",
@@ -259,7 +261,7 @@ export const animationData: ChapterAnim[] = [
               "Enzyme Carbonic Anhydrase catalyses: CO₂ + H₂O ⇌ H₂CO₃",
               "H₂CO₃ → H⁺ + HCO₃⁻ (bicarbonate formed in RBC, moves to plasma)",
             ],
-            visual: "molecules",
+            visual: "co2-transport",
           },
           {
             title: "Oxygen Dissociation Curve",
@@ -271,7 +273,7 @@ export const animationData: ChapterAnim[] = [
               "At lung pO₂ (104 mmHg): Hb is ~97% saturated",
               "At tissue pO₂ (40 mmHg): Hb drops to ~70% saturation",
             ],
-            visual: "compare",
+            visual: "partial-pressure",
           },
         ],
       },
@@ -287,7 +289,7 @@ export const animationData: ChapterAnim[] = [
               "Apneustic Centre = Pons (stimulates inspiration)",
               "These centres coordinate to produce normal 12-20 breaths/min",
             ],
-            visual: "brain",
+            visual: "regulation",
           },
           {
             title: "Chemical Regulation",
@@ -299,7 +301,7 @@ export const animationData: ChapterAnim[] = [
               "O₂ levels are a secondary (weaker) stimulus",
               "Peripheral chemoreceptors in aortic and carotid bodies",
             ],
-            visual: "brain",
+            visual: "regulation",
           },
         ],
       },
@@ -316,7 +318,7 @@ export const animationData: ChapterAnim[] = [
               "Emphysema mainly caused by cigarette smoking",
               "Both cause breathlessness and reduced oxygen supply",
             ],
-            visual: "compare",
+            visual: "disorders",
           },
           {
             title: "Occupational Respiratory Diseases",
@@ -328,7 +330,7 @@ export const animationData: ChapterAnim[] = [
               "All cause: fibrosis of lung tissue and reduced capacity",
               "Prevention: dust masks, proper ventilation, regular health checks",
             ],
-            visual: "compare",
+            visual: "disorders",
           },
         ],
       },
