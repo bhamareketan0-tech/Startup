@@ -1,0 +1,5 @@
+{
+  "installCommand": "cd bio-study-hub && pnpm install --frozen-lockfile=false",
+  "buildCommand": "cd bio-study-hub && pnpm --filter biospark build",
+  "outputDirectory": "bio-study-hub/artifacts/biospark/dist/public"
+}
