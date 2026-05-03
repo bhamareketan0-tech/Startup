@@ -1,57 +1,4 @@
-import { createServer } from "http";
-import { Server } from "socket.io";
-import app from "./app";
-import mongoose from "mongoose";
-import { setupBattleSocket } from "./socket/battleSocket";
-import { Chapter } from "./models/chapter";
-
-const port = Number(process.env["PORT"] ?? "8080");
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${process.env["PORT"]}"`);
-}
-
-const httpServer = createServer(app);
-
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
-
-setupBattleSocket(io);
-
-httpServer.listen(port, "0.0.0.0", () => {
-  console.log(`Server listening on port ${port}`);
-  connectMongo();
-});
-
-function connectMongo() {
-  const url = process.env.MONGODB_URI || "";
-  if (!url) {
-    console.warn("MONGODB_URI not set — MongoDB not connected.");
-    return;
-  }
-
-  mongoose.connection.on("error", (err) => {
-    console.warn("MongoDB error:", err.message);
-  });
-
-  mongoose
-    .connect(url, {
-      serverSelectionTimeoutMS: 15000,
-      connectTimeoutMS: 15000,
-    })
-    .then(async () => {
-      console.log("MongoDB Connected ✅");
-      await seedChaptersIfEmpty();
-    })
-    .catch((err) => console.warn("MongoDB connection failed:", err.message));
-}
-
-// ── Auto-seed chapters on first boot ────────────────────────────────────────
+const RENDER_API = "https://startup-jz85.onrender.com/api";
 
 const CLASS_11 = [
   { id: "the-living-world", name: "The Living World", subunits: ["Introduction", "What is Living?", "Biodiversity", "Taxonomic Categories", "Taxonomical Aids"] },
@@ -64,7 +11,7 @@ const CLASS_11 = [
   { id: "cell-the-unit-of-life", name: "Cell: The Unit of Life", subunits: ["Introduction", "Cell Theory and Overview", "Prokaryotic Cells", "Eukaryotic Cells", "Cell Membrane", "Cell Wall", "Nucleus", "Mitochondria", "Plastids", "Ribosomes", "Vacuoles", "Cilia and Flagella", "Centrosome and Microbodies"] },
   { id: "biomolecules", name: "Biomolecules", subunits: ["Introduction", "Amino Acids", "Proteins and Structure", "Carbohydrates and Polysaccharides", "Nucleic Acids", "Enzymes", "Metabolic Basis of Living"] },
   { id: "cell-cycle-and-cell-division", name: "Cell Cycle and Cell Division", subunits: ["Introduction", "Cell Cycle", "Mitosis", "Meiosis", "Significance of Cell Division"] },
-  { id: "transport-in-plants", name: "Transport in Plants", subunits: ["Introduction", "Means of Transport", "Plant–Water Relations", "Long Distance Transport of Water", "Transpiration", "Uptake and Transport of Mineral Nutrients"] },
+  { id: "transport-in-plants", name: "Transport in Plants", subunits: ["Introduction", "Means of Transport", "Plant-Water Relations", "Long Distance Transport of Water", "Transpiration", "Uptake and Transport of Mineral Nutrients"] },
   { id: "mineral-nutrition", name: "Mineral Nutrition", subunits: ["Introduction", "Methods to Study Mineral Requirements", "Essential Mineral Elements", "Deficiency Symptoms", "Mechanism of Absorption", "Metabolism of Nitrogen"] },
   { id: "photosynthesis-in-higher-plants", name: "Photosynthesis in Higher Plants", subunits: ["Introduction", "Early Experiments", "Pigments Involved in Photosynthesis", "Light Reactions", "Electron Transport Chain", "C3 Cycle (Calvin Cycle)", "C4 Cycle", "Photorespiration", "Factors Affecting Photosynthesis"] },
   { id: "respiration-in-plants", name: "Respiration in Plants", subunits: ["Introduction", "Glycolysis", "Fermentation", "Aerobic Respiration (Krebs Cycle)", "Oxidative Phosphorylation", "Respiratory Quotient"] },
@@ -73,7 +20,7 @@ const CLASS_11 = [
 
 const CLASS_12 = [
   { id: "reproduction-in-organisms", name: "Reproduction in Organisms", subunits: ["Introduction", "Asexual Reproduction", "Sexual Reproduction"] },
-  { id: "sexual-reproduction-in-flowering-plants", name: "Sexual Reproduction in Flowering Plants", subunits: ["Introduction", "Flower – a Fascinating Organ", "Pre-fertilisation Structures and Events", "Double Fertilisation", "Post-fertilisation Events", "Apomixis and Polyembryony"] },
+  { id: "sexual-reproduction-in-flowering-plants", name: "Sexual Reproduction in Flowering Plants", subunits: ["Introduction", "Flower a Fascinating Organ", "Pre-fertilisation Structures and Events", "Double Fertilisation", "Post-fertilisation Events", "Apomixis and Polyembryony"] },
   { id: "human-reproduction", name: "Human Reproduction", subunits: ["Introduction", "Male Reproductive System", "Female Reproductive System", "Gametogenesis", "Menstrual Cycle", "Fertilisation and Implantation", "Pregnancy and Embryonic Development", "Parturition and Lactation"] },
   { id: "reproductive-health", name: "Reproductive Health", subunits: ["Introduction", "Reproductive Health Problems", "Population Explosion and Birth Control", "Contraception Methods", "Sexually Transmitted Diseases", "Infertility"] },
   { id: "principles-of-inheritance-and-variation", name: "Principles of Inheritance and Variation", subunits: ["Introduction", "Mendel's Laws", "Inheritance of One Gene", "Inheritance of Two Genes", "Sex Determination", "Mutation", "Genetic Disorders"] },
@@ -82,7 +29,7 @@ const CLASS_12 = [
   { id: "human-health-and-disease", name: "Human Health and Disease", subunits: ["Introduction", "Common Diseases in Humans", "Immunity", "AIDS", "Cancer", "Drugs and Alcohol Abuse"] },
   { id: "strategies-for-enhancement-in-food-production", name: "Strategies for Enhancement in Food Production", subunits: ["Introduction", "Animal Husbandry", "Plant Breeding", "Single Cell Protein", "Tissue Culture"] },
   { id: "microbes-in-human-welfare", name: "Microbes in Human Welfare", subunits: ["Introduction", "Microbes in Household Products", "Microbes in Industrial Products", "Microbes in Sewage Treatment", "Microbes in Biogas Production", "Microbes as Biocontrol Agents", "Microbes as Biofertilisers"] },
-  { id: "biotechnology-principles-and-processes", name: "Biotechnology – Principles and Processes", subunits: ["Introduction", "Principles of Biotechnology", "Tools of Recombinant DNA Technology", "Processes of Recombinant DNA Technology"] },
+  { id: "biotechnology-principles-and-processes", name: "Biotechnology Principles and Processes", subunits: ["Introduction", "Principles of Biotechnology", "Tools of Recombinant DNA Technology", "Processes of Recombinant DNA Technology"] },
   { id: "biotechnology-and-its-applications", name: "Biotechnology and its Applications", subunits: ["Introduction", "Biotechnology in Agriculture", "Biotechnology in Medicine", "Ethical Issues"] },
   { id: "organisms-and-populations", name: "Organisms and Populations", subunits: ["Introduction", "Organisms and its Environment", "Populations", "Population Interactions"] },
   { id: "ecosystem", name: "Ecosystem", subunits: ["Introduction", "Ecosystem Structure and Function", "Productivity", "Decomposition", "Energy Flow", "Ecological Pyramids", "Ecological Succession", "Nutrient Cycling"] },
@@ -90,21 +37,20 @@ const CLASS_12 = [
   { id: "environmental-issues", name: "Environmental Issues", subunits: ["Introduction", "Air Pollution", "Water Pollution", "Solid Wastes", "Agrochemicals and Radioactive Wastes", "Deforestation", "International Agreements"] },
 ];
 
-async function seedChaptersIfEmpty() {
-  try {
-    const count = await Chapter.countDocuments();
-    if (count > 0) {
-      console.log(`Chapters already seeded (${count} found) — skipping.`);
-      return;
-    }
-    console.log("Chapters collection empty — seeding...");
-    for (const [cls, list] of [["11", CLASS_11], ["12", CLASS_12]] as const) {
-      await Chapter.insertMany(
-        list.map((c, i) => ({ ...c, class: cls, subject: "Biology", order: i }))
-      );
-      console.log(`✅ Auto-seeded ${list.length} chapters for Class ${cls}`);
-    }
-  } catch (err) {
-    console.warn("Chapter auto-seed failed:", err);
-  }
+async function push(cls: string, chapters: typeof CLASS_11) {
+  const withClass = chapters.map((c, i) => ({ ...c, class: cls, subject: "Biology", order: i }));
+  const res = await fetch(`${RENDER_API}/chapters/bulk`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ class: cls, chapters: withClass }),
+  });
+  const json = await res.json() as { data: unknown[]; error?: string };
+  if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
+  console.log(`✅ Class ${cls}: pushed ${(json.data ?? []).length} chapters`);
 }
+
+(async () => {
+  await push("11", CLASS_11);
+  await push("12", CLASS_12);
+  console.log("Done.");
+})().catch((e) => { console.error(e); process.exit(1); });

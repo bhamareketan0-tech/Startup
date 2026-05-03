@@ -23,7 +23,9 @@ router.put("/chapters/bulk", async (req, res) => {
     }
     await Chapter.deleteMany({ class: cls });
     if (chapters.length > 0) {
-      await Chapter.insertMany(chapters.map((c, i) => ({ ...c, order: i })));
+      await Chapter.insertMany(
+        chapters.map((c, i) => ({ ...c, class: cls, subject: c.subject || "Biology", order: i }))
+      );
     }
     const updated = await Chapter.find({ class: cls }).sort({ order: 1 });
     res.json({ data: updated.map((d) => d.toJSON()) });
