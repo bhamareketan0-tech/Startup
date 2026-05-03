@@ -102,6 +102,23 @@ router.delete("/questions/:id", async (req, res) => {
   }
 });
 
+router.delete("/questions", async (req, res) => {
+  try {
+    const { chapter, subunit, class: cls } = req.query as Record<string, string>;
+    const filter: Record<string, unknown> = {};
+    if (chapter) filter.chapter = chapter;
+    if (subunit) filter.subunit = subunit;
+    if (cls) filter.class = cls;
+    if (Object.keys(filter).length === 0) {
+      return res.status(400).json({ error: "At least one filter (chapter, subunit, class) is required for bulk delete" });
+    }
+    const result = await Question.deleteMany(filter);
+    res.json({ success: true, deleted: result.deletedCount });
+  } catch (err: unknown) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
 router.get("/questions/stats", async (_req, res) => {
   try {
     const total = await Question.countDocuments();
