@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd artifacts/biospark && npm install && npm run build",
-  "outputDirectory": "artifacts/biospark/dist/public",
-  "installCommand": "echo skip"
+  "installCommand": "pnpm install --frozen-lockfile=false",
+  "buildCommand": "pnpm --filter biospark build",
+  "outputDirectory": "artifacts/biospark/dist/public"
 }
