@@ -91,6 +91,7 @@ export function AdminAIGenerator() {
   const [generating, setGenerating] = useState(false);
   const cancelRef = useRef(false);
   const [cancelled, setCancelled] = useState(false);
+  const [genError, setGenError] = useState("");
 
   // Progress per type (displayed as current round status)
   const [currentRound, setCurrentRound] = useState(0);
