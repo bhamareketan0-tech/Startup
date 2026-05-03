@@ -55,7 +55,7 @@ const CREDENTIALS: CredDef[] = [
   {
     key: "cred_google_callback_url",
     label: "Google OAuth Callback URL",
-    placeholder: "https://bio-study-hub.onrender.com/auth/google/callback",
+    placeholder: "https://your-api.onrender.com/api/auth/google/callback",
     desc: "Must match the Authorized Redirect URI set in Google Cloud Console exactly.",
     secret: false,
     required: false,
