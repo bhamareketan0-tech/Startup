@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getChapters, fetchChaptersFromAPI } from "@/lib/chaptersManager";
 import type { Chapter } from "@/lib/chaptersManager";
-import { ChevronRight, ArrowLeft, Lock } from "lucide-react";
+import { ChevronRight, ArrowLeft, Lock, Play } from "lucide-react";
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? "") + "/api";
 
@@ -92,32 +92,25 @@ export function SubunitsPage() {
               const isLoaded = counts !== null;
 
               return (
-                <button
+                <div
                   key={subunit}
-                  onClick={() => {
-                    if (isLoaded && !hasQuestions) return;
-                    navigate(`/practice/${cls}/${chapterId}/${encodeURIComponent(subunit)}`);
-                  }}
-                  disabled={isLoaded && !hasQuestions}
-                  className="group border border-l-4 border-l-transparent p-5 text-left transition-all relative overflow-hidden disabled:cursor-default"
+                  className="border border-l-4 border-l-transparent transition-all relative overflow-hidden"
                   style={{
-                    background: isLoaded && !hasQuestions ? `color-mix(in srgb, var(--bs-surface) 50%, transparent)` : "var(--bs-surface)",
+                    background: "var(--bs-surface)",
                     borderColor: "var(--bs-border-subtle)",
-                    opacity: isLoaded && !hasQuestions ? 0.65 : 1,
+                    borderLeftColor: "transparent",
                   }}
                   onMouseEnter={(e) => {
-                    if (isLoaded && !hasQuestions) return;
                     (e.currentTarget as HTMLElement).style.borderLeftColor = "var(--bs-accent-hex)";
                     (e.currentTarget as HTMLElement).style.background = "var(--bs-surface-2)";
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLElement).style.borderLeftColor = "transparent";
-                    (e.currentTarget as HTMLElement).style.background = isLoaded && !hasQuestions
-                      ? `color-mix(in srgb, var(--bs-surface) 50%, transparent)`
-                      : "var(--bs-surface)";
+                    (e.currentTarget as HTMLElement).style.background = "var(--bs-surface)";
                   }}
                 >
-                  <div className="flex items-center gap-4">
+                  {/* Top row — subunit info */}
+                  <div className="flex items-center gap-4 p-4 pb-3">
                     <div
                       className="w-9 h-9 border flex items-center justify-center shrink-0 transform -skew-x-12"
                       style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-subtle)" }}
@@ -146,21 +139,64 @@ export function SubunitsPage() {
                               }}
                             >
                               <Lock className="w-2.5 h-2.5" />
-                              Coming Soon
+                              MCQ Coming Soon
                             </span>
                           )}
                         </div>
                       )}
                     </div>
-                    {(!isLoaded || hasQuestions) && (
-                      <ChevronRight
-                        className="w-4 h-4 group-hover:translate-x-1 transition-all shrink-0"
-                        strokeWidth={3}
-                        style={{ color: "var(--bs-text-muted)" }}
-                      />
-                    )}
                   </div>
-                </button>
+
+                  {/* Action buttons row */}
+                  <div className="flex gap-2 px-4 pb-4 pt-0">
+                    {/* Watch Animation button — always available */}
+                    <button
+                      onClick={() => navigate(`/animations/${cls}/${chapterId}/${encodeURIComponent(subunit)}`)}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border font-black uppercase tracking-wider text-xs transition-all"
+                      style={{
+                        borderColor: "var(--bs-accent-hex)",
+                        background: "color-mix(in srgb, var(--bs-accent-hex) 12%, transparent)",
+                        color: "var(--bs-accent-hex)",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.background = "color-mix(in srgb, var(--bs-accent-hex) 25%, transparent)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.background = "color-mix(in srgb, var(--bs-accent-hex) 12%, transparent)";
+                      }}
+                    >
+                      <Play className="w-3 h-3" />
+                      Watch Animation
+                    </button>
+
+                    {/* Practice button — only if questions exist */}
+                    <button
+                      onClick={() => {
+                        if (isLoaded && !hasQuestions) return;
+                        navigate(`/practice/${cls}/${chapterId}/${encodeURIComponent(subunit)}`);
+                      }}
+                      disabled={isLoaded && !hasQuestions}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border font-black uppercase tracking-wider text-xs transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      style={{
+                        borderColor: isLoaded && !hasQuestions ? "var(--bs-border-subtle)" : "var(--bs-border-subtle)",
+                        background: "var(--bs-surface-2)",
+                        color: isLoaded && !hasQuestions ? "var(--bs-text-muted)" : "var(--bs-text)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (isLoaded && !hasQuestions) return;
+                        (e.currentTarget as HTMLButtonElement).style.background = "var(--bs-surface)";
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--bs-border-strong)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.background = "var(--bs-surface-2)";
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--bs-border-subtle)";
+                      }}
+                    >
+                      <ChevronRight className="w-3 h-3" />
+                      Practice MCQ
+                    </button>
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -36,6 +36,7 @@ const PYQPage = lazy(() => import("@/pages/PYQPage").then(m => ({ default: m.PYQ
 const SamplePapersPage = lazy(() => import("@/pages/SamplePapersPage").then(m => ({ default: m.SamplePapersPage })));
 const ComparisonsPage = lazy(() => import("@/pages/ComparisonsPage").then(m => ({ default: m.ComparisonsPage })));
 const BattlePage = lazy(() => import("@/pages/BattlePage").then(m => ({ default: m.BattlePage })));
+const AnimationPage = lazy(() => import("@/pages/AnimationPage").then(m => ({ default: m.AnimationPage })));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Spinner() {
@@ -98,6 +99,7 @@ function AppRoutes() {
         <Route path="/sample-papers" element={<ProtectedRoute><Navbar /><SamplePapersPage /></ProtectedRoute>} />
         <Route path="/comparisons" element={<ProtectedRoute><Navbar /><ComparisonsPage /></ProtectedRoute>} />
         <Route path="/battle" element={<ProtectedRoute><Navbar /><BattlePage /></ProtectedRoute>} />
+        <Route path="/animations/:cls/:chapterId/:subunit" element={<ProtectedRoute><AnimationPage /></ProtectedRoute>} />
         <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
