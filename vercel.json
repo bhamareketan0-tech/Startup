@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install -g pnpm@10 && cd bio-study-hub && pnpm install --frozen-lockfile=false",
+  "installCommand": "npm install -g pnpm@10 && cd bio-study-hub && pnpm install --frozen-lockfile=false --filter biospark...",
   "buildCommand": "cd bio-study-hub && pnpm --filter biospark build",
   "outputDirectory": "bio-study-hub/artifacts/biospark/dist/public",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
