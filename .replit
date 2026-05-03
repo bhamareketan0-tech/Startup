@@ -38,6 +38,8 @@ AI_INTEGRATIONS_GEMINI_BASE_URL = "https://generativelanguage.googleapis.com"
 NODE_ENV = "development"
 PORT = "8080"
 ALLOWED_ORIGINS = ""
+GOOGLE_CLIENT_ID = "11610222602-2hjboqcbn10qvv85j47dhi0raib6pd31.apps.googleusercontent.com"
+VITE_GOOGLE_CLIENT_ID = "11610222602-2hjboqcbn10qvv85j47dhi0raib6pd31.apps.googleusercontent.com"
 
 [postMerge]
 path = "bio-study-hub/scripts/post-merge.sh"
