@@ -2,8 +2,8 @@
   "installCommand": "npm install -g pnpm@10 && cd bio-study-hub && pnpm install --frozen-lockfile=false",
   "buildCommand": "cd bio-study-hub && pnpm --filter biospark build",
   "outputDirectory": "bio-study-hub/artifacts/biospark/dist/public",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "env": {
-    "BASE_URL": "/",
-    "VITE_API_URL": "https://bio-study-hub.onrender.com"
+    "BASE_URL": "/"
   }
 }

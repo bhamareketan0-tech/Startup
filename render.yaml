@@ -2,27 +2,29 @@ services:
   - type: web
     name: biospark-api
     runtime: node
+    region: oregon
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: "npm install -g pnpm@10 && cd bio-study-hub && pnpm install --frozen-lockfile=false"
+    startCommand: "cd bio-study-hub/artifacts/api-server && pnpm exec tsx ./src/index.ts"
+    healthCheckPath: /healthz
     envVars:
       - key: NODE_VERSION
         value: 20.10.0
-      - key: PORT
-        value: 8080
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 10000
       - key: MONGODB_URI
-        sync: false
-      - key: SESSION_SECRET
         sync: false
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
+      - key: SESSION_SECRET
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
         sync: false
-      - key: FRONTEND_URL
+      - key: GOOGLE_CALLBACK_URL
         sync: false
