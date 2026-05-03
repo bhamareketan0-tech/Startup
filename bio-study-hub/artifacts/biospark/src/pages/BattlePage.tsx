@@ -1,44 +1,32 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "@/lib/auth";
-import { Zap, Copy, CheckCheck, Trophy, Swords, User, Clock, ArrowLeft, Loader2, Wifi, WifiOff } from "lucide-react";
+import {
+  Zap, Copy, CheckCheck, Trophy, Swords, User,
+  Clock, ArrowLeft, Loader2, Wifi, WifiOff, Shield
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-type Phase =
-  | "lobby"
-  | "creating"
-  | "waiting"
-  | "joining"
-  | "countdown"
-  | "playing"
-  | "result";
+type Phase = "lobby" | "creating" | "waiting" | "joining" | "countdown" | "playing" | "result";
 
-interface PlayerInfo {
-  name: string;
-  avatar: string;
-  score: number;
-}
-
-interface QuestionOption {
-  key: string;
-  text: string;
-}
-
+interface PlayerInfo { name: string; avatar: string; score: number; }
+interface QuestionOption { key: string; text: string; }
 interface BattleQuestion {
-  index: number;
-  total: number;
-  question: string;
-  options: QuestionOption[];
-  duration: number;
+  index: number; total: number; question: string;
+  options: QuestionOption[]; duration: number;
 }
+interface BattleResult { reason: string; winner: string; scores: PlayerInfo[]; }
 
-interface BattleResult {
-  reason: string;
-  winner: string;
-  scores: PlayerInfo[];
-}
+const GREEN = "#00FF9D";
+const RED = "#ff4444";
+const CARD_BG = "rgba(0,255,157,0.04)";
+const CARD_BORDER = "rgba(0,255,157,0.18)";
+const CARD_BORDER_STRONG = "rgba(0,255,157,0.4)";
+const TEXT = "#e8fef2";
+const TEXT_MUTED = "rgba(232,254,242,0.55)";
+const SURFACE = "rgba(0,0,0,0.55)";
 
-const OPTION_LABELS = ["A", "B", "C", "D"];
+const LABELS = ["A", "B", "C", "D"];
 
 export function BattlePage() {
   const { user, profile } = useAuth();
@@ -54,19 +42,17 @@ export function BattlePage() {
 
   const [players, setPlayers] = useState<PlayerInfo[]>([]);
   const [countdownNum, setCountdownNum] = useState(3);
-
   const [currentQ, setCurrentQ] = useState<BattleQuestion | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(15);
   const [scores, setScores] = useState<PlayerInfo[]>([]);
+  const [result, setResult] = useState<BattleResult | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const [result, setResult] = useState<BattleResult | null>(null);
-
   const myName = profile?.name || user?.email?.split("@")[0] || "You";
-  const myAvatar = profile?.avatar || user?.avatar || "";
-  const myUserId = user?.id || user?._id || user?.email || "anon";
+  const myAvatar = (profile as Record<string,string>)?.avatar || (user as Record<string,string>)?.avatar || "";
+  const myUserId = (user as Record<string,string>)?.id || (user as Record<string,string>)?._id || user?.email || "anon";
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -77,10 +63,7 @@ export function BattlePage() {
     clearTimer();
     setTimeLeft(duration);
     timerRef.current = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t <= 1) { clearTimer(); return 0; }
-        return t - 1;
-      });
+      setTimeLeft(t => { if (t <= 1) { clearTimer(); return 0; } return t - 1; });
     }, 1000);
   }, [clearTimer]);
 
@@ -90,53 +73,22 @@ export function BattlePage() {
 
     socket.on("connect", () => setConnected(true));
     socket.on("disconnect", () => setConnected(false));
-
-    socket.on("room_created", ({ code }: { code: string }) => {
-      setRoomCode(code);
-      setPhase("waiting");
-    });
-
-    socket.on("player_joined", ({ players: p }: { players: PlayerInfo[] }) => {
-      setPlayers(p);
-    });
-
-    socket.on("countdown", ({ count }: { count: number }) => {
-      setPhase("countdown");
-      setCountdownNum(count);
-    });
-
+    socket.on("room_created", ({ code }: { code: string }) => { setRoomCode(code); setPhase("waiting"); });
+    socket.on("player_joined", ({ players: p }: { players: PlayerInfo[] }) => setPlayers(p));
+    socket.on("countdown", ({ count }: { count: number }) => { setPhase("countdown"); setCountdownNum(count); });
     socket.on("question", (q: BattleQuestion) => {
-      setPhase("playing");
-      setCurrentQ(q);
-      setSelectedAnswer(null);
-      setCorrectAnswer(null);
+      setPhase("playing"); setCurrentQ(q);
+      setSelectedAnswer(null); setCorrectAnswer(null);
       startTimer(q.duration);
     });
-
-    socket.on("answer_result", ({ correct, correctAnswer: ca }: { correct: boolean; correctAnswer: string; score: number }) => {
+    socket.on("answer_result", ({ correctAnswer: ca }: { correct: boolean; correctAnswer: string; score: number }) => {
       setCorrectAnswer(ca);
-      if (!correct) setCorrectAnswer(ca);
     });
+    socket.on("score_update", ({ scores: s }: { scores: PlayerInfo[] }) => setScores(s));
+    socket.on("battle_end", (data: BattleResult) => { clearTimer(); setResult(data); setPhase("result"); });
+    socket.on("error", ({ message }: { message: string }) => { setError(message); setPhase("lobby"); });
 
-    socket.on("score_update", ({ scores: s }: { scores: PlayerInfo[] }) => {
-      setScores(s);
-    });
-
-    socket.on("battle_end", (data: BattleResult) => {
-      clearTimer();
-      setResult(data);
-      setPhase("result");
-    });
-
-    socket.on("error", ({ message }: { message: string }) => {
-      setError(message);
-      setPhase("lobby");
-    });
-
-    return () => {
-      clearTimer();
-      socket.disconnect();
-    };
+    return () => { clearTimer(); socket.disconnect(); };
   }, [clearTimer, startTimer]);
 
   const handleCreate = () => {
@@ -167,322 +119,374 @@ export function BattlePage() {
 
   const reset = () => {
     clearTimer();
-    setPhase("lobby");
-    setRoomCode("");
-    setJoinInput("");
-    setError("");
-    setPlayers([]);
-    setCurrentQ(null);
-    setSelectedAnswer(null);
-    setCorrectAnswer(null);
-    setScores([]);
-    setResult(null);
+    setPhase("lobby"); setRoomCode(""); setJoinInput(""); setError("");
+    setPlayers([]); setCurrentQ(null); setSelectedAnswer(null);
+    setCorrectAnswer(null); setScores([]); setResult(null);
   };
 
-  const myScore = scores.find((s) => s.name === myName)?.score ?? 0;
-  const opponentInfo = scores.find((s) => s.name !== myName) ?? players.find((p) => p.name !== myName);
-
   const optionStyle = (key: string): React.CSSProperties => {
+    const base: React.CSSProperties = {
+      background: CARD_BG, borderColor: CARD_BORDER, color: TEXT_MUTED,
+      border: "1px solid", transition: "all 0.15s"
+    };
     if (correctAnswer) {
-      if (key === correctAnswer) return { background: "rgba(0,255,157,0.15)", borderColor: "#00FF9D", color: "#00FF9D" };
-      if (key === selectedAnswer && key !== correctAnswer) return { background: "rgba(255,68,68,0.12)", borderColor: "#ff4444", color: "#ff4444" };
+      if (key === correctAnswer) return { ...base, background: "rgba(0,255,157,0.12)", borderColor: GREEN, color: GREEN };
+      if (key === selectedAnswer) return { ...base, background: "rgba(255,68,68,0.12)", borderColor: RED, color: RED };
     }
-    if (key === selectedAnswer) return { background: "rgba(0,255,157,0.1)", borderColor: "#00FF9D", color: "#00FF9D" };
-    return { borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" };
+    if (key === selectedAnswer) return { ...base, background: "rgba(0,255,157,0.08)", borderColor: GREEN, color: GREEN };
+    return base;
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-10 px-4 font-['Space_Grotesk']" style={{ background: "var(--bs-bg)" }}>
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen pt-20 pb-12 px-4 font-['Space_Grotesk']">
+      <div className="max-w-xl mx-auto">
 
-        {/* Header */}
+        {/* ─── HEADER ─── */}
         <div className="flex items-center gap-3 mb-8">
-          <button onClick={() => navigate("/home")} className="p-2 border transition-colors" style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }}>
-            <ArrowLeft className="w-4 h-4" />
+          <button
+            onClick={() => navigate("/home")}
+            style={{ background: CARD_BG, border: `1px solid ${CARD_BORDER}`, color: TEXT_MUTED, padding: "8px", display:"flex" }}
+          >
+            <ArrowLeft style={{ width: 16, height: 16 }} />
           </button>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center transform -skew-x-12" style={{ background: "#00FF9D" }}>
-              <Swords className="w-5 h-5 text-black transform skew-x-12" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black uppercase tracking-tighter" style={{ color: "var(--bs-text)" }}>
-                1v1 <span style={{ color: "#00FF9D" }}>BATTLE</span>
-              </h1>
-              <p className="text-xs uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>Live MCQ Duel</p>
-            </div>
+
+          <div style={{ width: 40, height: 40, background: GREEN, display: "flex", alignItems: "center", justifyContent: "center", transform: "skewX(-12deg)" }}>
+            <Swords style={{ width: 20, height: 20, color: "#000", transform: "skewX(12deg)" }} />
           </div>
-          <div className="ml-auto flex items-center gap-1.5 text-xs uppercase font-bold" style={{ color: connected ? "#00FF9D" : "#ff4444" }}>
-            {connected ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
+
+          <div>
+            <h1 className="text-2xl font-black uppercase tracking-tighter" style={{ color: TEXT }}>
+              1v1 <span style={{ color: GREEN }}>BATTLE</span>
+            </h1>
+            <p className="text-xs uppercase tracking-widest" style={{ color: TEXT_MUTED }}>Live MCQ Duel</p>
+          </div>
+
+          <div className="ml-auto flex items-center gap-1.5 text-xs font-black uppercase" style={{ color: connected ? GREEN : RED }}>
+            {connected
+              ? <Wifi style={{ width: 14, height: 14 }} />
+              : <WifiOff style={{ width: 14, height: 14 }} />}
             {connected ? "LIVE" : "OFFLINE"}
           </div>
         </div>
 
-        {/* ── LOBBY ── */}
+        {/* ─── LOBBY ─── */}
         {(phase === "lobby" || phase === "creating" || phase === "joining") && (
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
             {error && (
-              <div className="border px-4 py-3 text-sm font-bold uppercase" style={{ borderColor: "#ff4444", background: "rgba(255,68,68,0.08)", color: "#ff4444" }}>
-                {error}
+              <div style={{ background: "rgba(255,68,68,0.1)", border: `1px solid ${RED}`, color: RED, padding: "12px 16px", fontSize: 13, fontWeight: 700, textTransform: "uppercase" }}>
+                ⚠ {error}
               </div>
             )}
 
-            <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-              <p className="text-xs uppercase tracking-widest font-bold mb-4" style={{ color: "var(--bs-text-muted)" }}>Challenge a Friend</p>
+            {/* Create */}
+            <div style={{ background: SURFACE, border: `1px solid ${CARD_BORDER}`, padding: 24, backdropFilter: "blur(8px)" }}>
+              <p style={{ color: TEXT_MUTED, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>
+                ⚔ Challenge a Friend
+              </p>
               <button
                 onClick={handleCreate}
                 disabled={phase === "creating"}
-                className="w-full py-4 font-black uppercase tracking-widest text-base transform -skew-x-6 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                style={{ background: "#00FF9D", color: "black" }}
+                className="w-full"
+                style={{
+                  background: GREEN, color: "#000", padding: "14px 24px",
+                  fontWeight: 900, fontSize: 15, textTransform: "uppercase", letterSpacing: "0.1em",
+                  transform: "skewX(-6deg)", border: "none", cursor: "pointer",
+                  opacity: phase === "creating" ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+                }}
               >
                 {phase === "creating"
-                  ? <><Loader2 className="w-5 h-5 animate-spin transform skew-x-6" /><span className="transform skew-x-6">Creating...</span></>
-                  : <span className="transform skew-x-6">⚡ Create Battle Room</span>}
+                  ? <><Loader2 style={{ width: 18, height: 18, animation: "spin 1s linear infinite", transform: "skewX(6deg)" }} /><span style={{ transform: "skewX(6deg)" }}>Creating…</span></>
+                  : <span style={{ transform: "skewX(6deg)" }}>⚡ Create Battle Room</span>}
               </button>
             </div>
 
-            <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-              <p className="text-xs uppercase tracking-widest font-bold mb-4" style={{ color: "var(--bs-text-muted)" }}>Join with Code</p>
-              <div className="flex gap-2">
+            {/* Join */}
+            <div style={{ background: SURFACE, border: `1px solid ${CARD_BORDER}`, padding: 24, backdropFilter: "blur(8px)" }}>
+              <p style={{ color: TEXT_MUTED, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>
+                🔗 Join with Room Code
+              </p>
+              <div style={{ display: "flex", gap: 8 }}>
                 <input
                   value={joinInput}
-                  onChange={(e) => setJoinInput(e.target.value.toUpperCase())}
-                  placeholder="ENTER CODE"
+                  onChange={e => setJoinInput(e.target.value.toUpperCase())}
+                  placeholder="ABC123"
                   maxLength={6}
-                  className="flex-1 px-4 py-3 border font-black text-lg uppercase tracking-widest text-center bg-transparent outline-none"
-                  style={{ borderColor: "var(--bs-border-strong)", color: "var(--bs-text)" }}
-                  onKeyDown={(e) => e.key === "Enter" && handleJoin()}
+                  onKeyDown={e => e.key === "Enter" && handleJoin()}
+                  style={{
+                    flex: 1, padding: "12px 16px", background: "rgba(0,0,0,0.4)",
+                    border: `1px solid ${CARD_BORDER_STRONG}`, color: GREEN,
+                    fontWeight: 900, fontSize: 22, textTransform: "uppercase",
+                    letterSpacing: "0.25em", textAlign: "center", outline: "none"
+                  }}
                 />
                 <button
                   onClick={handleJoin}
                   disabled={phase === "joining"}
-                  className="px-6 py-3 font-black uppercase tracking-wider transform -skew-x-6 transition-all disabled:opacity-50 flex items-center gap-2"
-                  style={{ background: "var(--bs-surface-2)", color: "#00FF9D", border: "1px solid #00FF9D" }}
+                  style={{
+                    padding: "12px 20px", background: "transparent",
+                    border: `1px solid ${GREEN}`, color: GREEN,
+                    fontWeight: 900, fontSize: 13, textTransform: "uppercase",
+                    letterSpacing: "0.08em", transform: "skewX(-6deg)",
+                    cursor: "pointer", opacity: phase === "joining" ? 0.7 : 1,
+                    display: "flex", alignItems: "center", gap: 6
+                  }}
                 >
                   {phase === "joining"
-                    ? <Loader2 className="w-4 h-4 animate-spin transform skew-x-6" />
-                    : <span className="transform skew-x-6">JOIN</span>}
+                    ? <Loader2 style={{ width: 16, height: 16, animation: "spin 1s linear infinite", transform: "skewX(6deg)" }} />
+                    : <span style={{ transform: "skewX(6deg)" }}>JOIN</span>}
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 text-center">
-              {[["10", "QUESTIONS"], ["15s", "PER QUESTION"], ["10pts", "PER CORRECT"]].map(([val, label]) => (
-                <div key={label} className="p-4 border" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-                  <div className="text-2xl font-black" style={{ color: "#00FF9D" }}>{val}</div>
-                  <div className="text-xs uppercase tracking-wider mt-1" style={{ color: "var(--bs-text-muted)" }}>{label}</div>
+            {/* Stats */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+              {[["10", "Questions"], ["15s", "Per Q"], ["10pts", "Correct"]].map(([val, label]) => (
+                <div key={label} style={{ background: SURFACE, border: `1px solid ${CARD_BORDER}`, padding: "16px 8px", textAlign: "center", backdropFilter: "blur(8px)" }}>
+                  <div style={{ color: GREEN, fontSize: 22, fontWeight: 900 }}>{val}</div>
+                  <div style={{ color: TEXT_MUTED, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 4 }}>{label}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* ── WAITING ── */}
+        {/* ─── WAITING ─── */}
         {phase === "waiting" && (
-          <div className="text-center space-y-6">
-            <div className="p-8 border" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-              <p className="text-xs uppercase tracking-widest font-bold mb-2" style={{ color: "var(--bs-text-muted)" }}>Your Room Code</p>
-              <div className="text-6xl font-black tracking-widest my-6" style={{ color: "#00FF9D" }}>{roomCode}</div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24 }}>
+            <div style={{ background: SURFACE, border: `1px solid ${CARD_BORDER_STRONG}`, padding: "40px 32px", textAlign: "center", width: "100%", backdropFilter: "blur(8px)" }}>
+              <p style={{ color: TEXT_MUTED, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700, marginBottom: 8 }}>Your Room Code</p>
+              <div style={{ color: GREEN, fontSize: 56, fontWeight: 900, letterSpacing: "0.2em", margin: "16px 0", textShadow: `0 0 30px ${GREEN}55` }}>
+                {roomCode}
+              </div>
               <button
                 onClick={copyCode}
-                className="flex items-center gap-2 mx-auto px-6 py-3 border font-black text-sm uppercase tracking-widest transition-all"
-                style={{ borderColor: copied ? "#00FF9D" : "var(--bs-border-strong)", color: copied ? "#00FF9D" : "var(--bs-text-muted)" }}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  padding: "10px 20px", background: "transparent",
+                  border: `1px solid ${copied ? GREEN : CARD_BORDER_STRONG}`,
+                  color: copied ? GREEN : TEXT_MUTED,
+                  fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: "pointer"
+                }}
               >
-                {copied ? <CheckCheck className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? "COPIED!" : "COPY CODE"}
+                {copied ? <CheckCheck style={{ width: 14, height: 14 }} /> : <Copy style={{ width: 14, height: 14 }} />}
+                {copied ? "Copied!" : "Copy Code"}
               </button>
             </div>
 
-            <div className="flex items-center gap-4">
-              <PlayerCard name={myName} avatar={myAvatar} ready />
-              <div className="text-2xl font-black" style={{ color: "var(--bs-text-muted)" }}>VS</div>
-              <PlayerCard name="Waiting..." avatar="" waiting />
+            <div style={{ display: "flex", gap: 16, width: "100%", alignItems: "center" }}>
+              <WCard name={myName} avatar={myAvatar} ready />
+              <div style={{ color: TEXT_MUTED, fontWeight: 900, fontSize: 20, flexShrink: 0 }}>VS</div>
+              <WCard name="Waiting…" avatar="" waiting />
             </div>
 
-            <div className="flex items-center gap-2 justify-center text-sm uppercase font-bold" style={{ color: "var(--bs-text-muted)" }}>
-              <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#00FF9D" }} />
-              Waiting for opponent to join...
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: TEXT_MUTED, fontSize: 13, fontWeight: 700, textTransform: "uppercase" }}>
+              <Loader2 style={{ width: 16, height: 16, color: GREEN, animation: "spin 1s linear infinite" }} />
+              Waiting for opponent…
             </div>
-
-            <button onClick={reset} className="text-xs uppercase font-bold underline" style={{ color: "var(--bs-text-muted)" }}>Cancel</button>
+            <button onClick={reset} style={{ color: TEXT_MUTED, fontSize: 12, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Cancel</button>
           </div>
         )}
 
-        {/* ── COUNTDOWN ── */}
+        {/* ─── COUNTDOWN ─── */}
         {phase === "countdown" && (
-          <div className="text-center space-y-8 py-12">
-            <div className="flex items-center gap-4 justify-center">
-              <PlayerCard name={players[0]?.name ?? myName} avatar={players[0]?.avatar ?? myAvatar} ready />
-              <div className="text-2xl font-black" style={{ color: "var(--bs-text-muted)" }}>VS</div>
-              <PlayerCard name={players[1]?.name ?? "Opponent"} avatar={players[1]?.avatar ?? ""} ready />
+          <div style={{ textAlign: "center", padding: "48px 0" }}>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", marginBottom: 40 }}>
+              <WCard name={players[0]?.name ?? myName} avatar={players[0]?.avatar ?? myAvatar} ready />
+              <div style={{ color: TEXT_MUTED, fontWeight: 900, fontSize: 20, alignSelf: "center" }}>VS</div>
+              <WCard name={players[1]?.name ?? "Opponent"} avatar={players[1]?.avatar ?? ""} ready />
             </div>
-            <div
-              className="text-9xl font-black transition-all duration-300"
-              style={{ color: "#00FF9D", textShadow: "0 0 40px #00FF9D88" }}
-            >
+            <div style={{ fontSize: 120, fontWeight: 900, color: GREEN, textShadow: `0 0 60px ${GREEN}88`, lineHeight: 1 }}>
               {countdownNum > 0 ? countdownNum : "GO!"}
             </div>
-            <p className="text-sm uppercase tracking-widest font-bold" style={{ color: "var(--bs-text-muted)" }}>Battle starts in...</p>
+            <p style={{ color: TEXT_MUTED, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 700, marginTop: 16 }}>
+              Battle starts in…
+            </p>
           </div>
         )}
 
-        {/* ── PLAYING ── */}
+        {/* ─── PLAYING ─── */}
         {phase === "playing" && currentQ && (
-          <div className="space-y-5">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {/* Scores */}
-            <div className="flex gap-3">
+            <div style={{ display: "flex", gap: 10 }}>
               {(scores.length > 0 ? scores : players).map((p, i) => (
-                <div key={i} className="flex-1 p-3 border flex items-center justify-between" style={{ background: "var(--bs-surface)", borderColor: p.name === myName ? "#00FF9D" : "var(--bs-border-subtle)" }}>
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 border flex items-center justify-center text-xs" style={{ background: "var(--bs-surface-2)", borderColor: "var(--bs-border-strong)" }}>
-                      {p.avatar ? <img src={p.avatar} alt="" className="w-full h-full object-cover" /> : <User className="w-3.5 h-3.5" style={{ color: "#00FF9D" }} />}
+                <div key={i} style={{
+                  flex: 1, padding: "10px 14px", background: SURFACE,
+                  border: `1px solid ${p.name === myName ? GREEN : CARD_BORDER}`,
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  backdropFilter: "blur(8px)"
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ width: 28, height: 28, background: "rgba(0,0,0,0.4)", border: `1px solid ${CARD_BORDER}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                      {p.avatar ? <img src={p.avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User style={{ width: 14, height: 14, color: GREEN }} />}
                     </div>
-                    <span className="text-xs font-black uppercase truncate max-w-[80px]" style={{ color: p.name === myName ? "#00FF9D" : "var(--bs-text-muted)" }}>
+                    <span style={{ color: p.name === myName ? GREEN : TEXT_MUTED, fontSize: 11, fontWeight: 900, textTransform: "uppercase" }}>
                       {p.name === myName ? "YOU" : p.name.split(" ")[0]}
                     </span>
                   </div>
-                  <span className="text-xl font-black" style={{ color: "var(--bs-text)" }}>{p.score}</span>
+                  <span style={{ color: TEXT, fontSize: 22, fontWeight: 900 }}>{p.score}</span>
                 </div>
               ))}
             </div>
 
-            {/* Progress + Timer */}
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-black uppercase" style={{ color: "var(--bs-text-muted)" }}>
+            {/* Timer bar */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ color: TEXT_MUTED, fontSize: 11, fontWeight: 900, flexShrink: 0 }}>
                 Q{currentQ.index + 1}/{currentQ.total}
               </span>
-              <div className="flex-1 h-1.5" style={{ background: "var(--bs-surface-2)" }}>
-                <div
-                  className="h-full transition-all duration-300"
-                  style={{ width: `${((currentQ.index + 1) / currentQ.total) * 100}%`, background: "#00FF9D" }}
-                />
+              <div style={{ flex: 1, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2 }}>
+                <div style={{ height: "100%", background: timeLeft <= 5 ? RED : GREEN, width: `${(timeLeft / currentQ.duration) * 100}%`, transition: "width 1s linear, background 0.3s" }} />
               </div>
-              <div className="flex items-center gap-1.5 text-sm font-black" style={{ color: timeLeft <= 5 ? "#ff4444" : "#00FF9D" }}>
-                <Clock className="w-3.5 h-3.5" />
+              <div style={{ display: "flex", alignItems: "center", gap: 4, color: timeLeft <= 5 ? RED : GREEN, fontSize: 13, fontWeight: 900, flexShrink: 0 }}>
+                <Clock style={{ width: 13, height: 13 }} />
                 {timeLeft}s
               </div>
             </div>
 
-            {/* Timer bar */}
-            <div className="h-1" style={{ background: "var(--bs-surface-2)" }}>
-              <div
-                className="h-full transition-all duration-1000 ease-linear"
-                style={{ width: `${(timeLeft / currentQ.duration) * 100}%`, background: timeLeft <= 5 ? "#ff4444" : "#00FF9D" }}
-              />
-            </div>
-
             {/* Question */}
-            <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-              <p className="text-base font-bold leading-relaxed" style={{ color: "var(--bs-text)" }}>{currentQ.question}</p>
+            <div style={{ background: SURFACE, border: `1px solid ${CARD_BORDER_STRONG}`, padding: "20px 24px", backdropFilter: "blur(8px)" }}>
+              <p style={{ color: TEXT, fontSize: 15, fontWeight: 600, lineHeight: 1.6 }}>{currentQ.question}</p>
             </div>
 
             {/* Options */}
-            <div className="grid grid-cols-1 gap-3">
-              {currentQ.options.map((opt, i) => (
-                <button
-                  key={opt.key}
-                  onClick={() => handleAnswer(opt.key)}
-                  disabled={!!selectedAnswer || !!correctAnswer || !opt.text}
-                  className="flex items-center gap-4 px-5 py-4 border font-bold text-left transition-all duration-200 disabled:cursor-default"
-                  style={optionStyle(opt.key)}
-                >
-                  <span className="w-7 h-7 flex items-center justify-center border font-black text-xs flex-shrink-0 transform -skew-x-6" style={{ borderColor: "currentColor" }}>
-                    <span className="transform skew-x-6">{OPTION_LABELS[i]}</span>
-                  </span>
-                  <span className="text-sm">{opt.text}</span>
-                </button>
-              ))}
-            </div>
+            {currentQ.options.map((opt, i) => (
+              <button
+                key={opt.key}
+                onClick={() => handleAnswer(opt.key)}
+                disabled={!!selectedAnswer || !!correctAnswer || !opt.text}
+                style={{
+                  ...optionStyle(opt.key),
+                  display: "flex", alignItems: "center", gap: 14,
+                  padding: "14px 18px", cursor: selectedAnswer ? "default" : "pointer",
+                  textAlign: "left", width: "100%"
+                }}
+              >
+                <span style={{
+                  width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                  border: "1px solid currentColor", fontWeight: 900, fontSize: 12, flexShrink: 0,
+                  transform: "skewX(-6deg)"
+                }}>
+                  <span style={{ transform: "skewX(6deg)" }}>{LABELS[i]}</span>
+                </span>
+                <span style={{ fontSize: 14, fontWeight: 600 }}>{opt.text}</span>
+              </button>
+            ))}
 
             {selectedAnswer && !correctAnswer && (
-              <div className="text-center text-sm font-bold uppercase" style={{ color: "var(--bs-text-muted)" }}>
-                <Loader2 className="w-4 h-4 animate-spin inline mr-2" style={{ color: "#00FF9D" }} />
-                Waiting for opponent...
+              <div style={{ textAlign: "center", color: TEXT_MUTED, fontSize: 12, fontWeight: 700, textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                <Loader2 style={{ width: 14, height: 14, color: GREEN, animation: "spin 1s linear infinite" }} />
+                Waiting for opponent…
               </div>
             )}
           </div>
         )}
 
-        {/* ── RESULT ── */}
+        {/* ─── RESULT ─── */}
         {phase === "result" && result && (
-          <div className="text-center space-y-6 py-6">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {/* Banner */}
             {result.reason === "opponent_left" ? (
-              <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "#00FF9D" }}>
-                <Zap className="w-12 h-12 mx-auto mb-3" style={{ color: "#00FF9D" }} />
-                <p className="text-2xl font-black uppercase" style={{ color: "#00FF9D" }}>Opponent Left!</p>
-                <p className="text-sm mt-2" style={{ color: "var(--bs-text-muted)" }}>You win by default</p>
+              <div style={{ background: "rgba(0,255,157,0.08)", border: `1px solid ${GREEN}`, padding: "32px 24px", textAlign: "center" }}>
+                <Zap style={{ width: 40, height: 40, color: GREEN, margin: "0 auto 12px" }} />
+                <div style={{ color: GREEN, fontSize: 28, fontWeight: 900, textTransform: "uppercase" }}>Opponent Left!</div>
+                <div style={{ color: TEXT_MUTED, fontSize: 13, marginTop: 6 }}>You win by default 🎉</div>
               </div>
             ) : result.winner === "tie" ? (
-              <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "var(--bs-border-subtle)" }}>
-                <Swords className="w-12 h-12 mx-auto mb-3" style={{ color: "#00FF9D" }} />
-                <p className="text-3xl font-black uppercase tracking-tighter" style={{ color: "#00FF9D" }}>IT'S A TIE!</p>
-                <p className="text-sm mt-2" style={{ color: "var(--bs-text-muted)" }}>Perfectly matched rivals</p>
+              <div style={{ background: SURFACE, border: `1px solid ${CARD_BORDER_STRONG}`, padding: "32px 24px", textAlign: "center", backdropFilter: "blur(8px)" }}>
+                <Swords style={{ width: 40, height: 40, color: GREEN, margin: "0 auto 12px" }} />
+                <div style={{ color: GREEN, fontSize: 32, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.02em" }}>It's a Tie!</div>
+                <div style={{ color: TEXT_MUTED, fontSize: 13, marginTop: 6 }}>Perfectly matched rivals ⚔</div>
               </div>
             ) : result.winner === myName ? (
-              <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "#00FF9D" }}>
-                <Trophy className="w-14 h-14 mx-auto mb-3" style={{ color: "#00FF9D" }} />
-                <p className="text-4xl font-black uppercase tracking-tighter" style={{ color: "#00FF9D" }}>YOU WON!</p>
-                <p className="text-sm mt-2 font-bold uppercase" style={{ color: "var(--bs-text-muted)" }}>GG — Unstoppable! 🔥</p>
+              <div style={{ background: "rgba(0,255,157,0.07)", border: `2px solid ${GREEN}`, padding: "32px 24px", textAlign: "center" }}>
+                <Trophy style={{ width: 48, height: 48, color: GREEN, margin: "0 auto 12px" }} />
+                <div style={{ color: GREEN, fontSize: 40, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.02em", textShadow: `0 0 40px ${GREEN}66` }}>YOU WON!</div>
+                <div style={{ color: TEXT_MUTED, fontSize: 13, marginTop: 8, fontWeight: 700 }}>GG — Unstoppable! 🔥</div>
               </div>
             ) : (
-              <div className="p-6 border" style={{ background: "var(--bs-surface)", borderColor: "#ff4444" }}>
-                <p className="text-4xl font-black uppercase tracking-tighter" style={{ color: "#ff4444" }}>YOU LOST</p>
-                <p className="text-sm mt-2 font-bold uppercase" style={{ color: "var(--bs-text-muted)" }}>Better luck next time</p>
+              <div style={{ background: "rgba(255,68,68,0.07)", border: `1px solid ${RED}`, padding: "32px 24px", textAlign: "center" }}>
+                <Shield style={{ width: 40, height: 40, color: RED, margin: "0 auto 12px" }} />
+                <div style={{ color: RED, fontSize: 36, fontWeight: 900, textTransform: "uppercase" }}>You Lost</div>
+                <div style={{ color: TEXT_MUTED, fontSize: 13, marginTop: 6 }}>Better luck next time 💪</div>
               </div>
             )}
 
-            {/* Score breakdown */}
-            <div className="flex gap-4">
+            {/* Scores */}
+            <div style={{ display: "flex", gap: 12 }}>
               {result.scores.map((s, i) => (
-                <div key={i} className="flex-1 p-5 border" style={{ background: "var(--bs-surface)", borderColor: s.name === result.winner ? "#00FF9D" : "var(--bs-border-subtle)" }}>
+                <div key={i} style={{
+                  flex: 1, padding: "20px 16px", textAlign: "center",
+                  background: SURFACE, backdropFilter: "blur(8px)",
+                  border: `1px solid ${s.name === result.winner && result.winner !== "tie" ? GREEN : CARD_BORDER}`
+                }}>
                   {s.name === result.winner && result.winner !== "tie" && (
-                    <Trophy className="w-4 h-4 mx-auto mb-2" style={{ color: "#00FF9D" }} />
+                    <Trophy style={{ width: 16, height: 16, color: GREEN, margin: "0 auto 8px" }} />
                   )}
-                  <div className="text-xs uppercase font-black mb-1" style={{ color: s.name === myName ? "#00FF9D" : "var(--bs-text-muted)" }}>
+                  <div style={{ color: s.name === myName ? GREEN : TEXT_MUTED, fontSize: 11, fontWeight: 900, textTransform: "uppercase", marginBottom: 6 }}>
                     {s.name === myName ? "YOU" : s.name.split(" ")[0]}
                   </div>
-                  <div className="text-4xl font-black" style={{ color: "var(--bs-text)" }}>{s.score}</div>
-                  <div className="text-xs uppercase mt-1" style={{ color: "var(--bs-text-muted)" }}>points</div>
+                  <div style={{ color: TEXT, fontSize: 40, fontWeight: 900 }}>{s.score}</div>
+                  <div style={{ color: TEXT_MUTED, fontSize: 10, textTransform: "uppercase", marginTop: 4 }}>points</div>
                 </div>
               ))}
             </div>
 
-            <div className="flex gap-3">
+            {/* Actions */}
+            <div style={{ display: "flex", gap: 10 }}>
               <button
                 onClick={reset}
-                className="flex-1 py-4 font-black uppercase tracking-widest transform -skew-x-6 transition-all"
-                style={{ background: "#00FF9D", color: "black" }}
+                style={{
+                  flex: 1, padding: "14px", background: GREEN, color: "#000",
+                  fontWeight: 900, fontSize: 14, textTransform: "uppercase",
+                  letterSpacing: "0.08em", transform: "skewX(-6deg)", border: "none", cursor: "pointer"
+                }}
               >
-                <span className="transform skew-x-6">⚡ Battle Again</span>
+                <span style={{ transform: "skewX(6deg)", display: "block" }}>⚡ Battle Again</span>
               </button>
               <button
                 onClick={() => navigate("/home")}
-                className="px-6 py-4 border font-black uppercase tracking-widest transform -skew-x-6 transition-all"
-                style={{ borderColor: "var(--bs-border-subtle)", color: "var(--bs-text-muted)" }}
+                style={{
+                  padding: "14px 20px", background: "transparent",
+                  border: `1px solid ${CARD_BORDER}`, color: TEXT_MUTED,
+                  fontWeight: 900, fontSize: 13, textTransform: "uppercase",
+                  transform: "skewX(-6deg)", cursor: "pointer"
+                }}
               >
-                <span className="transform skew-x-6">HOME</span>
+                <span style={{ transform: "skewX(6deg)", display: "block" }}>HOME</span>
               </button>
             </div>
           </div>
         )}
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
 
-function PlayerCard({ name, avatar, ready, waiting }: { name: string; avatar: string; ready?: boolean; waiting?: boolean }) {
+function WCard({ name, avatar, ready, waiting }: { name: string; avatar: string; ready?: boolean; waiting?: boolean }) {
   return (
-    <div className="flex-1 flex flex-col items-center gap-2 p-4 border" style={{ background: "var(--bs-surface)", borderColor: ready ? "#00FF9D" : "var(--bs-border-subtle)" }}>
-      <div className="w-12 h-12 border-2 flex items-center justify-center" style={{ borderColor: ready ? "#00FF9D" : "var(--bs-border-subtle)", background: "var(--bs-surface-2)" }}>
+    <div style={{
+      flex: 1, padding: "16px 12px", textAlign: "center",
+      background: SURFACE, border: `1px solid ${ready ? GREEN : CARD_BORDER}`,
+      backdropFilter: "blur(8px)", display: "flex", flexDirection: "column", alignItems: "center", gap: 8
+    }}>
+      <div style={{
+        width: 44, height: 44, background: "rgba(0,0,0,0.4)",
+        border: `2px solid ${ready ? GREEN : CARD_BORDER}`,
+        display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden"
+      }}>
         {waiting
-          ? <Loader2 className="w-5 h-5 animate-spin" style={{ color: "var(--bs-text-muted)" }} />
+          ? <Loader2 style={{ width: 18, height: 18, color: TEXT_MUTED, animation: "spin 1s linear infinite" }} />
           : avatar
-          ? <img src={avatar} alt="" className="w-full h-full object-cover" />
-          : <User className="w-5 h-5" style={{ color: ready ? "#00FF9D" : "var(--bs-text-muted)" }} />}
+          ? <img src={avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          : <User style={{ width: 18, height: 18, color: ready ? GREEN : TEXT_MUTED }} />}
       </div>
-      <span className="text-xs font-black uppercase truncate max-w-full" style={{ color: ready ? "#00FF9D" : "var(--bs-text-muted)" }}>
+      <span style={{ color: ready ? GREEN : TEXT_MUTED, fontSize: 11, fontWeight: 900, textTransform: "uppercase", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {name}
       </span>
-      {ready && <span className="text-xs font-bold uppercase" style={{ color: "#00FF9D" }}>READY ✓</span>}
+      {ready && <span style={{ color: GREEN, fontSize: 10, fontWeight: 700, textTransform: "uppercase" }}>READY ✓</span>}
     </div>
   );
 }
