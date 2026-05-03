@@ -1,14 +1,9 @@
 {
-  "installCommand": "corepack enable && corepack prepare pnpm@10 --activate && cd bio-study-hub && pnpm install --frozen-lockfile=false --filter biospark...",
-  "buildCommand": "cd bio-study-hub && pnpm --filter biospark build",
+  "installCommand": "cd bio-study-hub/artifacts/biospark && npm install",
+  "buildCommand": "cd bio-study-hub/artifacts/biospark && npm run build",
   "outputDirectory": "bio-study-hub/artifacts/biospark/dist/public",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "env": {
     "BASE_URL": "/"
-  },
-  "build": {
-    "env": {
-      "NODE_VERSION": "18"
-    }
   }
 }
