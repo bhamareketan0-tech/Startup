@@ -22,6 +22,7 @@ import { AdminSettings } from "./admin/AdminSettings";
 import { AdminMongoStatus } from "./admin/AdminMongoStatus";
 import { AdminPDFImport } from "./admin/AdminPDFImport";
 import { AdminTextExtractor } from "./admin/AdminTextExtractor";
+import { AdminAIGenerator } from "./admin/AdminAIGenerator";
 import { AdminCredentials } from "./admin/AdminCredentials";
 import { AdminShortNotes } from "./admin/AdminShortNotes";
 import { AdminFlashcards } from "./admin/AdminFlashcards";
@@ -37,7 +38,7 @@ import { ADMIN_EMAIL } from "@/lib/constants";
 
 type Page =
   | "dashboard" | "analytics"
-  | "questions" | "chapters" | "passages" | "pdf_import" | "text_extractor"
+  | "questions" | "chapters" | "passages" | "pdf_import" | "text_extractor" | "ai_generator"
   | "short_notes" | "flashcards" | "comparisons" | "memory_palace" | "quotes"
   | "students" | "subscriptions" | "reports"
   | "communication"
@@ -54,6 +55,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "passages", label: "Passages", icon: FileText, group: "CONTENT" },
   { id: "pdf_import", label: "PDF Import", icon: Upload, group: "CONTENT" },
   { id: "text_extractor", label: "AI Question Extractor", icon: Sparkles, group: "CONTENT" },
+  { id: "ai_generator", label: "AI PDF → Questions", icon: Zap, group: "CONTENT" },
   { id: "short_notes", label: "Short Notes Manager", icon: StickyNote, group: "CONTENT" },
   { id: "flashcards", label: "Flashcard Manager", icon: FlashIcon, group: "CONTENT" },
   { id: "comparisons", label: "Comparison Charts", icon: GitCompareArrows, group: "CONTENT" },
@@ -192,6 +194,7 @@ export function AdminPage() {
           {page === "passages" && <AdminPassages />}
           {page === "pdf_import" && <AdminPDFImport />}
           {page === "text_extractor" && <AdminTextExtractor />}
+          {page === "ai_generator" && <AdminAIGenerator />}
           {page === "short_notes" && <AdminShortNotes />}
           {page === "flashcards" && <AdminFlashcards />}
           {page === "comparisons" && <AdminComparisons />}

@@ -28,6 +28,7 @@ import quotesRouter from "./quotes";
 import spacedRepetitionRouter from "./spacedRepetition";
 import samplePapersRouter from "./samplePapers";
 import xpRouter from "./xp";
+import aiGenerateRouter from "./aiGenerate";
 
 const router: IRouter = Router();
 
@@ -60,5 +61,6 @@ router.use(quotesRouter);
 router.use(spacedRepetitionRouter);
 router.use(samplePapersRouter);
 router.use(xpRouter);
+router.use(aiGenerateRouter);
 
 export default router;
