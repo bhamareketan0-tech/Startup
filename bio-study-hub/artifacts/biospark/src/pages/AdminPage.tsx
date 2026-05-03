@@ -107,7 +107,7 @@ export function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050a14] text-white flex" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <div className="relative min-h-screen bg-[#050a14] text-white flex" style={{ fontFamily: "'Space Grotesk', sans-serif", zIndex: 1 }}>
       {/* Sidebar */}
       <aside className="w-60 min-h-screen bg-[#07111f] border-r border-white/8 flex flex-col fixed top-0 left-0 z-40">
         <div className="px-5 py-5 border-b border-white/8">
