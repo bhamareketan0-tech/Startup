@@ -5,6 +5,7 @@ import passport from "passport";
 import router from "./routes";
 import authRouter from "./routes/auth";
 import { Settings } from "./models/settings";
+import { requireAuth } from "./middlewares/requireAuth";
 
 async function getGeminiKey(): Promise<string> {
   const fromEnv = process.env.GEMINI_API_KEY || process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
@@ -77,7 +78,7 @@ app.get("/healthz", (_req, res) =>
 // =====================================================
 // 🤖 GEMINI FORMAT ROUTE (FINAL)
 // =====================================================
-app.post("/format", async (req, res) => {
+app.post("/format", requireAuth, async (req, res) => {
   try {
     const input = req.body?.text || "";
 

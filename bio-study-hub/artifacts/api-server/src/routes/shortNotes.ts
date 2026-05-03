@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ShortNote } from "../models/shortNote";
+import { requireAdmin, requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
@@ -31,7 +32,7 @@ router.get("/short-notes/:id", async (req, res) => {
   }
 });
 
-router.post("/short-notes", async (req, res) => {
+router.post("/short-notes", requireAdmin, async (req, res) => {
   try {
     const note = await ShortNote.create(req.body);
     res.status(201).json(note);
@@ -40,7 +41,7 @@ router.post("/short-notes", async (req, res) => {
   }
 });
 
-router.put("/short-notes/:id", async (req, res) => {
+router.put("/short-notes/:id", requireAdmin, async (req, res) => {
   try {
     const note = await ShortNote.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!note) return res.status(404).json({ error: "Not found" });
@@ -50,7 +51,7 @@ router.put("/short-notes/:id", async (req, res) => {
   }
 });
 
-router.delete("/short-notes/:id", async (req, res) => {
+router.delete("/short-notes/:id", requireAdmin, async (req, res) => {
   try {
     await ShortNote.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
@@ -59,9 +60,10 @@ router.delete("/short-notes/:id", async (req, res) => {
   }
 });
 
-router.post("/short-notes/:id/bookmark", async (req, res) => {
+router.post("/short-notes/:id/bookmark", requireAuth, async (req, res) => {
   try {
-    const { userId } = req.body;
+    const sessionUser = (req.session as Record<string, unknown>).user as Record<string, unknown> | undefined;
+    const userId = sessionUser?.["id"] as string;
     const note = await ShortNote.findById(req.params.id);
     if (!note) return res.status(404).json({ error: "Not found" });
     const idx = note.bookmarkedBy.indexOf(userId);

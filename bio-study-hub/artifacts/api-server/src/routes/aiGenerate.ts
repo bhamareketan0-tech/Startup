@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Settings } from "../models/settings";
+import { requireAdmin } from "../middlewares/requireAuth";
 
 const router = Router();
 
@@ -159,7 +160,7 @@ function toQuestions(raw: any[], type: GenType, chapter: string, subunit: string
   })).filter((q) => (q.question || "").trim().length > 10 && (q.option1 || "").trim().length > 0);
 }
 
-router.post("/admin/ai-generate-questions", async (req, res) => {
+router.post("/admin/ai-generate-questions", requireAdmin, async (req, res) => {
   const apiKey = await getGeminiKey();
   if (!apiKey) return res.status(503).json({ error: "GEMINI_API_KEY not configured on server" });
 

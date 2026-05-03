@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Chapter } from "../models/chapter";
+import { requireAdmin } from "../middlewares/requireAuth";
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get("/chapters", async (req, res) => {
   }
 });
 
-router.put("/chapters/bulk", async (req, res) => {
+router.put("/chapters/bulk", requireAdmin, async (req, res) => {
   try {
     const { class: cls, chapters } = req.body as { class: string; chapters: { id: string; name: string; subject: string; class: string; subunits: string[]; order: number }[] };
     if (!cls || !Array.isArray(chapters)) {

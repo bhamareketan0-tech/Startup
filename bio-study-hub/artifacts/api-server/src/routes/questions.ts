@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Question } from "../models/question";
+import { requireAdmin, requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
@@ -30,7 +31,28 @@ router.get("/questions/counts", async (req, res) => {
   }
 });
 
-router.get("/questions", async (req, res) => {
+router.get("/questions/stats", requireAdmin, async (_req, res) => {
+  try {
+    const total = await Question.countDocuments();
+    const byType = await Question.aggregate([
+      { $group: { _id: "$type", count: { $sum: 1 } } },
+    ]);
+    const byDifficulty = await Question.aggregate([
+      { $group: { _id: "$difficulty", count: { $sum: 1 } } },
+    ]);
+    const recent = await Question.find().sort({ createdAt: -1 }).limit(5);
+    res.json({
+      total,
+      byType: byType.map((d) => ({ type: d._id, count: d.count })),
+      byDifficulty: byDifficulty.map((d) => ({ difficulty: d._id, count: d.count })),
+      recent: recent.map((d) => d.toJSON()),
+    });
+  } catch (err: unknown) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+router.get("/questions", requireAuth, async (req, res) => {
   try {
     const { class: cls, subunit, type, is_active, chapter, search, exclude } = req.query as Record<string, string>;
     const q = req.query as Record<string, string>;
@@ -68,7 +90,7 @@ router.get("/questions", async (req, res) => {
   }
 });
 
-router.post("/questions", async (req, res) => {
+router.post("/questions", requireAdmin, async (req, res) => {
   try {
     const body = req.body;
     if (Array.isArray(body)) {
@@ -83,7 +105,7 @@ router.post("/questions", async (req, res) => {
   }
 });
 
-router.put("/questions/:id", async (req, res) => {
+router.put("/questions/:id", requireAdmin, async (req, res) => {
   try {
     const doc = await Question.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!doc) return res.status(404).json({ error: "Not found" });
@@ -93,7 +115,7 @@ router.put("/questions/:id", async (req, res) => {
   }
 });
 
-router.delete("/questions/:id", async (req, res) => {
+router.delete("/questions/:id", requireAdmin, async (req, res) => {
   try {
     await Question.findByIdAndDelete(req.params.id);
     res.json({ success: true });
@@ -102,7 +124,7 @@ router.delete("/questions/:id", async (req, res) => {
   }
 });
 
-router.delete("/questions", async (req, res) => {
+router.delete("/questions", requireAdmin, async (req, res) => {
   try {
     const { chapter, subunit, class: cls } = req.query as Record<string, string>;
     const filter: Record<string, unknown> = {};
@@ -114,27 +136,6 @@ router.delete("/questions", async (req, res) => {
     }
     const result = await Question.deleteMany(filter);
     res.json({ success: true, deleted: result.deletedCount });
-  } catch (err: unknown) {
-    res.status(500).json({ error: String(err) });
-  }
-});
-
-router.get("/questions/stats", async (_req, res) => {
-  try {
-    const total = await Question.countDocuments();
-    const byType = await Question.aggregate([
-      { $group: { _id: "$type", count: { $sum: 1 } } },
-    ]);
-    const byDifficulty = await Question.aggregate([
-      { $group: { _id: "$difficulty", count: { $sum: 1 } } },
-    ]);
-    const recent = await Question.find().sort({ createdAt: -1 }).limit(5);
-    res.json({
-      total,
-      byType: byType.map((d) => ({ type: d._id, count: d.count })),
-      byDifficulty: byDifficulty.map((d) => ({ difficulty: d._id, count: d.count })),
-      recent: recent.map((d) => d.toJSON()),
-    });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }

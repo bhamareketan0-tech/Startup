@@ -2,6 +2,7 @@ import { Router } from "express";
 import { User } from "../models/user";
 import { Attempt } from "../models/attempt";
 import { getXPSummary } from "../services/xpService";
+import { requireAdmin, requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
@@ -25,7 +26,7 @@ function enrichWithXP(u: Record<string, unknown>) {
   return { ...u, xpSummary: summary };
 }
 
-router.get("/students", async (req, res) => {
+router.get("/students", requireAdmin, async (req, res) => {
   try {
     const { class: cls, plan } = req.query as Record<string, string>;
     const { pageNum, limitNum, skip } = parsePaginationParams(req.query as Record<string, string>);
@@ -43,7 +44,7 @@ router.get("/students", async (req, res) => {
   }
 });
 
-router.get("/users", async (req, res) => {
+router.get("/users", requireAdmin, async (req, res) => {
   try {
     const { class: cls, plan } = req.query as Record<string, string>;
     const { pageNum, limitNum, skip } = parsePaginationParams(req.query as Record<string, string>);
@@ -61,23 +62,40 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.get("/users/:id/stats", async (req, res) => {
+router.get("/users/:id/stats", requireAuth, async (req, res) => {
   try {
-    const attempts_count = await Attempt.countDocuments({ user_id: req.params.id });
+    const sessionUser = (req.session as Record<string, unknown>).user as Record<string, unknown> | undefined;
+    const requestedId = req.params.id;
+    if (sessionUser?.["role"] !== "admin" && sessionUser?.["id"] !== requestedId) {
+      res.status(403).json({ error: "Access denied." });
+      return;
+    }
+    const attempts_count = await Attempt.countDocuments({ user_id: requestedId });
     res.json({ attempts_count });
   } catch (err: unknown) {
     res.status(500).json({ error: String(err) });
   }
 });
 
-router.put("/users/:id", async (req, res) => {
+router.put("/users/:id", requireAuth, async (req, res) => {
   try {
+    const sessionUser = (req.session as Record<string, unknown>).user as Record<string, unknown> | undefined;
+    const requestedId = req.params.id;
+    const isAdmin = sessionUser?.["role"] === "admin";
+    const isSelf = sessionUser?.["id"] === requestedId;
+
+    if (!isAdmin && !isSelf) {
+      res.status(403).json({ error: "Access denied." });
+      return;
+    }
+
     const { name, class: cls, plan } = req.body as { name?: string; class?: string; plan?: string };
     const updates: Record<string, unknown> = {};
     if (name && name.trim()) updates["name"] = name.trim();
     if (cls === "11" || cls === "12") updates["class"] = cls;
-    if (["free", "pro", "elite"].includes(plan || "")) updates["plan"] = plan;
-    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (isAdmin && ["free", "pro", "elite"].includes(plan || "")) updates["plan"] = plan;
+
+    const user = await User.findByIdAndUpdate(requestedId, updates, { new: true });
     if (!user) { res.status(404).json({ error: "User not found." }); return; }
     res.json({ user: enrichWithXP(user.toJSON() as Record<string, unknown>) });
   } catch (err: unknown) {
@@ -85,7 +103,7 @@ router.put("/users/:id", async (req, res) => {
   }
 });
 
-router.delete("/users/:id", async (req, res) => {
+router.delete("/users/:id", requireAdmin, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
@@ -94,7 +112,7 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
-router.post("/users/xp", async (req, res) => {
+router.post("/users/xp", requireAdmin, async (req, res) => {
   try {
     const { userId, xp } = req.body as { userId: string; xp: number; reason?: string };
     const user = await User.findByIdAndUpdate(userId, { $inc: { score: xp } }, { new: true });
