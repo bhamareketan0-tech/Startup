@@ -7,7 +7,7 @@ import {
   Database, Plus, Sun, Moon, LogOut, User, ChevronRight, Upload,
   Sparkles, KeyRound, TrendingUp, Bell, Quote, MapPin,
   GitCompareArrows, Layers as FlashIcon, StickyNote, DollarSign,
-  Share2, BarChart2, Smartphone
+  Share2, BarChart2, Smartphone, Zap
 } from "lucide-react";
 import { AdminDashboard } from "./admin/AdminDashboard";
 import { AdminAnalytics } from "./admin/AdminAnalytics";
