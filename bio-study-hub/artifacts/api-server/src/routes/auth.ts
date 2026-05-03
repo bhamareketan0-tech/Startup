@@ -7,13 +7,14 @@ const router = Router();
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "";
+
 const GOOGLE_CALLBACK_URL =
   process.env.GOOGLE_CALLBACK_URL ||
   (process.env.REPLIT_DEV_DOMAIN
     ? `https://${process.env.REPLIT_DEV_DOMAIN}/auth/google/callback`
-    : "http://localhost:3000/auth/google/callback");
-
-const SUCCESS_REDIRECT = process.env.GOOGLE_SUCCESS_REDIRECT || "/login";
+    : "http://localhost:5000/auth/google/callback");
 
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
   passport.use(
@@ -31,23 +32,12 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
           const name = profile.displayName || email.split("@")[0];
 
           let user = await User.findOne({ googleId: profile.id });
+          if (!user) user = await User.findOne({ email });
           if (!user) {
-            user = await User.findOne({ email });
-          }
-          if (!user) {
-            user = await User.create({
-              name,
-              email,
-              googleId: profile.id,
-              avatar,
-            });
+            user = await User.create({ name, email, googleId: profile.id, avatar });
           } else {
-            if (!user.googleId) {
-              user.googleId = profile.id;
-            }
-            if (avatar && !user.get("avatar")) {
-              user.set("avatar", avatar);
-            }
+            if (!user.googleId) user.googleId = profile.id;
+            if (avatar && !user.get("avatar")) user.set("avatar", avatar);
             await user.save();
           }
           return done(null, user.toJSON());
@@ -70,7 +60,7 @@ passport.deserializeUser((user: Express.User, done) => {
 router.get("/auth/google", (req, res, next) => {
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     return res.status(503).json({
-      error: "Google Sign-In is not configured on this server. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.",
+      error: "Google Sign-In is not configured. Please add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to the server.",
     });
   }
   return passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
@@ -78,12 +68,12 @@ router.get("/auth/google", (req, res, next) => {
 
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login?googleError=1" }),
+  passport.authenticate("google", { failureRedirect: `${FRONTEND_URL}/login?error=google_failed` }),
   (req, res) => {
     const user = req.user as Record<string, unknown>;
-    (req.session as Record<string, unknown>).userId = user["id"];
+    (req.session as Record<string, unknown>).userId = user["id"] || user["_id"];
     (req.session as Record<string, unknown>).user = user;
-    const encoded = Buffer.from(JSON.stringify(user)).toString("base64url");
+    res.redirect(`${FRONTEND_URL}/home`);
   }
 );
 
