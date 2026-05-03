@@ -72,7 +72,7 @@ router.get("/auth/google", (req, res, next) => {
     const fe = FRONTEND_URL || "";
     return res.redirect(`${fe}/login?googleError=1&reason=not_configured`);
   }
-  return passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
+  return passport.authenticate("google", { scope: ["profile", "email"], prompt: "select_account" })(req, res, next);
 });
 
 router.get(
