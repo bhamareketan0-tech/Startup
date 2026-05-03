@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Question } from "@/lib/types";
-import { getChapters } from "@/lib/chaptersManager";
+import { getChapters, fetchChaptersFromAPI } from "@/lib/chaptersManager";
 import { api } from "@/lib/api";
 import {
   Plus, Edit, Trash2, Search, X, Check, AlertCircle,
@@ -741,6 +741,7 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [chaptersReady, setChaptersReady] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
@@ -750,6 +751,10 @@ export function AdminQuestions({ onAddQuestion }: { onAddQuestion?: (fn: () => v
     if (onAddQuestion) {
       onAddQuestion(() => startNew());
     }
+    Promise.all([
+      fetchChaptersFromAPI("11").catch(() => {}),
+      fetchChaptersFromAPI("12").catch(() => {}),
+    ]).then(() => setChaptersReady(true));
   }, []);
 
   async function fetchQuestions() {
