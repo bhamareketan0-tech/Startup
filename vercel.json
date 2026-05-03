@@ -5,5 +5,10 @@
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "env": {
     "BASE_URL": "/"
+  },
+  "build": {
+    "env": {
+      "NODE_VERSION": "18"
+    }
   }
 }
