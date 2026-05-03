@@ -99,7 +99,7 @@ export function LoginPage() {
               <Zap className="w-5 h-5 text-black" />
             </div>
             <span className="text-2xl font-black" style={{ color: "#f0fdf4" }}>
-              BIO<span style={{ color: "#00D97E" }}>SPARK</span>
+              NEET<span style={{ color: "#00D97E" }}>ASPIRE</span>
             </span>
           </Link>
           <h1 className="text-4xl font-black uppercase" style={{ color: "#f0fdf4" }}>

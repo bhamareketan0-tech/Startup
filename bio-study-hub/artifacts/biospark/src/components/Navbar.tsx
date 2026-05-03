@@ -67,7 +67,7 @@ export function Navbar() {
               <Zap className="w-6 h-6 text-black transform skew-x-12" />
             </div>
             <span className="text-2xl font-black tracking-tighter" style={{ color: "var(--bs-text)" }}>
-              BIO<span style={{ color: "#00FF9D" }}>SPARK</span>
+              NEET<span style={{ color: "#00FF9D" }}>ASPIRE</span>
             </span>
           </Link>
 

@@ -346,7 +346,7 @@ export function HomePage() {
           <div className="w-7 h-7 flex items-center justify-center transform -skew-x-12" style={{ background: "var(--bs-accent-hex)" }}>
             <Zap className="w-4 h-4 text-black transform skew-x-12" />
           </div>
-          <span className="font-black tracking-tighter text-lg" style={{ color: "var(--bs-text)" }}>BIO<span style={{ color: "var(--bs-accent-hex)" }}>SPARK</span></span>
+          <span className="font-black tracking-tighter text-lg" style={{ color: "var(--bs-text)" }}>NEET<span style={{ color: "var(--bs-accent-hex)" }}>ASPIRE</span></span>
         </div>
         <p className="text-xs font-mono uppercase tracking-widest" style={{ color: "var(--bs-text-muted)" }}>
           India's Premier NEET Biology MCQ Platform · {new Date().getFullYear()}
