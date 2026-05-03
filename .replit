@@ -76,3 +76,7 @@ waitForPort = 8080
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[deployment]
+deploymentTarget = "vm"
+run = ["bash", "-c", "cd bio-study-hub/artifacts/api-server && pnpm exec tsx ./src/index.ts"]
