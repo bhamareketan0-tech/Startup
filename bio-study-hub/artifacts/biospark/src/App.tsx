@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { ThemeProvider } from "@/lib/ThemeContext";
@@ -105,14 +105,25 @@ function AppRoutes() {
   );
 }
 
+// Hide background on focus-heavy pages where animation is distracting
+const NO_BG_ROUTES = ["/practice/", "/score"];
+function ConditionalBackground() {
+  const { pathname } = useLocation();
+  const hide = NO_BG_ROUTES.some((r) => pathname.startsWith(r));
+  if (hide) return null;
+  return (
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+      <SpaceBackground />
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ThemeProvider>
         <AuthProvider>
-          <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-            <SpaceBackground />
-          </div>
+          <ConditionalBackground />
           <AppRoutes />
           <ThemePicker />
         </AuthProvider>
