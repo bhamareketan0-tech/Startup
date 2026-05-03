@@ -57,11 +57,20 @@ passport.deserializeUser((user: Express.User, done) => {
   done(null, user);
 });
 
-router.get("/auth/google", (req, res, next) => {
+router.get("/auth/google/status", (req, res) => {
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     return res.status(503).json({
-      error: "Google Sign-In is not configured. Please add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to the server.",
+      ok: false,
+      error: "Google Sign-In is not configured on the server. GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is missing.",
     });
+  }
+  return res.json({ ok: true, callbackURL: GOOGLE_CALLBACK_URL });
+});
+
+router.get("/auth/google", (req, res, next) => {
+  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+    const fe = FRONTEND_URL || "";
+    return res.redirect(`${fe}/login?googleError=1&reason=not_configured`);
   }
   return passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
 });
