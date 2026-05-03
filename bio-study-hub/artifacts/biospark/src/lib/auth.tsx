@@ -73,6 +73,17 @@ async function safeJson(res: Response): Promise<Record<string, unknown>> {
   }
 }
 
+function apiFetch(path: string, init?: RequestInit): Promise<Response> {
+  return fetch(`${API}${path}`, {
+    ...init,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+  });
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -80,16 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [comebackMessage, setComebackMessage] = useState<AuthContextType["comebackMessage"]>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    fetch(`${API}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    apiFetch("/api/auth/me")
       .then(async (r) => {
         if (!r.ok) return null;
         return safeJson(r);
@@ -113,9 +115,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signIn(email: string, password: string): Promise<{ error: Error | null }> {
     try {
-      const res = await fetch(API + "/api/auth/login", {
+      const res = await apiFetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
       const data = await safeJson(res);
@@ -123,8 +124,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const msg = (data["error"] as string) || (data["message"] as string) || "Login failed. Please check your credentials.";
         return { error: new Error(msg) };
       }
-      const token = data["token"] as string | undefined;
-      if (token) localStorage.setItem("token", token);
       const u = (data["user"] as Record<string, unknown>) || data;
       setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
       setProfile(profileFromUser(u));
@@ -140,9 +139,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signUp(email: string, password: string, name: string, cls: string): Promise<{ error: Error | null }> {
     try {
-      const res = await fetch(API + "/api/auth/register", {
+      const res = await apiFetch("/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name, class: cls }),
       });
       const data = await safeJson(res);
@@ -150,8 +148,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const msg = (data["error"] as string) || (data["message"] as string) || "Registration failed. Please try again.";
         return { error: new Error(msg) };
       }
-      const token = data["token"] as string | undefined;
-      if (token) localStorage.setItem("token", token);
       const u = (data["user"] as Record<string, unknown>) || data;
       setUser({ id: (u["id"] as string) || (u["_id"] as string) || "", email: u["email"] as string, name: u["name"] as string | undefined, avatar: u["avatar"] as string | undefined, role: u["role"] as string | undefined });
       setProfile(profileFromUser(u));
@@ -162,8 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut(): Promise<void> {
-    await fetch(API + "/api/auth/logout", { method: "POST" }).catch(() => {});
-    localStorage.removeItem("token");
+    await apiFetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     setUser(null);
     setProfile(null);
   }
@@ -175,11 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function refreshProfile(): Promise<void> {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    const res = await fetch(`${API}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    }).catch(() => null);
+    const res = await apiFetch("/api/auth/me").catch(() => null);
     if (!res || !res.ok) return;
     const data = await safeJson(res);
     const u = (data["user"] as Record<string, unknown>) || data;
