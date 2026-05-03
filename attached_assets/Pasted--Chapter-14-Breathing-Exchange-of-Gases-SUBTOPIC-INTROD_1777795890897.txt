@@ -1,0 +1,907 @@
+=====================================
+Chapter 14 · Breathing & Exchange of Gases
+SUBTOPIC: INTRODUCTION
+All 13 Types | NEET Level
+=====================================
+
+-----------------------------------------
+TYPE 1 — PARAGRAPH STUDY
+-----------------------------------------
+
+Read the following passage carefully:
+
+Oxygen (O2) is utilised by the organisms to indirectly break down
+simple molecules like glucose, amino acids, fatty acids, etc., to derive
+energy to perform various activities. Carbon dioxide (CO2) which is
+harmful is also released during the above catabolic reactions.
+It is therefore evident that O2 has to be continuously provided to
+the cells and CO2 produced by the cells have to be released out.
+This process of exchange of O2 from the atmosphere with CO2
+produced by the cells is called breathing, commonly known as
+respiration. Place your hands on your chest; you can feel the chest
+moving up and down. You know that it is due to breathing.
+The respiratory organs and the mechanism of breathing are
+described in the following sections of this chapter.
+
+-----------------------------------------
+TYPE 2 — POINTER NOTES STUDY
+-----------------------------------------
+
+Key pointers from Introduction:
+
+- O2 is used INDIRECTLY to break down simple molecules
+- Simple molecules = glucose, amino acids, fatty acids
+- Purpose = derive energy for various activities
+- CO2 is HARMFUL — released during catabolic reactions
+- O2 must be CONTINUOUSLY supplied to cells
+- CO2 produced must be RELEASED OUT
+- Exchange of O2 (atmosphere) with CO2 (cells) = BREATHING
+- Breathing is commonly known as RESPIRATION
+- Physical sign of breathing = chest moves UP and DOWN
+- Respiratory organs and mechanism = described in FOLLOWING SECTIONS
+
+-----------------------------------------
+TYPE 3 — TRICKS & MNEMONICS
+-----------------------------------------
+
+Mnemonic: "BIG CEO Breathes Right"
+
+B - Breaking down = Glucose, Amino acids, Fatty acids
+I - Indirectly = O2 is used indirectly
+G - Gas released = CO2 (harmful)
+C - Continuously = O2 must be supplied continuously
+E - Exchange = O2 in, CO2 out = Breathing
+O - Other name = Respiration
+B - Breathing sign = Chest moves up and down
+R - Rest of chapter = Respiratory organs explained later
+
+Trick to remember simple molecules:
+"GAF" = Glucose, Amino acids, Fatty acids
+
+-----------------------------------------
+TYPE 4 — STANDARD MCQ
+-----------------------------------------
+
+Q1. O2 is utilised by organisms to break down simple molecules in
+what manner?
+A) Directly
+B) Indirectly
+C) Sometimes directly, sometimes indirectly
+D) Never
+Ans: B
+
+---
+
+Q2. Which of the following is NOT a simple molecule broken down
+by organisms for energy?
+A) Glucose
+B) Amino acids
+C) Fatty acids
+D) DNA
+Ans: D
+
+---
+
+Q3. The breakdown of simple molecules by organisms results in:
+A) Production of O2
+B) Storage of water
+C) Derivation of energy
+D) Production of N2
+Ans: C
+
+---
+
+Q4. CO2 released during catabolic reactions is described as:
+A) Useful
+B) Neutral
+C) Energetic
+D) Harmful
+Ans: D
+
+---
+
+Q5. O2 supply to cells must be:
+A) Occasional
+B) Weekly
+C) Only during exercise
+D) Continuous
+Ans: D
+
+---
+
+Q6. CO2 produced by cells must be:
+A) Stored inside cells
+B) Converted to O2
+C) Released out
+D) Kept in blood only
+Ans: C
+
+---
+
+Q7. The exchange of O2 from atmosphere with CO2 produced by
+cells is called:
+A) Digestion
+B) Excretion
+C) Circulation
+D) Breathing
+Ans: D
+
+---
+
+Q8. Breathing is commonly known as:
+A) Digestion
+B) Excretion
+C) Circulation
+D) Respiration
+Ans: D
+
+---
+
+Q9. Which physical observation confirms breathing in a person?
+A) Blinking of eyes
+B) Movement of fingers
+C) Chest moving up and down
+D) Movement of legs
+Ans: C
+
+---
+
+Q10. Which set correctly lists simple molecules broken down by
+organisms?
+A) Glucose, amino acids, fatty acids
+B) Proteins, lipids, nucleic acids
+C) Vitamins, minerals, water
+D) Starch, cellulose, glycogen
+Ans: A
+
+---
+
+Q11. Where are respiratory organs and mechanism of breathing
+described?
+A) Previous chapters
+B) Summary of chapter
+C) Exercises at end
+D) Following sections of the chapter
+Ans: D
+
+---
+
+Q12. Which gas must be continuously provided to the cells?
+A) CO2
+B) N2
+C) H2
+D) O2
+Ans: D
+
+---
+
+Q13. Which statement is correctly matched?
+A) Breathing — excretion of waste
+B) CO2 — useful gas for cells
+C) O2 — used indirectly in catabolism
+D) Glucose — complex molecule not broken down
+Ans: C
+
+---
+
+Q14. Catabolic reactions in cells produce which harmful gas?
+A) O2
+B) N2
+C) H2
+D) CO2
+Ans: D
+
+---
+
+Q15. Which statement correctly defines breathing as per NCERT?
+A) Intake of O2 only
+B) Release of CO2 only
+C) Exchange of O2 from atmosphere with CO2 from cells
+D) Exchange of N2 and O2 between cells and atmosphere
+Ans: C
+
+-----------------------------------------
+TYPE 5 — ASSERTION REASON
+-----------------------------------------
+
+Directions:
+A) Both A & R true — R is correct explanation of A
+B) Both A & R true — R is NOT correct explanation of A
+C) A true, R false
+D) A false, R true
+
+---
+
+Q1.
+Assertion: O2 is continuously provided to the cells.
+Reason: O2 is used by organisms to break down simple molecules
+and derive energy.
+Ans: A
+
+---
+
+Q2.
+Assertion: CO2 is released during catabolic reactions.
+Reason: CO2 is useful for the cells and is stored inside them.
+Ans: C
+
+---
+
+Q3.
+Assertion: The process of breathing is also called respiration.
+Reason: Breathing involves exchange of O2 from atmosphere with
+CO2 from cells.
+Ans: B
+
+---
+
+Q4.
+Assertion: Chest moves up and down during breathing.
+Reason: Breathing causes exchange of gases directly through the
+chest wall.
+Ans: C
+
+---
+
+Q5.
+Assertion: Organisms derive energy by breaking down simple
+molecules.
+Reason: O2 is used indirectly in the breakdown of simple molecules.
+Ans: A
+
+---
+
+Q6.
+Assertion: CO2 produced by cells must be released out.
+Reason: CO2 is harmful if it accumulates inside the cells.
+Ans: A
+
+---
+
+Q7.
+Assertion: Glucose is broken down by organisms using O2.
+Reason: Glucose is a simple molecule that is a source of energy.
+Ans: B
+
+---
+
+Q8.
+Assertion: O2 must be continuously provided to cells.
+Reason: O2 is directly used in catabolic reactions.
+Ans: C
+
+---
+
+Q9.
+Assertion: Respiratory organs are described in following sections.
+Reason: Mechanism of breathing is also described in following
+sections of the chapter.
+Ans: B
+
+---
+
+Q10.
+Assertion: Breathing is commonly known as respiration.
+Reason: Respiration involves the exchange of O2 from atmosphere
+with CO2 from cells.
+Ans: A
+
+---
+
+Q11.
+Assertion: Fatty acids are complex molecules.
+Reason: Organisms do not break down fatty acids for energy.
+Ans: D
+
+---
+
+Q12.
+Assertion: CO2 must be continuously removed from cells.
+Reason: Accumulation of CO2 is harmful to the cells.
+Ans: A
+
+-----------------------------------------
+TYPE 6 — NO. OF CORRECT STATEMENTS
+-----------------------------------------
+
+Q1. How many statements are CORRECT?
+(i) O2 is used to indirectly break down simple molecules
+(ii) CO2 is a useful gas produced during catabolic reactions
+(iii) Breathing is commonly known as respiration
+(iv) O2 must be continuously provided to the cells
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q2. How many statements are CORRECT?
+(i) Glucose, amino acids and fatty acids are complex molecules
+(ii) CO2 produced by cells must be released out
+(iii) Chest moves up and down during breathing
+(iv) Breathing involves exchange of O2 and CO2
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (ii, iii, iv)
+
+---
+
+Q3. How many statements are CORRECT?
+(i) CO2 is released during catabolic reactions
+(ii) O2 is used directly to break down simple molecules
+(iii) Breathing is also called respiration
+(iv) Respiratory organs are described later in the chapter
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q4. How many statements are CORRECT?
+(i) Exchange of gases between atmosphere and cells is called breathing
+(ii) CO2 is harmful when it accumulates in the cells
+(iii) Organisms derive energy by breaking down simple molecules
+(iv) Fatty acids are not broken down by organisms
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, ii, iii)
+
+---
+
+Q5. How many statements are CORRECT?
+(i) O2 is continuously provided to the cells
+(ii) CO2 must be stored in the cells
+(iii) Glucose is a simple molecule broken down for energy
+(iv) Amino acids are simple molecules broken down by organisms
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q6. How many statements are CORRECT?
+(i) Breathing is the exchange of O2 with CO2
+(ii) CO2 is useful and stored in the cells
+(iii) Respiratory organs are described in the following sections
+(iv) Chest movement is due to breathing
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (i, iii, iv)
+
+---
+
+Q7. How many statements are CORRECT?
+(i) Breathing and respiration are two completely different processes
+(ii) O2 has to be continuously provided to the cells
+(iii) CO2 is harmful if it accumulates in the cells
+(iv) Fatty acids are simple molecules broken down by organisms
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: C (ii, iii, iv)
+
+---
+
+Q8. How many statements are CORRECT?
+(i) Organisms use O2 directly in catabolic reactions
+(ii) CO2 released by cells must be removed
+(iii) Breathing is commonly known as respiration
+(iv) Glucose is a complex molecule not broken down by organisms
+
+A) Only 1
+B) Only 2
+C) Only 3
+D) All 4
+Ans: B (ii, iii)
+
+-----------------------------------------
+TYPE 7 — TRUE / FALSE
+-----------------------------------------
+
+Q1.
+(i) O2 is used indirectly to break down simple molecules
+(ii) CO2 is useful for the cells
+(iii) Breathing is commonly known as respiration
+(iv) O2 must be continuously provided to the cells
+
+A) i-T, ii-T, iii-T, iv-T
+B) i-T, ii-F, iii-T, iv-T
+C) i-F, ii-T, iii-T, iv-F
+D) i-T, ii-F, iii-F, iv-T
+Ans: B
+
+---
+
+Q2.
+(i) Glucose is a complex molecule
+(ii) CO2 produced by cells must be released out
+(iii) Chest moves up and down due to breathing
+(iv) Respiration is another name for digestion
+
+A) i-T, ii-T, iii-T, iv-F
+B) i-F, ii-T, iii-T, iv-F
+C) i-T, ii-F, iii-T, iv-T
+D) i-F, ii-F, iii-F, iv-T
+Ans: B
+
+---
+
+Q3.
+(i) CO2 is harmful when it accumulates in cells
+(ii) O2 is used directly in catabolic reactions
+(iii) Exchange of O2 with CO2 is called breathing
+(iv) Amino acids are broken down by organisms for energy
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-F, ii-T, iii-T, iv-T
+C) i-T, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-F, iv-F
+Ans: A
+
+---
+
+Q4.
+(i) Respiratory organs are described in following sections
+(ii) Fatty acids are not broken down by organisms
+(iii) O2 must be continuously removed from cells
+(iv) Breathing causes the chest to move up and down
+
+A) i-T, ii-F, iii-F, iv-T
+B) i-T, ii-T, iii-T, iv-F
+C) i-F, ii-T, iii-F, iv-T
+D) i-T, ii-F, iii-T, iv-T
+Ans: A
+
+---
+
+Q5.
+(i) CO2 is produced during catabolic reactions
+(ii) Breathing is commonly called excretion
+(iii) Organisms break down simple molecules to derive energy
+(iv) CO2 from cells must be provided continuously
+
+A) i-T, ii-F, iii-T, iv-F
+B) i-F, ii-T, iii-F, iv-T
+C) i-T, ii-T, iii-T, iv-F
+D) i-F, ii-F, iii-T, iv-T
+Ans: A
+
+---
+
+Q6.
+(i) Breathing is exchange of O2 from atmosphere with CO2 from cells
+(ii) O2 is used directly to break down simple molecules
+(iii) Glucose is a simple molecule broken down by organisms
+(iv) CO2 accumulation is beneficial for the cells
+
+A) i-T, ii-F, iii-T, iv-F
+B) i-T, ii-T, iii-F, iv-T
+C) i-F, ii-T, iii-T, iv-F
+D) i-T, ii-F, iii-F, iv-T
+Ans: A
+
+---
+
+Q7.
+(i) Respiration and breathing mean the same thing
+(ii) Chest movement can be felt by placing hands on chest
+(iii) Mechanism of breathing is described in following sections
+(iv) CO2 should be stored in the cells permanently
+
+A) i-T, ii-T, iii-T, iv-F
+B) i-T, ii-F, iii-T, iv-T
+C) i-F, ii-T, iii-T, iv-F
+D) i-F, ii-F, iii-T, iv-T
+Ans: A
+
+---
+
+Q8.
+(i) Energy is derived by breakdown of simple molecules
+(ii) CO2 is not harmful to the cells
+(iii) O2 supply must be continuous to the cells
+(iv) Respiration is the exchange of gases
+
+A) i-T, ii-F, iii-T, iv-T
+B) i-F, ii-T, iii-F, iv-T
+C) i-T, ii-T, iii-T, iv-F
+D) i-T, ii-F, iii-F, iv-F
+Ans: A
+
+---
+
+Q9.
+(i) O2 is used for building complex molecules
+(ii) Fatty acids are simple molecules broken down by organisms
+(iii) CO2 produced by cells must be released out
+(iv) Breathing is described in following sections of the chapter
+
+A) i-F, ii-T, iii-T, iv-T
+B) i-T, ii-F, iii-T, iv-F
+C) i-T, ii-T, iii-F, iv-T
+D) i-F, ii-F, iii-F, iv-T
+Ans: A
+
+---
+
+Q10.
+(i) Catabolic reactions release CO2
+(ii) O2 is not needed by the cells
+(iii) Breathing is commonly known as respiration
+(iv) Chest movement is not related to breathing
+
+A) i-T, ii-F, iii-T, iv-F
+B) i-F, ii-T, iii-F, iv-T
+C) i-T, ii-T, iii-T, iv-T
+D) i-T, ii-F, iii-F, iv-T
+Ans: A
+
+-----------------------------------------
+TYPE 8 — FILL IN THE BLANKS
+-----------------------------------------
+
+Q1. O2 is utilised by organisms to ________ break down simple
+molecules.
+A) Directly
+B) Indirectly
+C) Slowly
+D) Rapidly
+Ans: B
+
+---
+
+Q2. Simple molecules broken down by organisms include glucose,
+________ and fatty acids.
+A) Starch
+B) Amino acids
+C) Vitamins
+D) Minerals
+Ans: B
+
+---
+
+Q3. Organisms break down simple molecules to ________.
+A) Store energy
+B) Derive energy
+C) Release CO2
+D) Absorb O2
+Ans: B
+
+---
+
+Q4. CO2 which is ________ is released during catabolic reactions.
+A) Useful
+B) Harmless
+C) Harmful
+D) Essential
+Ans: C
+
+---
+
+Q5. O2 has to be ________ provided to the cells.
+A) Occasionally
+B) Continuously
+C) Weekly
+D) Daily
+Ans: B
+
+---
+
+Q6. CO2 produced by the cells has to be ________.
+A) Stored
+B) Released out
+C) Converted
+D) Absorbed
+Ans: B
+
+---
+
+Q7. The exchange of O2 from atmosphere with CO2 from cells is
+called ________.
+A) Excretion
+B) Digestion
+C) Breathing
+D) Circulation
+Ans: C
+
+---
+
+Q8. Breathing is commonly known as ________.
+A) Digestion
+B) Excretion
+C) Circulation
+D) Respiration
+Ans: D
+
+---
+
+Q9. Placing hands on chest, you can feel the chest moving ________.
+A) Left and right
+B) Forward and backward
+C) Up and down
+D) In and out
+Ans: C
+
+---
+
+Q10. The ________ and mechanism of breathing are described in
+following sections.
+A) Digestive organs
+B) Circulatory organs
+C) Excretory organs
+D) Respiratory organs
+Ans: D
+
+---
+
+Q11. CO2 is released during ________ reactions.
+A) Anabolic
+B) Synthetic
+C) Catabolic
+D) Only metabolic
+Ans: C
+
+---
+
+Q12. Fatty acids are ________ molecules that are broken down by
+organisms.
+A) Complex
+B) Inorganic
+C) Simple
+D) Structural
+Ans: C
+
+-----------------------------------------
+TYPE 9 — MATCH THE COLUMN
+-----------------------------------------
+
+Q1. Match the following:
+
+Column A                          Column B
+1. O2                             P. Harmful gas released during catabolism
+2. CO2                            Q. Simple molecule broken down for energy
+3. Glucose                        R. Exchange of gases between atmosphere and cells
+4. Breathing                      S. Gas continuously provided to cells
+
+A) 1-S, 2-P, 3-Q, 4-R
+B) 1-P, 2-S, 3-R, 4-Q
+C) 1-Q, 2-R, 3-P, 4-S
+D) 1-R, 2-Q, 3-S, 4-P
+Ans: A
+
+---
+
+Q2. Match the following:
+
+Column A                          Column B
+1. Catabolic reactions            P. Common name for breathing
+2. Respiration                    Q. Described in following sections
+3. Chest movement                 R. Felt by placing hands on chest
+4. Respiratory organs             S. Release CO2 as by-product
+
+A) 1-S, 2-P, 3-R, 4-Q
+B) 1-P, 2-Q, 3-S, 4-R
+C) 1-R, 2-S, 3-Q, 4-P
+D) 1-Q, 2-R, 3-P, 4-S
+Ans: A
+
+---
+
+Q3. Match the following:
+
+Column A                          Column B
+1. Glucose                        P. Derived by organisms through catabolism
+2. Amino acids                    Q. Simple molecule broken down by organisms
+3. Fatty acids                    R. Simple molecule broken down by organisms
+4. Energy                         S. Simple molecule broken down by organisms
+
+A) 1-Q, 2-R, 3-S, 4-P
+B) 1-P, 2-Q, 3-R, 4-S
+C) 1-R, 2-S, 3-Q, 4-P
+D) 1-S, 2-P, 3-Q, 4-R
+Ans: A
+
+---
+
+Q4. Match the following:
+
+Column A                          Column B
+1. Indirect use of O2             P. Harmful by-product
+2. CO2 nature                     Q. Breakdown of simple molecules
+3. Breathing process              R. Common name for breathing
+4. Respiration                    S. Exchange of O2 with CO2
+
+A) 1-Q, 2-P, 3-S, 4-R
+B) 1-P, 2-Q, 3-R, 4-S
+C) 1-S, 2-R, 3-Q, 4-P
+D) 1-R, 2-S, 3-P, 4-Q
+Ans: A
+
+---
+
+Q5. Match the following:
+
+Column A                          Column B
+1. O2                             P. Must be continuously provided to cells
+2. CO2                            Q. Must be released out from cells
+3. Fatty acids                    R. Simple molecule broken down for energy
+4. Chest movement                 S. Physical sign of breathing
+
+A) 1-P, 2-Q, 3-R, 4-S
+B) 1-Q, 2-P, 3-S, 4-R
+C) 1-R, 2-S, 3-P, 4-Q
+D) 1-S, 2-R, 3-Q, 4-P
+Ans: A
+
+-----------------------------------------
+TYPE 10 — DIAGRAM BASED
+-----------------------------------------
+
+Q1. In the process shown below, X enters cells and Y exits.
+Atmosphere --> [X] --> Cells --> [Y] --> Released out
+What are X and Y respectively?
+A) CO2 and O2
+B) O2 and CO2
+C) N2 and CO2
+D) O2 and N2
+Ans: B
+
+---
+
+Q2. A diagram shows a person with hands on chest, chest moving
+upward. This indicates:
+A) Expiration
+B) Digestion
+C) Excretion
+D) Inspiration
+Ans: D
+
+---
+
+Q3. A diagram shows:
+Glucose + O2 --> Energy + ___?___
+What fills the blank?
+A) H2O only
+B) O2
+C) CO2
+D) N2
+Ans: C
+
+---
+
+Q4. In a flow diagram:
+Atmosphere --> [Process X] --> Cells --> [Process Y] --> Atmosphere
+Process X and Y together represent:
+A) Digestion and absorption
+B) Breathing — intake and release of gases
+C) Circulation and excretion
+D) Anabolism and catabolism
+Ans: B
+
+-----------------------------------------
+TYPE 11 — TABLE BASED
+-----------------------------------------
+
+Q1. Which row in the table is CORRECTLY filled?
+
+Row | Gas  | Direction              | Nature
+A   | O2   | Cells to Atmosphere    | Useful
+B   | CO2  | Atmosphere to Cells    | Harmful
+C   | O2   | Atmosphere to Cells    | Required continuously
+D   | CO2  | Cells to Stored        | Harmful
+
+Ans: C
+
+---
+
+Q2. Which option is FULLY correct for the table below?
+
+Molecule     | Type             | Used for
+Glucose      | ?                | Energy
+Fatty acids  | ?                | Energy
+Amino acids  | ?                | Energy
+
+A) All are complex molecules
+B) All are simple molecules broken down for energy
+C) Only glucose is a simple molecule
+D) None of them are broken down by organisms
+Ans: B
+
+---
+
+Q3. Find the INCORRECT entry in the table:
+
+Term          | Meaning
+Breathing     | Exchange of O2 and CO2
+Respiration   | Common name for breathing
+Catabolism    | Builds complex molecules
+CO2           | Harmful gas released by cells
+
+A) Breathing
+B) Respiration
+C) Catabolism
+D) CO2
+Ans: C
+(Catabolism BREAKS DOWN molecules, does not build them)
+
+-----------------------------------------
+TYPE 12 — PREV YEAR QUESTIONS
+-----------------------------------------
+
+Q1. [NEET 2016 type]
+Which of the following statements is correct?
+A) Breathing is a physical process whereas respiration is a
+   biochemical process
+B) Breathing and respiration are synonymous terms with no
+   difference
+C) Respiration involves only the lungs
+D) Breathing does not involve any exchange of gases
+Ans: A
+
+---
+
+Q2. [NEET concept]
+The process by which atmospheric O2 is exchanged with CO2
+produced by cells is called:
+A) Circulation
+B) Digestion
+C) Breathing
+D) Excretion
+Ans: C
+
+---
+
+Q3. [NEET concept]
+During catabolic reactions in cells, which gas is released as a
+harmful by-product?
+A) O2
+B) N2
+C) CO2
+D) H2
+Ans: C
+
+---
+
+Q4. [NEET concept]
+Simple molecules broken down by organisms using O2 include:
+A) DNA, RNA, ATP
+B) Starch, cellulose, glycogen
+C) Glucose, amino acids, fatty acids
+D) Vitamins, minerals, water
+Ans: C
+
+---
+
+Q5. [NEET concept]
+Which of the following is TRUE regarding O2 in cellular
+metabolism?
+A) O2 directly breaks down simple molecules
+B) O2 is used indirectly to break down simple molecules
+C) O2 is not needed for catabolism
+D) O2 is released during catabolic reactions
+Ans: B
+
+=====================================
+INTRODUCTION — ALL 13 TYPES DONE!
+Say NEXT for 14.1 Respiratory Organs
+=====================================
