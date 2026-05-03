@@ -186,7 +186,7 @@ export function MockTestPage() {
   // ── Auto-save to localStorage ──────────────────────────────────────────────
   function startAutoSave() {
     autoSaveRef.current = setInterval(() => {
-      localStorage.setItem("biospark_mock_save", JSON.stringify({ answers, current, timeLeft }));
+      localStorage.setItem("neetaspire_mock_save", JSON.stringify({ answers, current, timeLeft }));
     }, 30000);
   }
 
@@ -225,7 +225,7 @@ export function MockTestPage() {
   async function finalSubmit() {
     clearTimers();
     setTimeTaken(Math.floor((Date.now() - startTimeRef.current) / 1000));
-    localStorage.removeItem("biospark_mock_save");
+    localStorage.removeItem("neetaspire_mock_save");
     const correct = questions.filter((q, i) => answers[i] === q.correct).length;
     try {
       const xpRes = await api.post("/xp/award", { reason: "mock_test_done", correctCount: correct }) as { xpResult?: { xpAwarded: number; leveledUp: boolean; newLevel: string }; newBadges?: Array<{ id: string; name: string; emoji: string; description: string }> };
@@ -356,7 +356,7 @@ export function MockTestPage() {
   const finalScore = questions.length > 0 ? correct * 4 - wrong : 0;
   const finalMax   = questions.length * 4;
   const accuracy   = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
-  const mockRank   = Math.max(1, Math.floor(Math.random() * 200) + 1); // placeholder BioSpark rank
+  const mockRank   = Math.max(1, Math.floor(Math.random() * 200) + 1); // placeholder NEETAspire rank
 
   // Chapter-wise breakdown
   const chapterBreakdown = (() => {
@@ -388,7 +388,7 @@ export function MockTestPage() {
       if (!scoreCardRef.current) return;
       const canvas = await html2canvas(scoreCardRef.current, { backgroundColor: "#000000", scale: 2 });
       const link = document.createElement("a");
-      link.download = `biospark-score-${Date.now()}.png`;
+      link.download = `neetaspire-score-${Date.now()}.png`;
       link.href = canvas.toDataURL();
       link.click();
     } catch {

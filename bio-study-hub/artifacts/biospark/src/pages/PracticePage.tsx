@@ -672,7 +672,7 @@ export function PracticePage() {
         const done = Object.keys(answers).length;
         if (done > 0) {
           localStorage.setItem(
-            `biospark_progress_${cls}_${chapterId}_${encodeURIComponent(decodedSubunit)}_${selectedType}`,
+            `neetaspire_progress_${cls}_${chapterId}_${encodeURIComponent(decodedSubunit)}_${selectedType}`,
             JSON.stringify({ answers, currentIndex, timeLeft, savedAt: Date.now() })
           );
         }
@@ -697,7 +697,7 @@ export function PracticePage() {
     const score = Math.round((correct / total) * 100) || 0;
     setCompletionStats({ correct, wrong, skipped, total, timeTaken });
 
-    localStorage.removeItem(`biospark_progress_${cls}_${chapterId}_${encodeURIComponent(decodedSubunit)}_${selectedType}`);
+    localStorage.removeItem(`neetaspire_progress_${cls}_${chapterId}_${encodeURIComponent(decodedSubunit)}_${selectedType}`);
 
     if (user) {
       await api.post("/attempts", { user_id: user.id, chapter: chapterId, subunit: decodedSubunit, class: cls, score, correct, wrong, skipped, total, time_taken: timeTaken }).catch(() => null);

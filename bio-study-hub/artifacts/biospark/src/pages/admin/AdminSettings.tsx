@@ -83,7 +83,7 @@ export function AdminSettings() {
       setSettings({ ...DEFAULTS, ...(res as Partial<AppSettings>) });
       setDbError(false);
     } catch {
-      const stored = localStorage.getItem("biospark_admin_settings");
+      const stored = localStorage.getItem("neetaspire_admin_settings");
       if (stored) {
         try { setSettings({ ...DEFAULTS, ...JSON.parse(stored) }); } catch {}
       }
@@ -98,11 +98,11 @@ export function AdminSettings() {
     setSaveStatus("idle");
     try {
       await api.put("/settings", settings);
-      localStorage.setItem("biospark_admin_settings", JSON.stringify(settings));
+      localStorage.setItem("neetaspire_admin_settings", JSON.stringify(settings));
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch {
-      localStorage.setItem("biospark_admin_settings", JSON.stringify(settings));
+      localStorage.setItem("neetaspire_admin_settings", JSON.stringify(settings));
       setSaveStatus("error");
     } finally {
       setSaving(false);
